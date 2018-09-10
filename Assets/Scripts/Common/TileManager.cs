@@ -85,7 +85,8 @@ public class TileManager : MonoBehaviour {
             }
 
         }
-
+        List<MyPathNode> list = FindingPath(new Vector2Int(24, 4), new Vector2Int(23, 6));
+        Debug.Log(list);
     }
 
     private void Start()
@@ -386,12 +387,11 @@ public class TileManager : MonoBehaviour {
             // 找到的目标节点
             if (curNode == endNode)
             {
-                generatePath(startNode, endNode);
-                return closeSet;
+                return generatePath(startNode, endNode);
             }
 
             // 判断周围节点，选择一个最优的节点
-            foreach (var item in TileManager.Instance.getNeibourhood(curNode))
+            foreach (var item in getNeibourhood(curNode))
             {
                 // 如果是墙或者已经在关闭列表中
                 if (item.IsWall || closeSet.Contains(item))
@@ -420,7 +420,7 @@ public class TileManager : MonoBehaviour {
     }
 
     // 生成路径
-    void generatePath(MyPathNode startNode, MyPathNode endNode)
+    List<MyPathNode> generatePath(MyPathNode startNode, MyPathNode endNode)
     {
         List<MyPathNode> path = new List<MyPathNode>();
         if (endNode != null)
@@ -434,6 +434,7 @@ public class TileManager : MonoBehaviour {
             // 反转路径
             path.Reverse();
         }
+        return path;
     }
 
     // 获取两个节点之间的距离

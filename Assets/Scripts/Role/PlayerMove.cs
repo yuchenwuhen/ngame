@@ -52,7 +52,6 @@ public class PlayerMove : MonoBehaviour{
                 {
                     nodeList.Add(m_node);
                 }
-                Debug.Log("节点"+m_node);
             }
             moveCoro = StartCoroutine(MoveCoro());
         }

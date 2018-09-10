@@ -15,12 +15,10 @@ public class MyPathNode : SettlersEngine.IPathNode<System.Object>
 	}
 
     // 与起点的长度
-    public int gCost;
+    public int gCost { get; set; }
     // 与目标点的长度
-    public int hCost;
-    private int w = 57;
-    private int h = 57;
-    private MyPathNode[,] grid;
+    public int hCost { get; set; }
+
     // 父节点
     public MyPathNode parent;
 
