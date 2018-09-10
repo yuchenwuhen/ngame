@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Timer {
 
-    private bool m_Ticking;
+    private bool m_Ticking; // 当前状态
 
-    public float m_curTime { get; private set; }
+    public float m_curTime { get; private set; }// 当前时间
 
-    private float m_triggerTime;
+    private float m_triggerTime;// 触发时间
 
     public delegate void EventHandler();
-    public event EventHandler m_tick;
+    public event EventHandler m_tick;// 触发事件
 
     public Timer(float second)
     {

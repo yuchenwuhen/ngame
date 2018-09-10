@@ -4,13 +4,14 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Animator))]
-public class NpcSongData : MonoBehaviour {
-
+public class NpcSongData : MonoBehaviour 
+{
     public float m_startTimePoint;
     public float m_endTimePoint;
     public float m_delayTimePoint = 0;
 
-    private Animator m_animator;
+    private Animator m_animator;    //动画
+
     private byte isCheckStart = 0;
     private Coroutine m_scro;
 
@@ -26,12 +27,12 @@ public class NpcSongData : MonoBehaviour {
     /// <param name="curtime"></param>
     public void CheckStatusTime(float curtime)
     {
-        if(isCheckStart==0)
+        if (isCheckStart == 0)
         {
             if (Mathf.Abs(curtime - m_startTimePoint) < 0.02f)
             {
                 isCheckStart = 1;
-                if(m_delayTimePoint==0)
+                if (m_delayTimePoint == 0)
                 {
                     StartTimeReach();
                 }
@@ -40,7 +41,7 @@ public class NpcSongData : MonoBehaviour {
                     m_scro = StartCoroutine(StartTimeReachIEnumetor());
                 }
             }
-        }else if(isCheckStart == 1)
+        }else if (isCheckStart == 1)
         {
             if (Mathf.Abs(curtime - m_endTimePoint) < 0.02f)
             {
@@ -57,20 +58,20 @@ public class NpcSongData : MonoBehaviour {
 
     private IEnumerator StartTimeReachIEnumetor()
     {
-        while(isCheckStart!=2)
+        while (isCheckStart != 2)
         {
             m_animator.enabled = true;
             Debug.Log(m_animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
             yield return new WaitForSeconds(0.15f);
             m_animator.enabled = false;
-            yield return new WaitForSeconds(m_delayTimePoint-0.15f);
+            yield return new WaitForSeconds(m_delayTimePoint - 0.15f);
         }
     }
 
     private void StopTimeReach()
     {
         m_animator.enabled = false;
-        if(m_scro!=null)
+        if (m_scro!=null)
         {
             StopCoroutine(m_scro);
         }
