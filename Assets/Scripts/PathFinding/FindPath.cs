@@ -92,8 +92,6 @@ public class FindPath : MonoBehaviour {
 			// 反转路径
 			path.Reverse ();
 		}
-        // 更新路径
-        grid.updatePath(path);
     }
 
 	// 获取两个节点之间的距离
