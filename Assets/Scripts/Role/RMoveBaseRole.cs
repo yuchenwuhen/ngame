@@ -17,11 +17,6 @@ public abstract class RMoveBaseRole : RBaseRole {
         m_animator = this.GetComponent<Animator>();
     }
 
-    protected override void SetSortingLayer()
-    {
-        this.GetComponent<SpriteRenderer>().sortingLayerID = 4;
-    }
-
     /// <summary>
     /// 播放动画
     /// </summary>

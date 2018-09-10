@@ -25,8 +25,6 @@ public abstract class RBaseRole : MonoBehaviour {
         Init();
     }
 
-    protected abstract void SetSortingLayer();
-
     protected virtual void Init()
     {
         //TODO 从RoleReadData中获取数据

@@ -26,7 +26,10 @@ public class Activity
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                return new PathfindingCommand(m_player, hit.collider.gameObject);
+                if (hit.collider.GetComponent<RMoveBaseRole>())
+                    return new PathfindingCommand(m_player, hit.collider.gameObject);
+                else if (hit.collider.GetComponent<MusicNote>())
+                    return new MusicNoteCommand(hit.collider.gameObject);
             }
             else
             {
