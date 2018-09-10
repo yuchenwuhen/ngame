@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -804662664, guid: 38d7dea3b0ae9584a903f07662a6f62c, type: 3}
+  m_Name: Hexagon_Single
+  m_EditorClassIdentifier: 
+  prefabs: []
+  sprites:
+  - {fileID: 21300000, guid: 7f9bd8c71734eca47a1d2c8f00b6266c, type: 3}
+  - {fileID: 21300000, guid: f8c9523ae732bbe48bec5f3ec17f3fa5, type: 3}
+  - {fileID: 21300000, guid: c1ebf609659a6e141b151a4f41f44b7c, type: 3}
+  - {fileID: 21300000, guid: ecc056b461a3aff45a97623c592c05b3, type: 3}

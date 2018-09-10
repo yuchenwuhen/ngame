@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1936369991, guid: 38d7dea3b0ae9584a903f07662a6f62c, type: 3}
+  m_Name: Isometric_Random
+  m_EditorClassIdentifier: 
+  sprites:
+  - name: Floor Stone
+    data:
+    - {fileID: 21300000, guid: f52855407f578f140856068dab9cd5dd, type: 3}
+    - {fileID: 21300000, guid: e3017d260479b6e42bef283344f17361, type: 3}
+    - {fileID: 21300000, guid: 61c4086e3dec63140a406e03170d3910, type: 3}
+    - {fileID: 21300000, guid: 1c6b32b84bcf9b14382e8236e2b77586, type: 3}
+    - {fileID: 21300000, guid: 4a8a8ba80e51ed24e8fd198320a82b16, type: 3}
+    - {fileID: 21300000, guid: 765570d5166667b40b3c717861655d43, type: 3}
+    - {fileID: 21300000, guid: dbb7d0f3e5a73374fbca0069936a7426, type: 3}
+    - {fileID: 21300000, guid: b8c12ffe147baf64495365dfdbc4460f, type: 3}
+    - {fileID: 21300000, guid: 621527bb267d4024e855998a1b3e0315, type: 3}
+    - {fileID: 21300000, guid: 4086557368f63b146924b49f43c9e1ea, type: 3}
+    - {fileID: 21300000, guid: 4cca3a997499f2e42a25a06bcaae9ef3, type: 3}
+    - {fileID: 21300000, guid: b16db98937864d74eb5665c1861f4015, type: 3}
+    defaultLayer: 0
+    defaultTag: Untagged
+  - name: Floor Dirt
+    data:
+    - {fileID: 21300000, guid: d2f109244d1e0ae43b69d26393137dae, type: 3}
+    - {fileID: 21300000, guid: 8ddd55dfcaef1d44a89cfea6402d8114, type: 3}
+    - {fileID: 21300000, guid: cf45646a54aa4e1498e6506a8f002acb, type: 3}
+    - {fileID: 21300000, guid: 98cb58ddd053ea1438ccf88bc7bd2abd, type: 3}
+    defaultLayer: 0
+    defaultTag: Untagged
+  - name: Objects
+    data:
+    - {fileID: 21300000, guid: 93959c0fce2ac714393511ac4cfd9a24, type: 3}
+    - {fileID: 21300000, guid: efae2c39baa581640b378f0f417ccf75, type: 3}
+    - {fileID: 21300000, guid: a40a6f02acc06e441be360641987d5a7, type: 3}
+    - {fileID: 21300000, guid: 8355f33bfa347614d893bcd9281f2115, type: 3}
+    - {fileID: 21300000, guid: f24d6807a84a7904ab20cec6688bba7f, type: 3}
+    - {fileID: 21300000, guid: b497bf12eaa70994aa2d1244a0f1c761, type: 3}
+    - {fileID: 21300000, guid: cc2a2cd8a9649114c8fae790a9d1ee7a, type: 3}
+    - {fileID: 21300000, guid: bca956237927f834ebd01bd02d784746, type: 3}
+    - {fileID: 21300000, guid: 235354ab226ed794c90772d31cd982fa, type: 3}
+    - {fileID: 21300000, guid: b109ebc0b7e4d31449c7164560bdc047, type: 3}
+    - {fileID: 21300000, guid: 84b0c603c10ce93409e6b11ce55ad337, type: 3}
+    - {fileID: 21300000, guid: 70a15e6ad63cf5f4a9ee456f5704dea8, type: 3}
+    - {fileID: 21300000, guid: 0d3d95b8e9d5fd64e9bc0316bcb6a738, type: 3}
+    - {fileID: 21300000, guid: c9d4e0892c97f2c43924705298d2fb21, type: 3}
+    - {fileID: 21300000, guid: 2d32963a8d823464d9d2671084739174, type: 3}
+    - {fileID: 21300000, guid: 5c4995f2d5895744bab12401cff7f147, type: 3}
+    - {fileID: 21300000, guid: bd595424fd73fac4093574406459a734, type: 3}
+    - {fileID: 21300000, guid: 3a589360ac81dc6479fe94f6e407d828, type: 3}
+    - {fileID: 21300000, guid: f602f4b8e3c19bb42bfe77351ef8ee9f, type: 3}
+    - {fileID: 21300000, guid: 5b943b619183da9409b489589b20d87f, type: 3}
+    - {fileID: 21300000, guid: 34068a517b6735d4b861353ce9e9c4e1, type: 3}
+    - {fileID: 21300000, guid: b138b14369d4d2749b76c7d12ef26b48, type: 3}
+    defaultLayer: 0
+    defaultTag: Untagged
+  prefabs: []

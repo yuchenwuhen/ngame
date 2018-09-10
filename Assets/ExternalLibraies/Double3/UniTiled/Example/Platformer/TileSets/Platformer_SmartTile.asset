@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1740677896, guid: 38d7dea3b0ae9584a903f07662a6f62c, type: 3}
+  m_Name: Platformer_SmartTile
+  m_EditorClassIdentifier: 
+  smartSprites:
+  - name: Gray stuff
+    data:
+    - {fileID: 21300000, guid: fccbde90545d42f47a117c95956ec381, type: 3}
+    - {fileID: 21300000, guid: 4c1f76241664acc429bd3b686c8f95af, type: 3}
+    - {fileID: 21300000, guid: 1f40a5cdc1afa5d4db30180d832bce51, type: 3}
+    - {fileID: 0}
+    - {fileID: 21300000, guid: f097cfc710be5c642b8cf2ceb056afb2, type: 3}
+    - {fileID: 21300000, guid: 4c1f76241664acc429bd3b686c8f95af, type: 3}
+    - {fileID: 21300000, guid: 710b4e27da339304cbd5f87bf3f3f9c8, type: 3}
+    - {fileID: 0}
+    - {fileID: 21300000, guid: b4c320daf4201f344acc0dfb3b93ed71, type: 3}
+    - {fileID: 0}
+    - {fileID: 21300000, guid: 3dcf17b91c3ceca4f97918369583d87f, type: 3}
+    - {fileID: 0}
+    - {fileID: 21300000, guid: 0730bece7611a054cb3476f00859ae2a, type: 3}
+    - {fileID: 0}
+    - {fileID: 21300000, guid: 3dcf17b91c3ceca4f97918369583d87f, type: 3}
+    - {fileID: 21300000, guid: 5a3b17868b46d9944abbee8cd0ec598a, type: 3}
+    defaultLayer: 0
+    defaultTag: Untagged
+  smartPrefabs: []
+  continueFromEdges: 0
+  otherSetsTilling: 2

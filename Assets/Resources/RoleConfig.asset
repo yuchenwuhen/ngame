@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a5ff4d856d8ddd40884834a7ecc490c, type: 3}
+  m_Name: RoleConfig
+  m_EditorClassIdentifier: 
+  m_xUnit: 57
+  m_yUnit: 57
+  m_Width: 0.93
+  m_Height: 0.465
+  m_startPosition: {x: -20.5, y: 2.5, z: 0}
+  wallPos:
+  - {x: 6, y: 1}
+  - {x: 5, y: 2}
+  - {x: 5, y: 3}
+  - {x: 6, y: 4}
+  id: 0
+  m_RoleInfoList:
+  - m_id: 0
+    m_name: Axe01
+    m_pos: {x: -6.5, y: -2.5, z: 0}
+  - m_id: 1
+    m_name: Axe01
+    m_pos: {x: -3.5, y: 1.5, z: 0}
+  - m_id: 2
+    m_name: Axe01
+    m_pos: {x: -0.5, y: 4.5, z: 0}
+  - m_id: 3
+    m_name: Axe01
+    m_pos: {x: -0.5, y: -1.5, z: 0}
+  - m_id: 4
+    m_name: Axe01
+    m_pos: {x: -1.5, y: -2.5, z: 0}
+  - m_id: 5
+    m_name: Enemy1
+    m_pos: {x: 0.5, y: -2.5, z: 0}
+  - m_id: 6
+    m_name: Enemy1
+    m_pos: {x: -5.5, y: -1.5, z: 0}
+  - m_id: 7
+    m_name: Enemy1
+    m_pos: {x: 4.5, y: -1.5, z: 0}
+  - m_id: 8
+    m_name: Enemy2
+    m_pos: {x: -11.5, y: -1.5, z: 0}
+  - m_id: 9
+    m_name: Enemy2
+    m_pos: {x: -5.5, y: 4.5, z: 0}
+  - m_id: 10
+    m_name: Player
+    m_pos: {x: -3.5, y: -3.5, z: 0}
