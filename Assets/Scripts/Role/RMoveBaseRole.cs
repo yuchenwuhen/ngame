@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(WallGridInfo))]
 [RequireComponent(typeof(Animator))]
 public abstract class RMoveBaseRole : RBaseRole {
 
