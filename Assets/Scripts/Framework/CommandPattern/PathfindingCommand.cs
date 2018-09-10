@@ -8,26 +8,28 @@ public class PathfindingCommand : ICommand {
     private GameObject m_HitObj = null;        //交互对象
 
     private RMoveBaseRole m_moveBaseRole;       //移动角色
+    private GameObject m_actor; //操作对象
 
-    public PathfindingCommand(Vector2Int move)
+    public PathfindingCommand(GameObject actor, Vector2Int move)
     {
+        m_actor = actor;
         m_MoveInt = move;
     }
 
-    public PathfindingCommand(GameObject hitobj)
+    public PathfindingCommand(GameObject actor, GameObject hitobj)
     {
+        m_actor = actor;
         m_HitObj = hitobj;
     }
 
     /// <summary>
     /// 执行操作
     /// </summary>
-    /// <param name="actor"></param>
-    public void Execute(GameObject actor)
+    public void Execute()
     {
-        if (actor != null)
+        if (m_actor != null)
         {
-            m_moveBaseRole = actor.GetComponent<RMoveBaseRole>();
+            m_moveBaseRole = m_actor.GetComponent<RMoveBaseRole>();
 
             if (m_moveBaseRole != null)
             {
@@ -43,8 +45,7 @@ public class PathfindingCommand : ICommand {
     /// <summary>
     /// 撤销操作
     /// </summary>
-    /// <param name="actor"></param>
-    public void Undo(GameObject actor)
+    public void Undo()
     {
 
     }

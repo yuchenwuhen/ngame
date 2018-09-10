@@ -8,20 +8,22 @@ public class MoveCommand : ICommand
 
     private RMoveBaseRole m_moveBaseRole;       //移动角色
 
-    public MoveCommand(Vector2Int move)
+    private GameObject m_actor; //操作对象
+
+    public MoveCommand(GameObject actor, Vector2Int move)
     {
+        m_actor = actor;
         m_MoveInt = move;
     }
 
     /// <summary>
     /// 执行操作
     /// </summary>
-    /// <param name="actor"></param>
-    public void Execute(GameObject actor)
+    public void Execute()
     {
-        if(actor != null)
+        if(m_actor != null)
         {
-            m_moveBaseRole = actor.GetComponent<RMoveBaseRole>();
+            m_moveBaseRole = m_actor.GetComponent<RMoveBaseRole>();
 
             if (m_moveBaseRole != null)
             {
@@ -36,8 +38,7 @@ public class MoveCommand : ICommand
     /// <summary>
     /// 撤销操作
     /// </summary>
-    /// <param name="actor"></param>
-    public void Undo(GameObject actor)
+    public void Undo()
     {
         
     }
