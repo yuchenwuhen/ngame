@@ -61,7 +61,7 @@ public class NpcSongData : MonoBehaviour
         while (isCheckStart != 2)
         {
             m_animator.enabled = true;
-            Debug.Log(m_animator.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+
             yield return new WaitForSeconds(0.15f);
             m_animator.enabled = false;
             yield return new WaitForSeconds(m_delayTimePoint - 0.15f);

@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class BookPanel : UIBase {
 
-    public Button m_click;
     public GameObject m_image;
     private Button m_event;
     private Button m_collect;
+    private Button m_btnBack;
 
     private RectTransform m_rectTransform;
     private Button btn_book;
@@ -18,17 +18,17 @@ public class BookPanel : UIBase {
     public override void OnAwake()
     {
         base.OnAwake();
-        m_click.onClick.AddListener(Click);
         m_rectTransform = this.GetComponent<RectTransform>();
         m_event = transform.Find("btn_event").GetComponent<Button>();
         m_collect = transform.Find("btn_collect").GetComponent<Button>();
-        btn_book = transform.Find("btn_book").GetComponent<Button>();
+        m_collect.onClick.AddListener(EnterScene);
         m_bookPro = transform.Find("BookPro").GetComponent<BookPro>();
         m_autoFlip = transform.Find("BookPro").GetComponent<AutoFlip>();
-        btn_book.onClick.AddListener(() => StartCoroutine(DynamicTansform(1f, new Vector3(100, -200, 0), 1f)));
+        //btn_book = transform.Find("btn_book").GetComponent<Button>();
+        //btn_book.onClick.AddListener(() => StartCoroutine(DynamicTansform(1f, new Vector3(100, -200, 0), 1f)));
         m_event.onClick.AddListener(SetEventPage);
-        m_event.gameObject.SetActive(false);
-        m_collect.gameObject.SetActive(false);
+        m_btnBack = transform.Find("btn_back").GetComponent<Button>();
+        m_btnBack.onClick.AddListener(BackToLogin);
     }
 
     public override void Appear()
@@ -37,9 +37,14 @@ public class BookPanel : UIBase {
         transform.SetSiblingIndex(transform.GetComponentsInChildren<UIBase>().Length-1);
     }
 
-    private void Click()
+    private void EnterScene()
     {
-        UIManager.instance.ShowFadeTransition();
+        UIManager.instance.ShowUIFade(UIState.Scene);
+    }
+
+    private void BackToLogin()
+    {
+        UIManager.instance.ShowUIFade(UIState.Mainmenu);
     }
 
     void SetEventPage()

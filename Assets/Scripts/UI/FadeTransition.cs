@@ -58,6 +58,7 @@ public class FadeTransition : UIBase {
     private void FadeOut()
     {
         fadeDir = -1;
+        fadeSpeed *= 2;
     }
 
     public override void OnDisAppear()

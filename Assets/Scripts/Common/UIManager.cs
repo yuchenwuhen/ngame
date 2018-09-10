@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum UIState
+{
+    Mainmenu,
+    Bookmenu,
+    Scene
+}
 public class UIManager : MonoBehaviour {
 
     public static UIManager instance = null;
     public bool ISstart = false;
 
-    public enum UIState
-    {
-        Mainmenu,
-        Bookmenu,
-        Scene
-    }
+
 
     private UIState m_curState = UIState.Mainmenu;
+    private UIState m_preState = UIState.Mainmenu;
 
     private void Awake()
     {
@@ -42,12 +44,28 @@ public class UIManager : MonoBehaviour {
     /// <typeparam name="T"></typeparam>
     public void ShowUIWindow<T>() where T:UIBase
     {
+        
         T ui = UIUtility.Instance.GetUI<T>();
         ui.Appear();
     }
 
+    public void DisappearUIWindow<T>() where T:UIBase
+    {
+        T ui = UIUtility.Instance.GetUI<T>();
+        ui.DisAppear();
+    }
+
+    public void ShowUIFade(UIState state)
+    {
+        m_curState = state;
+        FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
+        fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
+        fadeTransition.m_FadeOutEnd += ReceiveChildUIMessage;
+        fadeTransition.Appear();
+    }
+
     /// <summary>
-    /// 显示拾取窗口
+    /// 显示选择窗口
     /// </summary>
     /// <param name="message"></param>
     public void ShowOptionWindow(IMessage message)
@@ -59,6 +77,48 @@ public class UIManager : MonoBehaviour {
         ui.Appear();
     }
 
+    /// <summary>
+    /// 获取UI操作回调参数
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    void ReceiveChildUIMessage(GameObject sender, EventArgs e)
+    {
+        if (m_preState != m_curState)
+        {
+            switch (m_preState)
+            {
+                case UIState.Mainmenu:
+                    DisappearUIWindow<GameMenu>();
+                    break;
+                case UIState.Bookmenu:
+                case UIState.Scene:
+                    DisappearUIWindow<BookPanel>();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        switch (m_curState)
+        {
+            case UIState.Mainmenu:
+                ShowUIWindow<GameMenu>();
+                break;
+            case UIState.Bookmenu:
+                ShowUIWindow<BookPanel>();
+                break;
+            default:
+                break;
+        }
+        
+        m_preState = m_curState;
+    }
+
+    /// <summary>
+    /// 显示对话窗口
+    /// </summary>
+    /// <param name="actor"></param>
     public void ShowDialogueWindow(GameObject actor)
     {
         UIDialoguePanel dialoguePanel = UIUtility.Instance.GetUI<UIDialoguePanel>();
@@ -78,27 +138,7 @@ public class UIManager : MonoBehaviour {
         fadeTransition.Appear();
     }
 
-    /// <summary>
-    /// 获取UI操作回调参数
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    void ReceiveChildUIMessage(GameObject sender,EventArgs e)
-    {
-        UIBase uiBase = sender.GetComponent<UIBase>();
-        switch(uiBase.GetUIType())
-        {
-            case UIType.ChoiceWindow:
-                DealChoiceWindowCallback(e);
-                break;
-            case UIType.FadeWindow:
-                DealFadeWindowCallback(e);
-                break;
-            default:
-                break;
-        }
-        
-    }
+
 
     private void DealFadeWindowCallback(EventArgs e)
     {

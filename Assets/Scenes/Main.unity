@@ -4239,7 +4239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ba50d0627083349a524340607869e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ISstart: 0
+  ISstart: 1
 --- !u!4 &1218875363
 Transform:
   m_ObjectHideFlags: 0
@@ -4831,6 +4831,7 @@ MonoBehaviour:
   m_dialogueTxt: []
   m_propsType: 0
   m_checkRange: 3
+  m_musicType: 0
 --- !u!1 &1354781034
 GameObject:
   m_ObjectHideFlags: 0
