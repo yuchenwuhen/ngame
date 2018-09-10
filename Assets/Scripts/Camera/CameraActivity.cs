@@ -9,6 +9,7 @@ public class CameraActivity : MonoBehaviour
     private float inverseMoveTime;          //Used to make movement more efficient.
     public float moveTime = 0.1f;           //Time it will take object to move, in seconds.
 
+    public float moveSpeed = 0.5f;          //Camera Move Speed
     // Use this for initialization
     void Start()
     {
@@ -55,5 +56,10 @@ public class CameraActivity : MonoBehaviour
             //Return and loop until sqrRemainingDistance is close enough to zero to end the function
             yield return null;
         }
+    }
+
+    public void OffsetMove(Vector3 offset)
+    {
+        transform.position += offset * moveSpeed;
     }
 }

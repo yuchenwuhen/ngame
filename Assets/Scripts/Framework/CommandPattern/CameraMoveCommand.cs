@@ -24,7 +24,8 @@ public class CameraMoveCommand : ICommand
         if (m_camera != null)
         {
             // 摄像机移，速度控制，todo
-            m_camera.transform.position += m_offset;
+            //m_camera.transform.position += m_offset;
+            m_camera.GetComponent<CameraActivity>().OffsetMove(m_offset);
         }
         else
         {
