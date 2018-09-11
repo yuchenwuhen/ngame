@@ -68,7 +68,6 @@ public class CameraActivity : MonoBehaviour
         //transform.position -= offset * moveSpeed;
 
         Vector3 lastPos = transform.position - offset * moveSpeed;
-        Debug.Log("偏移量：" + offset * moveSpeed);
         BoundCheck(Camera.main.orthographicSize, ref lastPos);
         transform.position = lastPos;
     }

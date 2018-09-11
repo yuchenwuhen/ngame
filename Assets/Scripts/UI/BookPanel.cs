@@ -9,10 +9,12 @@ public class BookPanel : UIBase {
     private Button btn_play;
     private Button btn_record;
     private Button m_btnBack;
+    private bool m_isPlaying = false;
 
     private RectTransform m_rectTransform;
     private Button btn_book;
     public Image[] Img_musics;
+    public Sprite[] btnPlay_sprites;
 
     //private BookPro m_bookPro;
     //private AutoFlip m_autoFlip;
@@ -37,13 +39,16 @@ public class BookPanel : UIBase {
     {
         base.Appear();
         transform.SetSiblingIndex(transform.GetComponentsInChildren<UIBase>().Length-1);
+        SetImgmusic();
+        m_isPlaying = false;
+        SetBtnplaySprite();
     }
 
     private void EnterScene()
     {
+        m_isPlaying = !m_isPlaying;
         AudioManager.Instance.StopAudioMusic();
-        UIManager.instance.ShowUIFade(UIState.Scene);
-        
+        UIManager.instance.ShowUIFade(UIState.Scene); 
     }
 
     private void BackToLogin()
@@ -54,7 +59,40 @@ public class BookPanel : UIBase {
 
     void PlayMulMusic()
     {
-        AudioManager.Instance.PlayMulMusic(TileManager.Instance.GetMusicLevel());
+        m_isPlaying = !m_isPlaying;
+        SetBtnplaySprite();
+        if(m_isPlaying)
+        {
+            AudioManager.Instance.PlayMulMusic(TileManager.Instance.GetMusicLevel());
+        }
+        else
+        {
+            AudioManager.Instance.StopAudioMusic();
+        }
+    }
+
+    void SetBtnplaySprite()
+    {
+        if(!m_isPlaying)
+        {
+            btn_play.GetComponent<Image>().sprite = btnPlay_sprites[0];
+        }
+        else
+        {
+            btn_play.GetComponent<Image>().sprite = btnPlay_sprites[1];
+        }
+    }
+
+    /// <summary>
+    /// 设置音谱灰度
+    /// </summary>
+    public void SetImgmusic()
+    {
+        int[] level = TileManager.Instance.GetMusicLevel();
+        for (int i=0;i< level.Length;i++)
+        {
+            Img_musics[level[i]].color = Color.white;
+        }
     }
 
     //void SetEventPage()
