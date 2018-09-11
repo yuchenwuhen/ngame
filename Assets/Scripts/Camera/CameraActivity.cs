@@ -65,32 +65,81 @@ public class CameraActivity : MonoBehaviour
     public void OffsetMove(Vector3 offset)
     {
         // 摄像机的移动与手指移动相反
-        transform.position -= offset * moveSpeed;
+        //transform.position -= offset * moveSpeed;
+
+        Vector3 lastPos = transform.position - offset * moveSpeed;
+        BoundCheck(Camera.main.orthographicSize, ref lastPos);
+        transform.position = lastPos;
     }
 
     public void ZoomIn()
     {
         //摄像机视野变大
-        if (Camera.main.orthographicSize >= 14f)
+        float orthographicSize = Camera.main.orthographicSize;
+        if (orthographicSize >= 15f)
         {
-            Camera.main.orthographicSize = 14f;
+            orthographicSize = 15f;
         }
         else
         {
-            Camera.main.orthographicSize += 0.5f;
+            orthographicSize += 0.5f;
         }
+
+        Vector3 lastPos = transform.position;
+        BoundCheck(orthographicSize, ref lastPos);
+
+        transform.position = lastPos;
+        Camera.main.orthographicSize = orthographicSize;
     }
 
     public void ZoomOut()
     {
         //摄像机视野变小
-        if (Camera.main.orthographicSize <= 5f)
+        float orthographicSize = Camera.main.orthographicSize;
+        if (orthographicSize <= 5f)
         {
-            Camera.main.orthographicSize = 5f;
+            orthographicSize = 5f;
         }
         else
         {
-            Camera.main.orthographicSize -= 0.5f;
+            orthographicSize -= 0.5f;
+        }
+
+        Vector3 lastPos = transform.position;
+        BoundCheck(orthographicSize, ref lastPos);
+
+        transform.position = lastPos;
+        Camera.main.orthographicSize = orthographicSize;
+    }
+
+    /// <summary>
+    /// 检查摄像机是否移出边界
+    /// </summary>
+    /// <param name="orthographicSize">Orthographic size.</param>
+    /// <param name="checkPos">Check position.</param>
+    private void BoundCheck(float orthographicSize, ref Vector3 checkPos)
+    {
+        float MaxX = 29f - (9f / 5f) * orthographicSize;
+        float MaxY = 27f - orthographicSize;
+
+        if (checkPos.x > MaxX)
+        {
+            checkPos.x = MaxX;
+        }
+
+        if (checkPos.x < -MaxX)
+        {
+            checkPos.x = -MaxX;
+        }
+
+        if (checkPos.y > MaxY)
+        {
+            checkPos.y = MaxY;
+        }
+
+        if (checkPos.y < -MaxY)
+        {
+            checkPos.y = -MaxY;
         }
     }
 }
