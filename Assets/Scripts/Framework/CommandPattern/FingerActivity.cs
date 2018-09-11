@@ -88,6 +88,7 @@ public class FingerActivity : Activity
                     //备份上一次触摸点的位置，用于对比
                     m_vec2OldPosition1 = vec2NowPosition1;
                     m_vec2OldPosition2 = vec2NowPosition2;
+                    m_bIsFingerMoved = true;// 容错两只手指点击移开之后，触发移动事件
                 }
             }
         }
