@@ -28,15 +28,7 @@ public class CameraZoomInCommand : ICommand
     {
         if (m_camera != null)
         {
-            //物体变大
-            if (m_camera.orthographicSize >= 10f)
-            {
-                m_camera.orthographicSize = 10f;
-            }
-            else
-            {
-                m_camera.orthographicSize += 0.5f;
-            }
+            m_camera.GetComponent<CameraActivity>().ZoomIn();
         }
         else
         {

@@ -9,12 +9,16 @@ public class CameraActivity : MonoBehaviour
     private float inverseMoveTime;          //Used to make movement more efficient.
     public float moveTime = 0.1f;           //Time it will take object to move, in seconds.
 
-    public float moveSpeed = 0.5f;          //Camera Move Speed
+    public float moveSpeed = 0.2f;          //Camera Move Speed
     // Use this for initialization
     void Start()
     {
         //By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
         inverseMoveTime = 1f / moveTime;
+
+        transform.position = new Vector3(3.7f, 3.7f, -10f);
+
+        Camera.main.orthographicSize = 14;
     }
 
     // Update is called once per frame
@@ -60,6 +64,33 @@ public class CameraActivity : MonoBehaviour
 
     public void OffsetMove(Vector3 offset)
     {
-        transform.position += offset * moveSpeed;
+        // 摄像机的移动与手指移动相反
+        transform.position -= offset * moveSpeed;
+    }
+
+    public void ZoomIn()
+    {
+        //摄像机视野变大
+        if (Camera.main.orthographicSize >= 14f)
+        {
+            Camera.main.orthographicSize = 14f;
+        }
+        else
+        {
+            Camera.main.orthographicSize += 0.5f;
+        }
+    }
+
+    public void ZoomOut()
+    {
+        //摄像机视野变小
+        if (Camera.main.orthographicSize <= 5f)
+        {
+            Camera.main.orthographicSize = 5f;
+        }
+        else
+        {
+            Camera.main.orthographicSize -= 0.5f;
+        }
     }
 }

@@ -27,15 +27,7 @@ public class CameraZoomOutCommand : ICommand
     {
         if (m_camera != null)
         {
-            //物体变小
-            if (m_camera.orthographicSize <= 1f)
-            {
-                m_camera.orthographicSize = 0.5f;
-            }
-            else 
-            {
-                m_camera.orthographicSize -= 0.5f;
-            }
+            m_camera.GetComponent<CameraActivity>().ZoomOut();
         }
         else
         {
