@@ -85,8 +85,6 @@ public class TileManager : MonoBehaviour {
             }
 
         }
-        List<MyPathNode> list = FindingPath(new Vector2Int(24, 4), new Vector2Int(23, 6));
-        Debug.Log(list);
     }
 
     private void Start()
@@ -511,4 +509,47 @@ public class TileManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 获取音乐当前关卡
+    /// </summary>
+    /// <returns></returns>
+    public int[] GetMusicLevel()
+    {
+        List<int> level = new List<int>();
+        for (int i = 0; i < m_roleConfig.m_musicLevel.Length; i++)
+        {
+            if (m_roleConfig.m_musicLevel[i] == 1)
+            {
+                if(!level.Contains(i))
+                    level.Add(i);
+            }
+        }
+        return level.ToArray();
+    }
+
+    /// <summary>
+    /// 设置音乐关卡
+    /// </summary>
+    /// <param name="level"></param>
+    public void SetMusicLevel(int level)
+    {
+        m_roleConfig.m_musicLevel[level] = 1;
+    }
+    /// <summary>
+    /// 获取玩家位置
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetPlayerPosition()
+    {
+        return m_roleConfig.m_playerPos;
+    }
+
+    /// <summary>
+    /// 设置玩家位置
+    /// </summary>
+    /// <param name="pos"></param>
+    public void SetPlayerPosition(Vector3 pos)
+    {
+        m_roleConfig.m_playerPos = pos;
+    }
 }

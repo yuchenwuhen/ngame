@@ -16,6 +16,8 @@ public class AudioManager : MonoBehaviour
     public AudioSource efxSource;
     public AudioSource bgSource;
     public AudioSource musicSource;
+    public AudioSource[] m_audioSource;
+
 
     void Awake()
     {
@@ -41,5 +43,25 @@ public class AudioManager : MonoBehaviour
     public void StopBgMusic()
     {
         bgSource.Stop();
+    }
+
+    /// <summary>
+    /// 播放多条音轨
+    /// </summary>
+    /// <param name="index"></param>
+    public void PlayMulMusic(int[] index)
+    {
+        for(int i=0;i<index.Length;i++)
+        {
+            m_audioSource[index[i]].Play();
+        }
+    }
+
+    public void StopAudioMusic()
+    {
+        foreach(var i in m_audioSource)
+        {
+            i.Stop();
+        }
     }
 }

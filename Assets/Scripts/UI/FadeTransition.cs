@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class FadeTransition : UIBase {
 
-    public float fadeSpeed = 0.3f;
+    public float fadeInSpeed = 0.3f;
+    public float fadeOutSpeed = 0.6f;
+    private float fadeSpeed;
 
     private float alpha = 0f;
     private bool isFade = false;
@@ -53,12 +55,13 @@ public class FadeTransition : UIBase {
     private void FadeIn()
     {
         fadeDir = 1;
+        fadeSpeed = fadeInSpeed;
     }
 
     private void FadeOut()
     {
         fadeDir = -1;
-        fadeSpeed *= 2;
+        fadeSpeed = fadeOutSpeed;
     }
 
     public override void OnDisAppear()

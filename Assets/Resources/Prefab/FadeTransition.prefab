@@ -69,7 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   m_uiType: 0
-  fadeSpeed: 0.5
+  fadeInSpeed: 0.4
+  fadeOutSpeed: 0.8
 --- !u!222 &222739154913027948
 CanvasRenderer:
   m_ObjectHideFlags: 1

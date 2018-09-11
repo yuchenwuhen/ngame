@@ -6,27 +6,29 @@ using UnityEngine.UI;
 public class BookPanel : UIBase {
 
     public GameObject m_image;
-    private Button m_event;
-    private Button m_collect;
+    private Button btn_play;
+    private Button btn_record;
     private Button m_btnBack;
 
     private RectTransform m_rectTransform;
     private Button btn_book;
-    private BookPro m_bookPro;
-    private AutoFlip m_autoFlip;
+    public Image[] Img_musics;
+
+    //private BookPro m_bookPro;
+    //private AutoFlip m_autoFlip;
 
     public override void OnAwake()
     {
         base.OnAwake();
         m_rectTransform = this.GetComponent<RectTransform>();
-        m_event = transform.Find("btn_event").GetComponent<Button>();
-        m_collect = transform.Find("btn_collect").GetComponent<Button>();
-        m_collect.onClick.AddListener(EnterScene);
-        m_bookPro = transform.Find("BookPro").GetComponent<BookPro>();
-        m_autoFlip = transform.Find("BookPro").GetComponent<AutoFlip>();
+        btn_play = transform.Find("btn_play").GetComponent<Button>();
+        btn_record = transform.Find("btn_record").GetComponent<Button>();
+        btn_record.onClick.AddListener(EnterScene);
+        //m_bookPro = transform.Find("BookPro").GetComponent<BookPro>();
+        //m_autoFlip = transform.Find("BookPro").GetComponent<AutoFlip>();
         //btn_book = transform.Find("btn_book").GetComponent<Button>();
         //btn_book.onClick.AddListener(() => StartCoroutine(DynamicTansform(1f, new Vector3(100, -200, 0), 1f)));
-        m_event.onClick.AddListener(SetEventPage);
+        btn_play.onClick.AddListener(PlayMulMusic);
         m_btnBack = transform.Find("btn_back").GetComponent<Button>();
         m_btnBack.onClick.AddListener(BackToLogin);
     }
@@ -39,6 +41,7 @@ public class BookPanel : UIBase {
 
     private void EnterScene()
     {
+        AudioManager.Instance.StopAudioMusic();
         UIManager.instance.ShowUIFade(UIState.Scene);
     }
 
@@ -47,21 +50,26 @@ public class BookPanel : UIBase {
         UIManager.instance.ShowUIFade(UIState.Mainmenu);
     }
 
-    void SetEventPage()
+    void PlayMulMusic()
     {
-        int dif =  m_bookPro.currentPaper - 1;
-        m_autoFlip.PageFlipTime = m_autoFlip.PageFlipTime / 3;
-        if (dif>0)
-        {
-            m_autoFlip.FlipLeftPage();
-            m_bookPro.currentPaper =2;
-        }
-        else if(dif<0)
-        {
-            m_autoFlip.FlipRightPage();
-        }
-        m_autoFlip.PageFlipTime = 1f;
+        AudioManager.Instance.PlayMulMusic(TileManager.Instance.GetMusicLevel());
     }
+
+    //void SetEventPage()
+    //{
+    //    int dif =  m_bookPro.currentPaper - 1;
+    //    m_autoFlip.PageFlipTime = m_autoFlip.PageFlipTime / 3;
+    //    if (dif>0)
+    //    {
+    //        m_autoFlip.FlipLeftPage();
+    //        m_bookPro.currentPaper =2;
+    //    }
+    //    else if(dif<0)
+    //    {
+    //        m_autoFlip.FlipRightPage();
+    //    }
+    //    m_autoFlip.PageFlipTime = 1f;
+    //}
 
     private IEnumerator DynamicTansform(float scale,Vector3 pos,float time)
     {
@@ -77,8 +85,8 @@ public class BookPanel : UIBase {
             m_rectTransform.localScale = Vector2.Lerp(startScale, endScale, dur / time);
             yield return null;
         }
-        m_event.gameObject.SetActive(true);
-        m_collect.gameObject.SetActive(true);
+        btn_play.gameObject.SetActive(true);
+        btn_record.gameObject.SetActive(true);
     }
 
     void Fade()

@@ -18,6 +18,10 @@ public class RoleConfig :ScriptableObject  {
     [Tooltip("菱形精灵高度")]
     [SerializeField]
     public  float m_Height = 1.49f;
+    [SerializeField]
+    public int[] m_musicLevel;
+    [SerializeField]
+    public Vector3 m_playerPos;
 
     [Tooltip("起始位置")]
     [SerializeField]
