@@ -5130,6 +5130,7 @@ MonoBehaviour:
   m_name: 
   m_dialogueTxt: []
   m_propsType: 0
+  m_musicLevel: 0
   m_checkRange: 3
   m_musicType: 0
 --- !u!1 &1354781034
@@ -5660,7 +5661,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 28.67
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

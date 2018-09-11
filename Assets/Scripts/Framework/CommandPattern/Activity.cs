@@ -33,6 +33,11 @@ public class Activity
             }
             else
             {
+                Vector2Int gezi = TileManager.Instance.ScreenPointToTilePoint(clickPosition);
+                if (!TileManager.Instance.IsWallByGrid(gezi))
+                {
+                    CreateNewRipple(TileManager.Instance.ScreenPointToWorldPosition(clickPosition));
+                }
                 return new PathfindingCommand(m_player, TileManager.Instance.ScreenPointToTilePoint(clickPosition));
             }
         }
@@ -42,6 +47,17 @@ public class Activity
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 创建新的波纹
+    /// </summary>
+    /// <param name="pos"></param>
+    private void CreateNewRipple(Vector3 pos)
+    {
+        pos.z = 0;
+        GameObject tempNewRipple = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/" + "RippleEffect"));
+        tempNewRipple.transform.position = pos;
     }
 
     // 单手指滑动

@@ -92,8 +92,11 @@ public class UIManager : MonoBehaviour {
                     DisappearUIWindow<GameMenu>();
                     break;
                 case UIState.Bookmenu:
+                    DisappearUIWindow<BookPanel>();
+                    break;
                 case UIState.Scene:
                     DisappearUIWindow<BookPanel>();
+                    UIManager.instance.ShowUIWindow<SettingBtn>();
                     break;
                 default:
                     break;

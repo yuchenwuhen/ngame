@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum MUSICTYPE
 {
@@ -8,7 +9,8 @@ public enum MUSICTYPE
 }
 
 public class MusicNote : RProps {
-
+    [SerializeField]
+    private int m_musicLevel;
     public float m_checkRange = 3f;
     public MUSICTYPE m_musicType;
     private Transform m_player;
@@ -44,6 +46,6 @@ public class MusicNote : RProps {
 
     public void EnterMusicPlay()
     {
-        Debug.Log("music");
+        SceneManager.LoadSceneAsync(1);
     }
 }

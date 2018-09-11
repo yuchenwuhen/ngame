@@ -43,11 +43,13 @@ public class BookPanel : UIBase {
     {
         AudioManager.Instance.StopAudioMusic();
         UIManager.instance.ShowUIFade(UIState.Scene);
+        
     }
 
     private void BackToLogin()
     {
         UIManager.instance.ShowUIFade(UIState.Mainmenu);
+        AudioManager.Instance.StopAudioMusic();
     }
 
     void PlayMulMusic()
