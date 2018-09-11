@@ -78,11 +78,11 @@ public class FingerActivity : Activity
                     //函数返回真为放大，返回假为缩小
                     if (IsEnlarge(m_vec2OldPosition1, m_vec2OldPosition2, vec2NowPosition1, vec2NowPosition2))
                     {
-                        command = base.OnFingerZoomInEvent();
+                        command = base.OnFingerZoomOutEvent();
                     }
                     else
                     {
-                        command = base.OnFingerZoomOutEvent();
+                        command = base.OnFingerZoomInEvent();
                     }
 
                     //备份上一次触摸点的位置，用于对比
