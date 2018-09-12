@@ -18,7 +18,7 @@ public class CameraActivity : MonoBehaviour
 
         transform.position = new Vector3(3.7f, 3.7f, -10f);
 
-        Camera.main.orthographicSize = 14;
+        Camera.main.orthographicSize = 5f;
     }
 
     // Update is called once per frame

@@ -203,6 +203,14 @@ public class PlayMusicManager : MonoBehaviour
             Debug.Log("节点超时,CheckPoint:" + m_checkPointID);
             Debug.Log("节点超时,curTIme:" + m_Timer.m_curTime);
             CheckPointChange();
+
+            if (m_clickAudioSource)
+            {
+                m_clickAudioSource.clip = m_clickAudios[1];
+                m_clickAudioSource.Stop();
+                m_clickAudioSource.Play();
+            }
+
             m_checkPointID++;
         }
     }

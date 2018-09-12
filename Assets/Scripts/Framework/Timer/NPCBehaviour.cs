@@ -12,8 +12,6 @@ public class NPCBehaviour : MonoBehaviour
 
     private bool m_bIsMove = true;
 
-    //private bool m_bIsIvaild = true; // 该NPC是否可用
-
     public float m_speed;
 
     private Vector3 m_LastEndPos;
