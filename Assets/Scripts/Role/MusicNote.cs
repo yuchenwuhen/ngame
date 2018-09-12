@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public enum MUSICTYPE
 {
     Water,
+    Wood,
+    Basketball
 }
 
 public class MusicNote : RProps {
@@ -23,6 +25,7 @@ public class MusicNote : RProps {
         m_player = GameObject.FindWithTag("Player").transform;
         m_sprite = this.GetComponent<SpriteRenderer>();
         m_collider = this.GetComponent<BoxCollider>();
+        m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
     }
 	
 	// Update is called once per frame
@@ -46,6 +49,19 @@ public class MusicNote : RProps {
 
     public void EnterMusicPlay()
     {
-        SceneManager.LoadSceneAsync(1);
+        switch(m_musicType)
+        {
+            case MUSICTYPE.Water:
+                Debug.Log("水井音乐玩法");
+                break;
+            case MUSICTYPE.Basketball:
+                Debug.Log("篮球音乐玩法");
+                break;
+            case MUSICTYPE.Wood:
+                UIManager.instance.ShowUIFade(UIState.Musicmenu);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -123,6 +123,8 @@ public class TileManager : MonoBehaviour {
         int isOver = 0;
         while (isOver==0)
         {
+            if (curNum < 0)
+                break;
             Vector2Int vector = new Vector2Int(reed[curNum], curNum);
             if (m_gridLayerDict.ContainsKey(vector))
             {
@@ -132,7 +134,10 @@ public class TileManager : MonoBehaviour {
                     if (reed[curNum] < m_xUnit)
                     {
                         reed[curNum]++;
-                    }else
+                        if (reed[curNum] >= m_xUnit)
+                            curNum--;
+                    }
+                    else
                     {
                         curNum--;
                     }
@@ -146,11 +151,14 @@ public class TileManager : MonoBehaviour {
                             reed[curNum] = m_gridLayerDict[vector].GetXMaxWall(curNum) + 1;
                             curNum--;
                         }
-
+                        else
+                        {
+                            curNum--;
+                        }
                     }
                     else
                     {
-                        reed[curNum]++;
+                        reed[curNum] = m_gridLayerDict[vector].GetXMaxWall(curNum) + 1;
                         curNum = m_gridLayerDict[vector].GetCurReed().y;
                         reed[curNum] = m_gridLayerDict[vector].GetCurReed().x + 1;
                         if(!m_finalLayerList.Contains(m_gridLayerDict[vector]))
@@ -164,6 +172,8 @@ public class TileManager : MonoBehaviour {
                 if (reed[curNum] < m_xUnit)
                 {
                     reed[curNum]++;
+                    if (reed[curNum] >= m_xUnit)
+                        curNum--;
                 }
                 else
                 {

@@ -52,6 +52,8 @@ public class UIManager : MonoBehaviour {
         ui.Appear();
     }
 
+
+
     public void DisappearUIWindow<T>() where T:UIBase
     {
         T ui = UIUtility.Instance.GetUI<T>();
@@ -155,8 +157,13 @@ public class UIManager : MonoBehaviour {
     public void CalculationCurMusicResult(int level)
     {
         m_curMusicLevel = level;
+        MusicPanel ui = UIUtility.Instance.GetUI<MusicPanel>();
+        ui.Appear();
+        List<object> levellist = new List<object>();
+        levellist.Add(m_curMusicLevel);
+        ui.Init(levellist.ToArray());
     }
-
+    
     private void DealFadeWindowCallback(EventArgs e)
     {
         switch(m_curState)

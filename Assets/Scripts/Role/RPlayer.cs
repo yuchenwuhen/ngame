@@ -46,6 +46,7 @@ public class RPlayer : RMoveBaseRole {
             {
                 m_playerMove.Pathfinding(newpos);
                 m_hitObj = hitObj;
+                PlayAnimation(1f);
             }     
         }
         else
@@ -54,6 +55,7 @@ public class RPlayer : RMoveBaseRole {
             if (pos != TileManager.Instance.WorldPositionToGridPoint(transform.position))
             {
                 m_playerMove.Pathfinding(pos);
+                PlayAnimation(1f);
             }
 
         }
@@ -62,12 +64,19 @@ public class RPlayer : RMoveBaseRole {
 
     }
 
+    protected override void PlayAnimation(float value)
+    {
+        base.PlayAnimation(value);
+        m_animator.SetFloat("speed",value);
+    }
+
     void PathEndCallback()
     {
         if(m_hitObj!=null)
         {
             UIManager.instance.ShowDialogueWindow(m_hitObj);
         }
+        PlayAnimation(0f);
     }
 
     private Vector2Int GetAroundPoint(Vector2Int pos,Vector2Int hitpos)

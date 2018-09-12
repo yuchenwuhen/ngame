@@ -26,6 +26,11 @@ public abstract class RMoveBaseRole : RBaseRole {
         m_animator.SetTrigger(opsName);
     }
 
+    protected virtual void PlayAnimation(float value)
+    {
+
+    }
+
     /// <summary>
     /// 移动的方向和速度
     /// </summary>

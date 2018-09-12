@@ -8,8 +8,8 @@ public class WallGridInfo : GridInfo {
 
     public override Vector2Int GetCurReed()
     {
-        int x = 0;
-        int y = 0;
+        int x = -1;
+        int y = -1;
         foreach(var grid in m_GridWallList)
         {
             if(grid.x>x)
