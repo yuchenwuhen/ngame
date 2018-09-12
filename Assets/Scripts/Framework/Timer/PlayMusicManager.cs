@@ -46,8 +46,10 @@ public class PlayMusicManager : MonoBehaviour
 
     private Animator m_animatorCutWood;
     private Button m_btnReset;
+    private GameObject m_woodsuccess;
+    private float m_woodSuccessTime = 0.2f;
     // Use this for initialization
-	void Start () 
+    void Start () 
     {
         // 节奏点数据
         m_songData = this.GetComponent<SongData>();
@@ -91,7 +93,8 @@ public class PlayMusicManager : MonoBehaviour
         m_animatorCutWood = GameObject.Find("CutWood").GetComponent<Animator>();
         m_btnReset = transform.Find("Reset").GetComponent<Button>();
         m_btnReset.onClick.AddListener(ResetClick);
-
+        m_woodsuccess = GameObject.Find("Woodsuccess");
+        m_woodsuccess.SetActive(false);
         Debug.Log("EndBegin");
     }
 
@@ -166,6 +169,8 @@ public class PlayMusicManager : MonoBehaviour
                 m_clickAudioSource.Play();
             }
             m_checkPointID++;
+            m_woodsuccess.SetActive(true);
+            Invoke("PlayWoodEffect", m_woodSuccessTime);
         }
         else if ((curTime1 - curtime) > m_touchSuccessTIme && (curTime1 - curtime) < m_touchCheckTIme)
         {
@@ -197,6 +202,11 @@ public class PlayMusicManager : MonoBehaviour
         {
             Debug.Log("无效点击");
         }
+    }
+
+    private void PlayWoodEffect()
+    {
+        m_woodsuccess.SetActive(false);
     }
 
     /// <summary>
