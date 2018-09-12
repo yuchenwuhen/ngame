@@ -32,7 +32,7 @@ public class NPCBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("init pos:" + transform.position);
+        Debug.Log("init pos:" + transform.position);
         //transform.position = Vector3.MoveTowards(transform.position, target, 
         //                                        (distance / 1f) * Time.deltaTime);
 
