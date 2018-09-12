@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour {
 
     private UIState m_curState = UIState.Mainmenu;
     private UIState m_preState = UIState.Mainmenu;
+    private int m_curMusicLevel;
 
     private void Awake()
     {
@@ -147,7 +148,14 @@ public class UIManager : MonoBehaviour {
         fadeTransition.Appear();
     }
 
-
+    /// <summary>
+    /// 设置当前音乐等级 0代表fail,1-3代表相应星级
+    /// </summary>
+    /// <param name="level"></param>
+    public void CalculationCurMusicResult(int level)
+    {
+        m_curMusicLevel = level;
+    }
 
     private void DealFadeWindowCallback(EventArgs e)
     {
