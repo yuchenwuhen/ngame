@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum MusicSong
 {
@@ -43,6 +44,8 @@ public class PlayMusicManager : MonoBehaviour
     private AudioSource m_clickAudioSource;   // 点击音效
     public AudioClip[] m_clickAudios;         // 音效列表
 
+    private Animator m_animatorCutWood;
+    private Button m_btnReset;
     // Use this for initialization
 	void Start () 
     {
@@ -85,9 +88,13 @@ public class PlayMusicManager : MonoBehaviour
         // 获取音效播放源
         m_clickAudioSource = GetComponent<AudioSource>();
 
+        m_animatorCutWood = GameObject.Find("CutWood").GetComponent<Animator>();
+        m_btnReset = transform.Find("Reset").GetComponent<Button>();
+        m_btnReset.onClick.AddListener(ResetClick);
+
         Debug.Log("EndBegin");
     }
-	
+
 	// Update is called once per frame
 	void Update () 
     {
@@ -126,6 +133,8 @@ public class PlayMusicManager : MonoBehaviour
             {
                 // 当前点击有效
                 m_touchTimer.Restart(); // 点击定时器重0开始计时
+                m_animatorCutWood.Play("Guoqi", -1, 0f);
+                m_animatorCutWood.Update(0f);
                 CheckPlayerInput(m_Timer.m_curTime); // 检测玩家有效点击情况
                 isTouch = false; // 点击定时器结束之前，点击无效
             }
@@ -270,5 +279,10 @@ public class PlayMusicManager : MonoBehaviour
     private void FixedUpdate()
     {
         //Debug.Log(Time.deltaTime);
+    }
+
+    void ResetClick()
+    {
+        SceneManager.LoadScene("Music");
     }
 }
