@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657838, g: 0.49641234, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -372,7 +372,7 @@ RectTransform:
   m_GameObject: {fileID: 274004689}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 4, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 336129799}
   m_RootOrder: 2
@@ -380,7 +380,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -308, y: -15}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 178, y: 294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &274004691
 MonoBehaviour:
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_beginPos: {x: 115, y: 224.5, z: 0}
-  m_endPos: {x: 1296, y: 525, z: 0}
+  m_endPos: {x: 1310, y: 525, z: 0}
   m_LastEndOffset: {x: 500, y: 0, z: 0}
   m_speed: 600
 --- !u!114 &274004692
@@ -518,13 +518,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioClip:
-  - {fileID: 8300000, guid: b07aba970bc494893bf62f8e36f852aa, type: 3}
+  - {fileID: 8300000, guid: 195d317eef4e01748bcde799729b17ed, type: 3}
   m_musicSong: 0
   m_touchAgainTime: 0.1
-  m_touchSuccessTIme: 0.1
-  m_touchCheckTIme: 0.15
+  m_touchSuccessTIme: 0.2
+  m_touchCheckTIme: 0.28
   m_clickAudios:
-  - {fileID: 8300000, guid: be77e0f7604bf470d9e59aa55d7d46a1, type: 3}
+  - {fileID: 8300000, guid: 90e3436a52806b248b9d6dc45d26db7b, type: 3}
   - {fileID: 8300000, guid: 2bda2e531794747d6854dc7c30a178e6, type: 3}
 --- !u!114 &336129803
 MonoBehaviour:
@@ -547,7 +547,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: be77e0f7604bf470d9e59aa55d7d46a1, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 90e3436a52806b248b9d6dc45d26db7b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -725,7 +725,7 @@ RectTransform:
   m_GameObject: {fileID: 955966900}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 4, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 336129799}
   m_RootOrder: 0
@@ -733,7 +733,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -308, y: -15}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 178, y: 294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &955966902
 MonoBehaviour:
@@ -781,7 +781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_beginPos: {x: 115, y: 525, z: 0}
-  m_endPos: {x: 1296, y: 525, z: 0}
+  m_endPos: {x: 1310, y: 525, z: 0}
   m_LastEndOffset: {x: 200, y: 0, z: 0}
   m_speed: 600
 --- !u!1 &971815703
@@ -980,7 +980,7 @@ RectTransform:
   m_GameObject: {fileID: 1774716129}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 4, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 336129799}
   m_RootOrder: 1
@@ -988,7 +988,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -308, y: -15}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 178, y: 294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1774716131
 MonoBehaviour:
@@ -1002,7 +1002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_beginPos: {x: 115, y: 224.5, z: 0}
-  m_endPos: {x: 1296, y: 525, z: 0}
+  m_endPos: {x: 1310, y: 525, z: 0}
   m_LastEndOffset: {x: 200, y: 0, z: 0}
   m_speed: 600
 --- !u!114 &1774716132
