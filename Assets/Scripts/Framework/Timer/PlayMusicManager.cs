@@ -158,6 +158,7 @@ public class PlayMusicManager : MonoBehaviour
             Debug.Log("检测成功");
 
             CheckPointChange();
+
             if (m_clickAudioSource)
             {
                 m_clickAudioSource.clip = m_clickAudios[0];
