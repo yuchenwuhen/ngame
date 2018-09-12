@@ -7,8 +7,11 @@ using UnityEngine.UI;					//Allows us to use UI.
 	
 public class GameManager : MonoBehaviour
 {
-	public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
-			
+	public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
+
+    public bool m_IsEnterMenu = false;
+    public bool m_IsEnterMusic = false;
+
 	//Awake is always called before any Start functions
 	void Awake()
 	{
@@ -30,15 +33,17 @@ public class GameManager : MonoBehaviour
 			
 	}
 
-		
-	//Initializes the game for each level.
-	void InitGame()
-	{
-			
-	}
-
-    private void Update()
+    private void Start()
     {
+        if (m_IsEnterMenu)
+            UIManager.instance.ShowUIFade(UIState.Mainmenu);
+        if (m_IsEnterMusic)
+            BackToScene();
+    }
+
+    public void BackToScene()
+    {
+        UIManager.instance.ShowUIFade(UIState.Musicmenu);
     }
 
 

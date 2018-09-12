@@ -7,6 +7,8 @@ public enum UIState
 {
     Mainmenu,
     Bookmenu,
+    Musicmenu,
+    MusicResultMenu,
     Scene
 }
 public class UIManager : MonoBehaviour {
@@ -111,6 +113,9 @@ public class UIManager : MonoBehaviour {
                 break;
             case UIState.Scene:
                 ShowUIWindow<SettingBtn>();
+                break;
+            case UIState.Musicmenu:
+                ShowUIWindow<MusicPanel>();
                 break;
             default:
                 break;
