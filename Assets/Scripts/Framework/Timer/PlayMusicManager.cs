@@ -345,13 +345,25 @@ public class PlayMusicManager : MonoBehaviour
         m_checkPointID = 0;
 
         // 主时间定时器
+        m_totalTime = m_audioClip[(int)(m_musicSong)].length;
+        if (m_Timer == null)
+        {
+            m_Timer = new Timer(m_totalTime);
+            m_Timer.m_tick += PlayEnd;
+        }
         m_Timer.Restart();
 
         // 播放音乐
         AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
 
         // 触摸定时器
-        m_touchTimer.Restart();
+        if (m_touchTimer == null)
+        {
+            m_touchTimer = new Timer(m_touchAgainTime);
+            m_touchTimer.m_tick += TouchEnd;
+        }
+        // 节奏点数据
+        m_songData = this.GetComponent<SongData>();
 
         // 清空所有还在移动的NPC
         int Count = queueRunNpc.Count;
@@ -383,6 +395,7 @@ public class PlayMusicManager : MonoBehaviour
 
         m_bGameStateRun = true;    // 运行状态
 
+        enabled = true;
         Debug.Log("EndResetClick");
     }
 
@@ -405,6 +418,7 @@ public class PlayMusicManager : MonoBehaviour
         {
             UIManager.instance.CalculationCurMusicResult(0);
         }
+        enabled = false;
     }
 
     /// <summary>
