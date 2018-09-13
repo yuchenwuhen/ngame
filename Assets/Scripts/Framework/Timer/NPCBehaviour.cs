@@ -24,7 +24,7 @@ public class NPCBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("init pos:" + transform.position);
+        //Debug.Log("init pos:" + transform.position);
     }
 
     public void BeginMove(float pointTime)
