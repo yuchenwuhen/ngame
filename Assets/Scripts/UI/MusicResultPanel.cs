@@ -21,6 +21,9 @@ public class MusicResultPanel : UIBase {
     private Button btn_failrecord;
     private Button btn_failback;
 
+    public delegate void ResultHander();
+    public ResultHander m_resultHandler;
+
     public override void OnAwake()
     {
         base.OnAwake();
@@ -111,6 +114,7 @@ public class MusicResultPanel : UIBase {
 
     private void RecordAgain()
     {
-        
+        UIManager.instance.SetRecordButton();
+        gameObject.SetActive(false);
     }
 }

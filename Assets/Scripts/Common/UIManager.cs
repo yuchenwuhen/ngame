@@ -180,6 +180,18 @@ public class UIManager : MonoBehaviour {
             Debug.Log("当前状态" + m_curState);
         }
     }
+
+    public void SetRecordButton()
+    {
+        switch (m_curState)
+        {
+            case UIState.Musicmenu1:
+                UIUtility.Instance.GetUI<MusicPanel>().Reset();
+                break;
+            default:
+                break;
+        }
+    }
     
     private void DealFadeWindowCallback(EventArgs e)
     {
