@@ -29,7 +29,7 @@ public class UIDialoguePanel : UIBase {
 
     IEnumerator StartDialogue()
     {
-        int i = 0;
+        //int i = 0;
         yield return null;
     }
 }

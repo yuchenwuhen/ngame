@@ -41,6 +41,11 @@ public class AudioManager : MonoBehaviour
         musicSource.Play();
     }
 
+    public void StopMusicSingle()
+    {
+        musicSource.Stop();
+    }
+
     public void StopBgMusic()
     {
         bgSource.Stop();
@@ -66,13 +71,4 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayEffectMusic(AudioClip clip)
-    {
-        efxSource.clip = clip;
-        efxSource.Play();
-    }
-    public void StopEffectMusic()
-    {
-        efxSource.Stop();
-    }
 }

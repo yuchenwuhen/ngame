@@ -13,8 +13,7 @@ public class NPCBehaviour : MonoBehaviour
     private bool m_bIsMove = false; // 是否移动
     private Vector3 m_LastEndPos; // 最远的距离
 
-    private int m_iStyle;
-
+    private Image m_imgSource;
     // Use this for initialization
     void Start()
     {
@@ -24,23 +23,26 @@ public class NPCBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("init pos:" + transform.position);
+        //Debug.Log("init pos:" + transform.position);
     }
 
-    public void BeginMove(float pointTime)
+    public void Init()
+    {
+        gameObject.SetActive(false);
+        m_imgSource = gameObject.GetComponent<Image>();
+    }
+
+    public void BeginMove(float pointTime, int iStyle)
     {
         Debug.Log("BeginMove, pointTime:" + pointTime);
         transform.position = new Vector3(m_endPos.x - m_speed * pointTime, m_endPos.y, m_endPos.z);
         Debug.Log("BeginMove, pos:" + transform.position);
+
         gameObject.SetActive(true);
-
         m_bIsMove = true;
-        m_iStyle = 0;
 
-        Image img = gameObject.GetComponent<Image>();
-
-        img.sprite = m_randomSprite[Random.Range(0,3)];
-        //img.SetNativeSize();
+        m_imgSource.sprite = m_randomSprite[iStyle];
+        m_imgSource.SetNativeSize();
     }
 
     public void Move(float time)
@@ -51,7 +53,6 @@ public class NPCBehaviour : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, m_LastEndPos, m_speed * time);
             //Debug.Log("Move pos:" + transform.position);
         }
-
     }
 
     public void EndMove()
@@ -63,5 +64,66 @@ public class NPCBehaviour : MonoBehaviour
     public Vector3 GetPos()
     {
         return transform.position;
+    }
+
+    public float time = 0.5f;//代表从A点出发到B经过的时长
+    public float g = -10;//重力加速度
+
+    private Vector3 speed;//初速度向量
+    private Vector3 Gravity = Vector3.zero;//重力向量
+    private bool m_IsParabolaMove = false;
+    private Vector3 pointB;//点B
+    private float dTime = 0;
+
+    //public delegate void EndParabola(NPCBehaviour nPCBehaviour);
+    //public event EndParabola Test;
+    //通过一个式子计算初速度
+
+    public void ParabolaMove(Vector3 dir)
+    {
+        m_bIsMove = false;
+        Vector3 pointA = transform.position;
+        pointB = transform.position + dir;
+        speed = new Vector3((pointB.x - pointA.x) / time, (pointB.y - pointA.y) / time - 0.5f * g * time, 
+                            (pointB.z - pointA.z) / time);
+        m_IsParabolaMove = true;
+    }
+
+    public void SuccessMove()
+    {
+        if (m_IsParabolaMove)
+        {
+            //Debug.Log("jjjjjjj");
+            Gravity.y = g * (dTime += Time.fixedDeltaTime);//v=at
+                                                           //模拟位移
+            transform.Translate(speed * Time.fixedDeltaTime);
+            transform.Translate(Gravity * Time.fixedDeltaTime);
+            if (Vector3.Distance(transform.position, pointB) < 10f)
+            {
+                //Debug.Log("jjjjjjjjjjjjjjjjjjjjjjjjj");
+                //Test(this);
+                Debug.LogWarning("抛物线结束");
+                m_IsParabolaMove = false;
+            }
+        }
+    }
+    private void FixedUpdate()
+    {
+        //if (m_IsParabolaMove)
+        //{
+        //    //Debug.Log("jjjjjjj");
+        //    Gravity.y = g * (dTime += Time.fixedDeltaTime);//v=at
+        //                                                   //模拟位移
+        //    transform.Translate(speed * Time.fixedDeltaTime);
+        //    transform.Translate(Gravity * Time.fixedDeltaTime);
+        //    if (Vector3.Distance(transform.position, pointB) < 10f)
+        //    {
+        //        //Debug.Log("jjjjjjjjjjjjjjjjjjjjjjjjj");
+        //        //Test(this);
+        //        Debug.LogWarning("抛物线结束");
+        //        m_IsParabolaMove = false;
+        //        gameObject.SetActive(false);
+        //    }
+        //}
     }
 }
