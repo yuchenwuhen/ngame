@@ -14,7 +14,7 @@ public class MusicPanel : UIBase {
     public override void Appear()
     {
         base.Appear();
-        m_musicManager.ResetClick();
+        //m_musicManager.ResetClick();
     }
 
     public void Reset()
