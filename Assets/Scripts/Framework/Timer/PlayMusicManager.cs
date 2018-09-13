@@ -299,7 +299,22 @@ public class PlayMusicManager : MonoBehaviour
         {
             //listRunNPC[iNPCID].EndMove();
             NPCBehaviour tmp1 = queueRunNpc.Dequeue();
-            tmp1.EndMove();
+            if (iState == 0)
+            {
+                tmp1.EndMove();
+            }
+            else if (iState == 1)
+            {
+                Debug.LogWarning("超前失败");
+                //tmp1.EndMove();
+                tmp1.ParabolaMove(new Vector3(-800, 0, 0));
+            }
+            else if (iState == 2)
+            {
+                Debug.LogWarning("延迟失败");
+                //tmp1.EndMove();
+                tmp1.ParabolaMove(new Vector3(800, 0, 0));
+            }
             queueCanUseNpc.Enqueue(tmp1);
         }
         else
@@ -317,14 +332,14 @@ public class PlayMusicManager : MonoBehaviour
             else if (iState == 1)
             {
                 Debug.LogWarning("超前失败");
-                tmp1.EndMove();
-                //tmp1.ParabolaMove(new Vector3(-800, 0, 0));
+                //tmp1.EndMove();
+                tmp1.ParabolaMove(new Vector3(-800, 0, 0));
             }
             else if (iState == 2)
             {
                 Debug.LogWarning("延迟失败");
-                tmp1.EndMove();
-                //tmp1.ParabolaMove(new Vector3(800, 0, 0));
+                //tmp1.EndMove();
+                tmp1.ParabolaMove(new Vector3(-800, 800, 0));
             }
             queueCanUseNpc.Enqueue(tmp1);
 
@@ -474,7 +489,7 @@ public class PlayMusicManager : MonoBehaviour
     {
         for (int i = 0; i < queueCanUseNpc.ToArray().Length; i++)
         {
-            queueCanUseNpc.ToArray()[i].SuccessMove();
+            queueCanUseNpc.ToArray()[i].SuccessMove(Time.fixedDeltaTime);
         }
     }
 }

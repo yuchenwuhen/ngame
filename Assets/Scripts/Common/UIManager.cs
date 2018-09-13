@@ -168,6 +168,14 @@ public class UIManager : MonoBehaviour {
         ui.Init(levellist.ToArray());
         if(level>0)
         {
+            switch(m_curState)
+            {
+                case UIState.Musicmenu1:
+                    TileManager.Instance.SetMusicLevel(0);
+                    break;
+                default:
+                    break;
+            }
             //等级大于0
             Debug.Log("当前状态" + m_curState);
         }

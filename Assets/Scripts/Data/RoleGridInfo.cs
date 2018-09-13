@@ -12,7 +12,6 @@ public class RoleGridInfo : GridInfo {
 
     public Vector2Int GetGridWall()
     {
-        Debug.Log("坐标" + TileManager.Instance.WorldPositionToGridPoint(transform.position));
         return TileManager.Instance.WorldPositionToGridPoint(transform.position);
     }
 

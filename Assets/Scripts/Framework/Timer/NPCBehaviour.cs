@@ -67,7 +67,7 @@ public class NPCBehaviour : MonoBehaviour
     }
 
     public float time = 0.5f;//代表从A点出发到B经过的时长
-    public float g = -10;//重力加速度
+    public float g = -1000;//重力加速度
 
     private Vector3 speed;//初速度向量
     private Vector3 Gravity = Vector3.zero;//重力向量
@@ -87,17 +87,18 @@ public class NPCBehaviour : MonoBehaviour
         speed = new Vector3((pointB.x - pointA.x) / time, (pointB.y - pointA.y) / time - 0.5f * g * time, 
                             (pointB.z - pointA.z) / time);
         m_IsParabolaMove = true;
+        dTime = 0;
     }
 
-    public void SuccessMove()
+    public void SuccessMove(float time)
     {
         if (m_IsParabolaMove)
         {
             //Debug.Log("jjjjjjj");
-            Gravity.y = g * (dTime += Time.fixedDeltaTime);//v=at
+            Gravity.y = g * (dTime += time);//v=at
                                                            //模拟位移
-            transform.Translate(speed * Time.fixedDeltaTime);
-            transform.Translate(Gravity * Time.fixedDeltaTime);
+            transform.Translate(speed * time);
+            transform.Translate(Gravity * time);
             if (Vector3.Distance(transform.position, pointB) < 10f)
             {
                 //Debug.Log("jjjjjjjjjjjjjjjjjjjjjjjjj");
