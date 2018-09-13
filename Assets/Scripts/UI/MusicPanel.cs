@@ -11,6 +11,12 @@ public class MusicPanel : UIBase {
         m_musicManager = this.GetComponent<PlayMusicManager>();
     }
 
+    public override void Appear()
+    {
+        base.Appear();
+        m_musicManager.ResetClick();
+    }
+
     public void Reset()
     {
         m_musicManager.ResetClick();

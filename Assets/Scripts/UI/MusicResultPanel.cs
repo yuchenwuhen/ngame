@@ -115,6 +115,6 @@ public class MusicResultPanel : UIBase {
     private void RecordAgain()
     {
         UIManager.instance.SetRecordButton();
-        gameObject.SetActive(false);
+        DisAppear();
     }
 }

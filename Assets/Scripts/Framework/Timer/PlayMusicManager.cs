@@ -339,7 +339,7 @@ public class PlayMusicManager : MonoBehaviour
     public void ResetClick()
     {
         //UIManager.instance.ShowUIFade(UIState.Musicmenu1);
-
+        isset = true;
         m_bGameStateRun = false;
         // 当前节奏点ID，整段音乐的节奏点个数
         m_checkPointID = 0;
@@ -397,7 +397,7 @@ public class PlayMusicManager : MonoBehaviour
         Debug.Log("GameEnd,queueRunNpc Count:" + queueRunNpc.Count);
         AudioManager.Instance.StopMusicSingle();
         m_bGameStateRun = false;
-        if (m_iMaxStar - m_iFailTimes >= 0)
+        if (m_iMaxStar - m_iFailTimes > 0)
         {
             UIManager.instance.CalculationCurMusicResult(m_iMaxStar - m_iFailTimes);
         }
