@@ -287,7 +287,7 @@ public class PlayMusicManager : MonoBehaviour
     public void ResetClick()
     {
         //SceneManager.LoadScene("Main");
-        UIManager.instance.ShowUIFade(UIState.Musicmenu);
+        UIManager.instance.ShowUIFade(UIState.Musicmenu1);
 
         // 节奏点数据
         //m_songData = this.GetComponent<SongData>();

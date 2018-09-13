@@ -18,6 +18,8 @@ public class MusicNote : RProps {
     private Transform m_player;
     private SpriteRenderer m_sprite;
     private BoxCollider m_collider;
+    [SerializeField]
+    private AudioClip m_efxAudio;
 
     private bool m_isEnter = false;
     // Use this for initialization
@@ -29,10 +31,12 @@ public class MusicNote : RProps {
     }
 	
 	// Update is called once per frame
-	void LateUpdate () {
+	void Update () {
 		if(Vector3.Distance(m_player.position,transform.position)<m_checkRange)
         {
             m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 1f);
+            if(m_efxAudio && !m_isEnter)
+                AudioManager.Instance.PlayEffectMusic(m_efxAudio);
             m_collider.enabled = true;
             m_isEnter = true;
         }
@@ -42,6 +46,9 @@ public class MusicNote : RProps {
             {
                 m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
                 m_collider.enabled = false;
+                if (m_efxAudio&&m_isEnter)
+                    AudioManager.Instance.StopEffectMusic();
+                m_isEnter = false;
             }
 
         }
@@ -58,10 +65,12 @@ public class MusicNote : RProps {
                 Debug.Log("篮球音乐玩法");
                 break;
             case MUSICTYPE.Wood:
-                UIManager.instance.ShowUIFade(UIState.Musicmenu);
+                UIManager.instance.ShowUIFade(UIState.Musicmenu1);
                 break;
             default:
                 break;
         }
+        if (m_efxAudio)
+            AudioManager.Instance.StopEffectMusic();
     }
 }

@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     public void BackToScene()
     {
-        UIManager.instance.ShowUIFade(UIState.Musicmenu);
+        UIManager.instance.ShowUIFade(UIState.Musicmenu1);
     }
 
 

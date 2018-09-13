@@ -7,7 +7,7 @@ public enum UIState
 {
     Mainmenu,
     Bookmenu,
-    Musicmenu,
+    Musicmenu1,
     MusicResultMenu,
     Scene
 }
@@ -101,7 +101,7 @@ public class UIManager : MonoBehaviour {
                     DisappearUIWindow<BookPanel>();
                     DisappearUIWindow<SettingBtn>();
                     break;
-                case UIState.Musicmenu:
+                case UIState.Musicmenu1:
                     DisappearUIWindow<MusicPanel>();
                     DisappearUIWindow<MusicResultPanel>();
                     break;
@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour {
             case UIState.Scene:
                 ShowUIWindow<SettingBtn>();
                 break;
-            case UIState.Musicmenu:
+            case UIState.Musicmenu1:
                 ShowUIWindow<MusicPanel>();
                 break;
             default:
@@ -166,6 +166,11 @@ public class UIManager : MonoBehaviour {
         List<object> levellist = new List<object>();
         levellist.Add(m_curMusicLevel);
         ui.Init(levellist.ToArray());
+        if(level>0)
+        {
+            //等级大于0
+            Debug.Log("当前状态" + m_curState);
+        }
     }
     
     private void DealFadeWindowCallback(EventArgs e)
