@@ -354,7 +354,7 @@ public class PlayMusicManager : MonoBehaviour
     /// </summary>
     public void ResetClick()
     {
-        UIManager.instance.ShowUIFade(UIState.Musicmenu);
+        UIManager.instance.ShowUIFade(UIState.Musicmenu1);
 
         m_bGameStateRun = false;
         // 当前节奏点ID，整段音乐的节奏点个数

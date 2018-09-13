@@ -71,4 +71,14 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PlayEffectMusic(AudioClip clip)
+    {
+        efxSource.clip = clip;
+        efxSource.Play();
+    }
+    public void StopEffectMusic()
+    {
+        efxSource.Stop();
+    }
+
 }
