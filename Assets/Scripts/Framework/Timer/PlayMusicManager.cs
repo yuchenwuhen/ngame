@@ -9,6 +9,7 @@ public enum MusicSong
     one = 0,
 }
 
+
 public class PlayMusicManager : MonoBehaviour 
 {
     public AudioClip[] m_audioClip;          //背景音乐信息
