@@ -9,7 +9,6 @@ public enum MusicSong
     one = 0,
 }
 
-
 public class PlayMusicManager : MonoBehaviour 
 {
     public AudioClip[] m_audioClip;          //背景音乐信息
@@ -247,7 +246,7 @@ public class PlayMusicManager : MonoBehaviour
         if(curTime > (m_songData.GetPlayerSongList()[m_checkPointID]+ m_touchCheckTIme))
         {
             Debug.Log("节点超时,CheckPoint:" + m_checkPointID);
-            Debug.Log("节点超时,curTime:" + m_Timer.m_curTime);
+            //Debug.Log("节点超时,curTime:" + m_Timer.m_curTime);
             CheckPointChange(2);
 
             PlayClickFailAudio();
@@ -304,19 +303,19 @@ public class PlayMusicManager : MonoBehaviour
         }
         else if (iState == 1)
         {
-            Debug.LogWarning("超前失败");
+            //Debug.LogWarning("超前失败");
             tmp1.ParabolaMove(new Vector3(-800, 0, 0));
         }
         else if (iState == 2)
         {
-            Debug.LogWarning("延迟失败");
+            //Debug.LogWarning("延迟失败");
             tmp1.ParabolaMove(new Vector3(800, 0, 0));
         }
         queueCanUseNpc.Enqueue(tmp1);
 
         if (m_iHandlePointID < m_songData.GetPlayerSongList().Count)
         {
-            Debug.Log("m_iHandlePointID:" + m_iHandlePointID);
+            //Debug.Log("m_iHandlePointID:" + m_iHandlePointID);
             float curTime2 = m_songData.GetPlayerSongList()[m_iHandlePointID]; // 获取需要注册的木块
             int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
 
