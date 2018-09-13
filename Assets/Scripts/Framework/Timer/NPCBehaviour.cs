@@ -14,6 +14,7 @@ public class NPCBehaviour : MonoBehaviour
     private Vector3 m_LastEndPos; // 最远的距离
 
     private Image m_imgSource;
+
     // Use this for initialization
     void Start()
     {
@@ -34,9 +35,7 @@ public class NPCBehaviour : MonoBehaviour
 
     public void BeginMove(float pointTime, int iStyle)
     {
-        Debug.Log("BeginMove, pointTime:" + pointTime);
         transform.position = new Vector3(m_endPos.x - m_speed * pointTime, m_endPos.y, m_endPos.z);
-        Debug.Log("BeginMove, pos:" + transform.position);
 
         gameObject.SetActive(true);
         m_bIsMove = true;
@@ -97,14 +96,9 @@ public class NPCBehaviour : MonoBehaviour
             transform.Translate(Gravity * time);
             if (Vector3.Distance(transform.position, pointB) < 10f)
             {
-                Debug.LogWarning("抛物线结束");
                 EndMove();
                 m_IsParabolaMove = false;
             }
         }
-    }
-
-    private void FixedUpdate()
-    {
     }
 }

@@ -246,7 +246,7 @@ public class PlayMusicManager : MonoBehaviour
         if(curTime > (m_songData.GetPlayerSongList()[m_checkPointID]+ m_touchCheckTIme))
         {
             Debug.Log("节点超时,CheckPoint:" + m_checkPointID);
-            Debug.Log("节点超时,curTime:" + m_Timer.m_curTime);
+            //Debug.Log("节点超时,curTime:" + m_Timer.m_curTime);
             CheckPointChange(2);
 
             PlayClickFailAudio();
@@ -303,19 +303,19 @@ public class PlayMusicManager : MonoBehaviour
         }
         else if (iState == 1)
         {
-            Debug.LogWarning("超前失败");
+            //Debug.LogWarning("超前失败");
             tmp1.ParabolaMove(new Vector3(-800, 0, 0));
         }
         else if (iState == 2)
         {
-            Debug.LogWarning("延迟失败");
+            //Debug.LogWarning("延迟失败");
             tmp1.ParabolaMove(new Vector3(800, 0, 0));
         }
         queueCanUseNpc.Enqueue(tmp1);
 
         if (m_iHandlePointID < m_songData.GetPlayerSongList().Count)
         {
-            Debug.Log("m_iHandlePointID:" + m_iHandlePointID);
+            //Debug.Log("m_iHandlePointID:" + m_iHandlePointID);
             float curTime2 = m_songData.GetPlayerSongList()[m_iHandlePointID]; // 获取需要注册的木块
             int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
 
@@ -345,13 +345,25 @@ public class PlayMusicManager : MonoBehaviour
         m_checkPointID = 0;
 
         // 主时间定时器
+        m_totalTime = m_audioClip[(int)(m_musicSong)].length;
+        if (m_Timer == null)
+        {
+            m_Timer = new Timer(m_totalTime);
+            m_Timer.m_tick += PlayEnd;
+        }
         m_Timer.Restart();
 
         // 播放音乐
         AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
 
         // 触摸定时器
-        m_touchTimer.Restart();
+        if (m_touchTimer == null)
+        {
+            m_touchTimer = new Timer(m_touchAgainTime);
+            m_touchTimer.m_tick += TouchEnd;
+        }
+        // 节奏点数据
+        m_songData = this.GetComponent<SongData>();
 
         // 清空所有还在移动的NPC
         int Count = queueRunNpc.Count;
@@ -383,6 +395,7 @@ public class PlayMusicManager : MonoBehaviour
 
         m_bGameStateRun = true;    // 运行状态
 
+        enabled = true;
         Debug.Log("EndResetClick");
     }
 
@@ -405,6 +418,7 @@ public class PlayMusicManager : MonoBehaviour
         {
             UIManager.instance.CalculationCurMusicResult(0);
         }
+        enabled = false;
     }
 
     /// <summary>
