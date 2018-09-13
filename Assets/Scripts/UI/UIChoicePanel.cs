@@ -9,7 +9,7 @@ public class UIChoicePanel : UIBase {
     private Button m_btnOptionB;
 
     public event UICompleteHandle m_uiCompleteHandle = null;
-    private int itemFlag = 0;                   //标记当前List显示的个数
+    //private int itemFlag = 0;                   //标记当前List显示的个数
 
     public override void OnAwake()
     {
