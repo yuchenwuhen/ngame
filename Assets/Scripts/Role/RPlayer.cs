@@ -74,7 +74,7 @@ public class RPlayer : RMoveBaseRole {
     {
         if(m_hitObj!=null)
         {
-            UIManager.instance.ShowDialogueWindow(m_hitObj);
+            UIManager.instance.ShowDialogueWindow(this.gameObject,m_hitObj);
         }
         PlayAnimation(0f);
     }
