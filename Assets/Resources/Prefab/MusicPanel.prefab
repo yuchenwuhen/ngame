@@ -429,6 +429,8 @@ MonoBehaviour:
   m_clickAudios:
   - {fileID: 8300000, guid: 90e3436a52806b248b9d6dc45d26db7b, type: 3}
   - {fileID: 8300000, guid: 2bda2e531794747d6854dc7c30a178e6, type: 3}
+  - {fileID: 8300000, guid: a9888368c9e62cd47acd932b62f21f74, type: 3}
+  m_iMaxStar: 0
 --- !u!114 &114271065449880212
 MonoBehaviour:
   m_ObjectHideFlags: 1

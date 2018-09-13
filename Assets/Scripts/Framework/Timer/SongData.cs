@@ -13,4 +13,13 @@ public class SongData : MonoBehaviour {
             return playerSong.m_songTimePoint;
         return null;
     }
+
+    public List<int> GetPlayerSongStyleList()
+    {
+        if(playerSong != null)
+        {
+            return playerSong.m_songStyle;
+        }
+        return null;
+    }
 }
