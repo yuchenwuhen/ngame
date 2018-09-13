@@ -101,6 +101,10 @@ public class UIManager : MonoBehaviour {
                     DisappearUIWindow<BookPanel>();
                     DisappearUIWindow<SettingBtn>();
                     break;
+                case UIState.Musicmenu:
+                    DisappearUIWindow<MusicPanel>();
+                    DisappearUIWindow<MusicResultPanel>();
+                    break;
                 default:
                     break;
             }
@@ -157,7 +161,7 @@ public class UIManager : MonoBehaviour {
     public void CalculationCurMusicResult(int level)
     {
         m_curMusicLevel = level;
-        MusicPanel ui = UIUtility.Instance.GetUI<MusicPanel>();
+        MusicResultPanel ui = UIUtility.Instance.GetUI<MusicResultPanel>();
         ui.Appear();
         List<object> levellist = new List<object>();
         levellist.Add(m_curMusicLevel);

@@ -106,7 +106,7 @@ public class MusicResultPanel : UIBase {
 
     private void BackToScene()
     {
-        GameManager.instance.BackToScene();
+        UIManager.instance.ShowUIFade(UIState.Scene);
     }
 
     private void RecordAgain()

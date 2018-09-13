@@ -36,7 +36,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         if (m_IsEnterMenu)
-            UIManager.instance.ShowUIFade(UIState.Mainmenu);
+        {
+            UIManager.instance.ShowUIWindow<GameMenu>();
+           // UIManager.instance
+        }
         if (m_IsEnterMusic)
             BackToScene();
     }

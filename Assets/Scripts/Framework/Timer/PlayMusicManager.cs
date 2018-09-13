@@ -98,7 +98,7 @@ public class PlayMusicManager : MonoBehaviour
         m_woodsuccess.SetActive(false);
         Debug.Log("EndBegin");
     }
-
+    private bool isset = true;
 	// Update is called once per frame
 	void Update () 
     {
@@ -115,8 +115,9 @@ public class PlayMusicManager : MonoBehaviour
 
         // 检查节点是否全部结束
         //m_songPointCount
-        if (m_checkPointID >= m_songPointCount)
+        if (m_checkPointID >= m_songPointCount && isset)
         {
+            isset = false;
             Invoke("GameEnd", 2f);
             return;
         }
@@ -283,7 +284,7 @@ public class PlayMusicManager : MonoBehaviour
     /// <summary>
     /// 重置音乐场景
     /// </summary>
-    void ResetClick()
+    public void ResetClick()
     {
         //SceneManager.LoadScene("Main");
         UIManager.instance.ShowUIFade(UIState.Musicmenu);

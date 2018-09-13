@@ -8,6 +8,7 @@ public class NPCBehaviour : MonoBehaviour
     public Vector3 m_endPos;    // 终点位置
     public Vector3 m_LastEndOffset; // 超时的最远移动位置与终点位置的偏移
     public float m_speed;       //移动速度
+    public Sprite[] m_randomSprite;
 
     private bool m_bIsMove = false; // 是否移动
     private Vector3 m_LastEndPos; // 最远的距离
@@ -36,9 +37,9 @@ public class NPCBehaviour : MonoBehaviour
         m_bIsMove = true;
         m_iStyle = 0;
 
-        //Image img = gameObject.GetComponent<Image>() as Image;
+        Image img = gameObject.GetComponent<Image>();
 
-        //img.sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite>("");
+        img.sprite = m_randomSprite[Random.Range(0,3)];
         //img.SetNativeSize();
     }
 
