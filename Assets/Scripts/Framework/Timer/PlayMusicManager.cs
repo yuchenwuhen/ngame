@@ -96,6 +96,8 @@ public class PlayMusicManager : MonoBehaviour
         // 木块被劈开的画面
         m_woodsuccess = GameObject.Find("Woodsuccess");
         m_woodsuccess.SetActive(false);
+
+        // 失败次数
         m_iFailTimes = 0;
         Debug.Log("EndBegin");
     }
@@ -219,7 +221,7 @@ public class PlayMusicManager : MonoBehaviour
             CheckPointChange();
 
             PlayClickAudio(1);
-            m_iFailTimes++;
+            m_iFailTimes++; 
         }
 
     }
@@ -372,6 +374,7 @@ public class PlayMusicManager : MonoBehaviour
     void GameEnd()
     {
         Debug.Log("m_iFailTimes:" + m_iFailTimes);
+        AudioManager.Instance.StopMusicSingle();
         if (m_iMaxStar - m_iFailTimes >= 0)
         {
             UIManager.instance.CalculationCurMusicResult(m_iMaxStar - m_iFailTimes);

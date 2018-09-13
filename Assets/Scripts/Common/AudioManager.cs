@@ -41,6 +41,11 @@ public class AudioManager : MonoBehaviour
         musicSource.Play();
     }
 
+    public void StopMusicSingle()
+    {
+        musicSource.Stop();
+    }
+
     public void StopBgMusic()
     {
         bgSource.Stop();
@@ -65,4 +70,5 @@ public class AudioManager : MonoBehaviour
             i.Stop();
         }
     }
+
 }
