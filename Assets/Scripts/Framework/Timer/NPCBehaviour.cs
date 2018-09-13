@@ -75,10 +75,7 @@ public class NPCBehaviour : MonoBehaviour
     private Vector3 pointB;//点B
     private float dTime = 0;
 
-    //public delegate void EndParabola(NPCBehaviour nPCBehaviour);
-    //public event EndParabola Test;
     //通过一个式子计算初速度
-
     public void ParabolaMove(Vector3 dir)
     {
         m_bIsMove = false;
@@ -94,37 +91,20 @@ public class NPCBehaviour : MonoBehaviour
     {
         if (m_IsParabolaMove)
         {
-            //Debug.Log("jjjjjjj");
             Gravity.y = g * (dTime += time);//v=at
                                                            //模拟位移
             transform.Translate(speed * time);
             transform.Translate(Gravity * time);
             if (Vector3.Distance(transform.position, pointB) < 10f)
             {
-                //Debug.Log("jjjjjjjjjjjjjjjjjjjjjjjjj");
-                //Test(this);
                 Debug.LogWarning("抛物线结束");
+                EndMove();
                 m_IsParabolaMove = false;
             }
         }
     }
+
     private void FixedUpdate()
     {
-        //if (m_IsParabolaMove)
-        //{
-        //    //Debug.Log("jjjjjjj");
-        //    Gravity.y = g * (dTime += Time.fixedDeltaTime);//v=at
-        //                                                   //模拟位移
-        //    transform.Translate(speed * Time.fixedDeltaTime);
-        //    transform.Translate(Gravity * Time.fixedDeltaTime);
-        //    if (Vector3.Distance(transform.position, pointB) < 10f)
-        //    {
-        //        //Debug.Log("jjjjjjjjjjjjjjjjjjjjjjjjj");
-        //        //Test(this);
-        //        Debug.LogWarning("抛物线结束");
-        //        m_IsParabolaMove = false;
-        //        gameObject.SetActive(false);
-        //    }
-        //}
     }
 }
