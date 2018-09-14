@@ -30,6 +30,8 @@ public class Activity
                     return new PathfindingCommand(m_player, hit.collider.gameObject);
                 else if (hit.collider.GetComponent<MusicNote>())
                     return new MusicNoteCommand(hit.collider.gameObject);
+                else if (hit.collider.GetComponent<DialogueNote>())
+                    return new DialogueCommand(hit.collider.gameObject);
             }
             else
             {

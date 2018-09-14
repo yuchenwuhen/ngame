@@ -72,10 +72,7 @@ public class RPlayer : RMoveBaseRole {
 
     void PathEndCallback()
     {
-        if(m_hitObj!=null)
-        {
-            UIManager.instance.ShowDialogueWindow(this.gameObject,m_hitObj);
-        }
+
         PlayAnimation(0f);
     }
 

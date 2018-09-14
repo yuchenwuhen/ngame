@@ -17,6 +17,9 @@ public abstract class RBaseRole : MonoBehaviour {
     private void OnEnable()
     {
         
+
+
+
     }
 
     private void Start()
