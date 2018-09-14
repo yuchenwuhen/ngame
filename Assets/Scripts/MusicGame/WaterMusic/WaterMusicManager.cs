@@ -33,6 +33,8 @@ public class WaterMusicManager : MonoBehaviour
 
     private int m_iNowSection;                // 当前进行到第几段音乐
     private int m_iSectionCount;              // 音乐小节数
+
+    private int m_iNpcCount = 5;                  // NPC个数
     void Awake()
     {
 
@@ -53,6 +55,14 @@ public class WaterMusicManager : MonoBehaviour
         m_touchTimer = new Timer(m_fTouchAgainTime);
         m_touchTimer.m_tick += TouchEnd;
 
+        // 初始化所有NPC
+        GameObject waterNpc = GameObject.Find("WaterNPC");
+        for (int i = 0; i < m_iNpcCount; i++)
+        {
+            GameObject tmp = Instantiate(waterNpc) as GameObject;
+            tmp.transform.SetParent(transform);
+        }
+
         //目前所处的节奏点序号
         m_iCheckPointID = 0;
 
@@ -72,13 +82,20 @@ public class WaterMusicManager : MonoBehaviour
         {
             return;
         }
+
         m_oneSectionTimer.Update(Time.deltaTime);
+
+        if (m_iCheckPointID >= m_iSongPointCount)
+        {
+            return;
+        }
 
         // 触摸CD时间内，更新触摸定时器
         if (!m_bIsTouch)
         {
             m_touchTimer.Update(Time.deltaTime);
         }
+
 
         // 检查当前节点是否超时
         CheckCurTouchTime(m_oneSectionTimer.m_curTime);
