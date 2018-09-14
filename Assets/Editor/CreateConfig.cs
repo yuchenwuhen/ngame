@@ -26,4 +26,12 @@ public class CreateConfig : MonoBehaviour {
         PlayerSongData asset = ScriptableObject.CreateInstance<PlayerSongData>();
         AssetDatabase.CreateAsset(asset, "Assets/Resources/NewSong.asset");
     }
+
+    [MenuItem("Assets/Create/WaterMusic")]
+    public static void CreateWaterMusicAsset()
+    {
+        WaterMusicData asset = ScriptableObject.CreateInstance<WaterMusicData>();
+        AssetDatabase.CreateAsset(asset, "Assets/Resources/WaterMusic.asset");
+
+    }
 }

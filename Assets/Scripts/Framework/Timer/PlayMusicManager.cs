@@ -44,7 +44,7 @@ public class PlayMusicManager : MonoBehaviour
     public int m_iMaxStar = 3;                // 最多可获得星星数
     private int m_iFailTimes;
 
-    private bool isset = true;                // 是否调用过结算函数
+    private bool m_bIsAskResult = true;                // 是否调用过结算函数
     private bool m_bGameStateRun = false;     // 场景是否正在运行
 
     public int m_InitNpcCount = 10;
@@ -52,7 +52,7 @@ public class PlayMusicManager : MonoBehaviour
     private Queue<NPCBehaviour> queueCanUseNpc = new Queue<NPCBehaviour>();
     private Queue<NPCBehaviour> queueRunNpc = new Queue<NPCBehaviour>();
     private int m_iHandlePointID;
-    //private Dictionary<int, int> PointID2listID;
+    
     // Use this for initialization
     void Start () 
     {
@@ -147,9 +147,9 @@ public class PlayMusicManager : MonoBehaviour
         //m_songPointCount
         if (m_checkPointID >= m_songPointCount)
         {
-            if (isset)
+            if (m_bIsAskResult)
             {
-                isset = false;
+                m_bIsAskResult = false;
                 Invoke("GameEnd", 2f);
             }
             //Debug.Log("m_iFailTimes:" + m_iFailTimes);
@@ -339,7 +339,7 @@ public class PlayMusicManager : MonoBehaviour
     public void ResetClick()
     {
         //UIManager.instance.ShowUIFade(UIState.Musicmenu1);
-        isset = true;
+        m_bIsAskResult = true;
         m_bGameStateRun = false;
         // 当前节奏点ID，整段音乐的节奏点个数
         m_checkPointID = 0;
