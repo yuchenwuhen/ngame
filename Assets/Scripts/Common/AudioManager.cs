@@ -39,6 +39,12 @@ public class AudioManager : MonoBehaviour
         musicSource.Stop();
         musicSource.clip = audioClip;
         musicSource.Play();
+        Debug.Log("总时长" + audioClip.length);
+    }
+
+    public float GetMusicSourceTime()
+    {
+        return musicSource.time;
     }
 
     public void StopMusicSingle()
