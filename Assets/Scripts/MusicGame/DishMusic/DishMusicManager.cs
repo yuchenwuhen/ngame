@@ -28,7 +28,7 @@ public class DishMusicManager : MonoBehaviour
 
     private bool m_bIsTouch = true;           // 本次触摸是否有效
     private float m_fLastTouchTime;           // 上次触摸的时间
-    private float m_fInitTime;                // 初始化获取的音乐播放时间
+    private float m_fInitTime;                // 初始化获取的音乐播放时间(改字段主要是为了兼容，start中获取到的初始播放音乐时间不为0)
     // 当前状态模块 Begin////
 
     // 点击音效模块 Begin/////
@@ -49,13 +49,14 @@ public class DishMusicManager : MonoBehaviour
 
     void Awake()
     {
+        // 初始化场景
         InitGame();
     }
 
     // Use this for initialization
     void Start()
     {
-        // 播放音乐
+        // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
         AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
         m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
         //Debug.Log("InitTime:" + m_fInitTime);
@@ -65,12 +66,12 @@ public class DishMusicManager : MonoBehaviour
     void Update()
     {
         float fNowTime = AudioManager.Instance.GetMusicSourceTime();
-        float fRunTime = fNowTime - m_fInitTime;
+        float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
         //Debug.Log("fRunTime:" + fRunTime);
 
         if (m_bIsPointEnd)
         {
-            Debug.Log("PointEnd");
+            //Debug.Log("PointEnd");
             return;
         }
         // 检查当前节超时；教学阶段，可以检查节点是否需要增加NPC操作
@@ -136,6 +137,11 @@ public class DishMusicManager : MonoBehaviour
     /// </summary>
     void ReInitSection()
     {
+        //初始化数据
+        InitGame();
+        // 播放音乐
+        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+        m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
     }
 
     /// <summary>
@@ -223,6 +229,7 @@ public class DishMusicManager : MonoBehaviour
                 return;
             }
             m_iNowPointID = 0;
+            // 更新一些在小节中生效的数据
             m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;
             m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
         }
