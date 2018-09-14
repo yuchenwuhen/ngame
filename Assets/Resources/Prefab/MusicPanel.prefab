@@ -266,9 +266,8 @@ MonoBehaviour:
   m_LastEndOffset: {x: 200, y: 0, z: 0}
   m_speed: 600
   m_randomSprite:
+  - {fileID: 21300000, guid: 131c02069fe2b204a86e5dec6ff32843, type: 3}
   - {fileID: 21300000, guid: 6fa69602f28cb2a4d9779c29b972662c, type: 3}
-  - {fileID: 21300000, guid: b83b608fa0c909d4ab80a138169e4399, type: 3}
-  - {fileID: 21300000, guid: 1fc9a4d9a3bcee1478a4c99b3fe578ff, type: 3}
   time: 1
   g: -1000
 --- !u!114 &114032758572200414
