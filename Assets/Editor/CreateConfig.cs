@@ -32,7 +32,13 @@ public class CreateConfig : MonoBehaviour {
     {
         WaterMusicData asset = ScriptableObject.CreateInstance<WaterMusicData>();
         AssetDatabase.CreateAsset(asset, "Assets/Resources/WaterMusic.asset");
+    }
 
+    [MenuItem("Assets/Create/DishMusic")]
+    public static void CreateDishMusicAsset()
+    {
+        MusicGameConfig asset = ScriptableObject.CreateInstance<MusicGameConfig>();
+        AssetDatabase.CreateAsset(asset, "Assets/Resources/DishMusic.asset");
     }
 
     [MenuItem("Assets/Create/RecordMusic")]
