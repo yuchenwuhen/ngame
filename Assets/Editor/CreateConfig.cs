@@ -34,4 +34,12 @@ public class CreateConfig : MonoBehaviour {
         AssetDatabase.CreateAsset(asset, "Assets/Resources/WaterMusic.asset");
 
     }
+
+    [MenuItem("Assets/Create/RecordMusic")]
+    public static void CreateRecordMusicAsset()
+    {
+        RecordConfig asset = ScriptableObject.CreateInstance<RecordConfig>();
+        AssetDatabase.CreateAsset(asset, "Assets/Resources/RecordConfig.asset");
+
+    }
 }
