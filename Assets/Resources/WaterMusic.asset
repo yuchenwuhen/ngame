@@ -12,6 +12,27 @@ MonoBehaviour:
   m_Name: WaterMusic
   m_EditorClassIdentifier: 
   m_musicData:
-  - m_songTimePoint:
+  - audioClip: {fileID: 8300000, guid: b07aba970bc494893bf62f8e36f852aa, type: 3}
+    m_songTimePoint:
     - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    m_songStyle: 
+  - audioClip: {fileID: 8300000, guid: b07aba970bc494893bf62f8e36f852aa, type: 3}
+    m_songTimePoint:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    m_songStyle: 
+  - audioClip: {fileID: 8300000, guid: b07aba970bc494893bf62f8e36f852aa, type: 3}
+    m_songTimePoint:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
     m_songStyle: 
