@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa72853e691ab43239e24c1a81a5555d, type: 3}
+  m_Name: DishMusicGameConfig
+  m_EditorClassIdentifier: 
+  m_audioClipBgm: {fileID: 8300000, guid: b07aba970bc494893bf62f8e36f852aa, type: 3}
+  m_fTouchAgainTime: 0.1
+  m_fTouchSuccessTime: 0.15
+  m_fTouchCheckTime: 0.3
+  m_musicGameData:
+  - m_iSectionID: 0
+    m_iSectionType: 2
+    m_songTimePoint:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    m_songStyle: 
+    m_iClickIndex: 6
+  - m_iSectionID: 1
+    m_iSectionType: 2
+    m_songTimePoint:
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    m_songStyle: 
+    m_iClickIndex: 6

@@ -9,6 +9,7 @@ public class MusicGameConfig : ScriptableObject
     {
         Common = 0,
         Teach = 1,
+        SevenClick = 2,
     }
 
     [System.Serializable]
@@ -18,6 +19,7 @@ public class MusicGameConfig : ScriptableObject
         public SectionType m_iSectionType;                       // 小节样式
         public List<float> m_songTimePoint = new List<float>();  // 节奏点时间
         public List<int> m_songStyle = new List<int>();          // 节奏点风格
+        public int m_iClickIndex;                                // 当该小节为SevenClick时，该字段判断需要玩家点击的是哪一拍
     }
 
     public AudioClip m_audioClipBgm;          //背景音乐
@@ -120,5 +122,15 @@ public class MusicGameConfig : ScriptableObject
     public int GetSectionOnePointStyle(int iSectionID, int iPointID)
     {
         return m_musicGameData[iSectionID].m_songStyle[iPointID];
+    }
+
+    /// <summary>
+    /// 在SevenClick玩法中,玩家需要点击的节点序号ID
+    /// </summary>
+    /// <param name="iSectionID"></param>
+    /// <returns></returns>
+    public int GetSevenClickPlayerIndex(int iSectionID)
+    {
+        return m_musicGameData[iSectionID].m_iClickIndex;
     }
 }

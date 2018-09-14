@@ -20,6 +20,9 @@ public class DishMusicManager : MonoBehaviour
     private bool m_bIsPointEnd;               // 该玩法中,所有的节奏点是否全部走完
 
     private bool m_bIsTeachStage;             // 是否在教学阶段(雨滴关卡特有字段)
+    private bool m_bIsSevenClickStage;        // 是否是七拍点击阶段(盘子管卡特有字段)
+    private bool m_bIsNpcHasAction;           // NPC是否行动过(超时检测时，可以检测当前节点时间，让NPC做出一定动作)
+
     private int m_iNowPointID;                // 当前小节中，目前所处的节奏点序号
     private int m_iNowSectionPointCount;      // 当前小节中，节奏点总个数
 
@@ -112,7 +115,10 @@ public class DishMusicManager : MonoBehaviour
         m_iNowSectionID = 0;              // 该玩法中，当前小节ID
         m_iSectionCount = m_musicGameConfig.GetSectionCount();              // 该玩法中，音乐小节总数
         m_bIsPointEnd = false;
-        m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;             // 是否在教学阶段
+        m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 1 ? true : false;             // 是否在教学阶段
+        m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
+        m_bIsNpcHasAction = false;
+
         m_iNowPointID = 0;                // 当前小节中，目前所处的节奏点序号
         m_iNowSectionPointCount = m_musicGameConfig.GetSectionPointCount(m_iNowSectionID);      // 当前小节中，节奏点总个数
         m_bIsTouch = true;           // 本次触摸是否有效
@@ -138,7 +144,21 @@ public class DishMusicManager : MonoBehaviour
     /// <param name="fRunTime"></param>
     void CheckCurPoint(float fRunTime)
     {
-        if (fRunTime > m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID) + m_fTouchCheckTime)
+        float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
+        //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
+
+        // Seven中，NPC行动，但是不更新当前节点ID，等到超时的时候再更新
+        if (!m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
+        {
+            Debug.Log("NPC行动");
+            m_bIsNpcHasAction = true;
+            if (m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
+            {
+                Debug.Log("NPC打盘子");
+            }
+        }
+
+        if (fRunTime > checkPointTime + m_fTouchCheckTime)
         {
             Debug.Log("节奏点超时");
             m_iNowPointID++;
@@ -147,7 +167,7 @@ public class DishMusicManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测玩家的CD时间之外的点击
+    /// 检测玩家的CD时间之外的有效点击
     /// </summary>
     /// <param name="fRunTime"></param>
     void CheckPlayerInput(float fRunTime)
@@ -190,6 +210,8 @@ public class DishMusicManager : MonoBehaviour
     /// </summary>
     void OnNowPointIDChange()
     {
+        // 更新一些对每个节奏点生效的数据
+        m_bIsNpcHasAction = false;
         if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
         {
             Debug.Log("改变小节");
@@ -202,6 +224,7 @@ public class DishMusicManager : MonoBehaviour
             }
             m_iNowPointID = 0;
             m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;
+            m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
         }
     }
 
