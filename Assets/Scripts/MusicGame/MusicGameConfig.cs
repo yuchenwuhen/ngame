@@ -5,24 +5,70 @@ using UnityEngine;
 [System.Serializable]
 public class MusicGameConfig : ScriptableObject
 {
+    public enum SectionType
+    {
+        Common = 0,
+        Teach = 1,
+    }
+
     [System.Serializable]
     public class OneSectionData
     {
-        public AudioClip audioClipBgm;
-        public List<float> m_songTimePoint = new List<float>();
-        public List<int> m_songStyle = new List<int>();
+        public int m_iSectionID;                                 // 小节ID
+        public SectionType m_iSectionType;                       // 小节样式
+        public List<float> m_songTimePoint = new List<float>();  // 节奏点时间
+        public List<int> m_songStyle = new List<int>();          // 节奏点风格
     }
 
-    public List<OneSectionData> m_musicGameData = new List<OneSectionData>();
+    public AudioClip m_audioClipBgm;          //背景音乐
+    public float m_fTouchAgainTime;           //玩家再次touch时间
+    public float m_fTouchSuccessTime;         //检测玩家点击成功的有效范围
+    public float m_fTouchCheckTime;           //玩家的点击影响物体的检测时间范围
+    public List<OneSectionData> m_musicGameData = new List<OneSectionData>(); //单小节数据
 
+    /// <summary>
+    /// 获取背景音效
+    /// </summary>
+    /// <returns></returns>
+    public AudioClip GetAudioClipBgm()
+    {
+        return m_audioClipBgm;
+    }
+
+    /// <summary>
+    /// 获取再次touch时间范围
+    /// </summary>
+    /// <returns></returns>
+    public float GetTouchAgainTime()
+    {
+        return m_fTouchAgainTime;
+    }
+
+    /// <summary>
+    /// 获取touch成功时间范围
+    /// </summary>
+    /// <returns></returns>
+    public float GetTouchSuccessTime()
+    {
+        return m_fTouchSuccessTime;
+    }
+
+    /// <summary>
+    /// 获取touch被检测时间范围
+    /// </summary>
+    /// <returns></returns>
+    public float GetTouchCheckTime()
+    {
+        return m_fTouchCheckTime;
+    }
     /// <summary>
     /// 获取某小节的配置数据
     /// </summary>
     /// <returns>The one music data.</returns>
-    /// <param name="iIndex">I index.</param>
-    public OneSectionData GetOneSectionData(int iIndex)
+    /// <param name="iSectionID">I index.</param>
+    public OneSectionData GetOneSectionData(int iSectionID)
     {
-        return iIndex > m_musicGameData.Count ? null : m_musicGameData[iIndex];
+        return iSectionID > m_musicGameData.Count ? null : m_musicGameData[iSectionID];
     }
 
     /// <summary>
@@ -32,5 +78,47 @@ public class MusicGameConfig : ScriptableObject
     public int GetSectionCount()
     {
         return m_musicGameData.Count;
+    }
+
+    /// <summary>
+    /// 获取指定小节的类型
+    /// </summary>
+    /// <param name="iSectionID"></param>
+    /// <returns></returns>
+    public int GetSectionType(int iSectionID)
+    {
+        return iSectionID > m_musicGameData.Count ? -1 : (int)m_musicGameData[iSectionID].m_iSectionType;
+    }
+
+    /// <summary>
+    /// 获取指定小节的节奏点个数
+    /// </summary>
+    /// <param name="iSectionID"></param>
+    /// <returns></returns>
+    public int GetSectionPointCount(int iSectionID)
+    {
+        return m_musicGameData[iSectionID].m_songTimePoint.Count;
+    }
+
+    /// <summary>
+    /// 获取某一个小节,某一节奏点时间
+    /// </summary>
+    /// <param name="iSectionID"></param>
+    /// <param name="iPointID"></param>
+    /// <returns></returns>
+    public float GetSectionOnePointTime(int iSectionID, int iPointID)
+    {
+        return m_musicGameData[iSectionID].m_songTimePoint[iPointID];
+    }
+
+    /// <summary>
+    /// 获取某一小节，某一节奏点样式
+    /// </summary>
+    /// <param name="iSectionID"></param>
+    /// <param name="iPointID"></param>
+    /// <returns></returns>
+    public int GetSectionOnePointStyle(int iSectionID, int iPointID)
+    {
+        return m_musicGameData[iSectionID].m_songStyle[iPointID];
     }
 }
