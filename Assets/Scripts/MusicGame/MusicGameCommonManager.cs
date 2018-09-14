@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaterMusicManager : MonoBehaviour
+public class MusicGameCommonManager : MonoBehaviour
 {
     [SerializeField]
     public MusicGameConfig m_musicGameConfig; //玩法通用配置数据
