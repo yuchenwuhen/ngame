@@ -6,93 +6,78 @@ using UnityEngine.UI;
 public class WaterMusicManager : MonoBehaviour
 {
     [SerializeField]
-    private WaterMusicData m_waterMusicData;  //水滴玩法配置数据
+    public MusicGameConfig m_musicGameConfig; //玩法通用配置数据
 
-    public float m_fTouchAgainTime;           //玩家再次touch时间
-    public float m_fTouchSuccessTime;         //检测玩家点击成功的有效范围
-    public float m_fTouchCheckTime;           //玩家的点击影响物体的检测时间范围
+    // 临界时间模块 Begin////
+    private float m_fTouchAgainTime;           //玩家再次touch时间
+    private float m_fTouchSuccessTime;         //检测玩家点击成功的有效范围
+    private float m_fTouchCheckTime;           //玩家的点击影响物体的检测时间范围
+    // 临界时间模块 End////
 
-    //private float m_fOneSectitonTime;         //一小段音乐的时间
-    private int m_iCheckPointID = 0;          //目前所处的节奏点序号
-    private int m_iSongPointCount;            //玩家节奏点总个数
+    // 当前状态模块 Begin////
+    private int m_iNowSectionID;              // 该玩法中，当前小节ID
+    private int m_iSectionCount;              // 该玩法中，音乐小节总数
+    private bool m_bIsPointEnd;               // 该玩法中,所有的节奏点是否全部走完
 
+    private bool m_bIsTeachStage;             // 是否在教学阶段(雨滴关卡特有字段)
+    private int m_iNowPointID;                // 当前小节中，目前所处的节奏点序号
+    private int m_iNowSectionPointCount;      // 当前小节中，节奏点总个数
+    
     private bool m_bIsTouch = true;           // 本次触摸是否有效
+    private float m_fLastTouchTime;           // 上次触摸的时间
+    private float m_fInitTime;                // 初始化获取的音乐播放时间
+    // 当前状态模块 Begin////
 
-    private Timer m_oneSectionTimer;          // 一段音乐的定时器
-    private Timer m_touchTimer;               // 每次触摸的定时器
-
+    // 点击音效模块 Begin/////
     private AudioSource m_clickAudioSource;   // 点击音效
     public AudioClip m_clickInvalidAudio;     // 点击无效音效
     public AudioClip m_clickFailAudio;        // 点击失败音效
     public AudioClip[] m_clickAudios;         // 音效列表
+    // 点击音效模块 End/////
 
-    public int m_iMaxStar = 3;                // 最多可获得星星数
+    // 结算相关模块 Begin////
+    private int m_iMaxStar = 3;                // 最多可获得星星数(目前结算面板只支持配置3)
     private int m_iFailTimes;                 // 失败次数
+    // 结算相关模块 End////
 
-    //private bool m_bIsAskResult = true;       // 是否调用过结算函数
-
-    private int m_iNowSectionID;              // 玩法中，当前小节ID
-    private int m_iSectionCount;              // 玩法中，音乐小节总数
-    private bool m_bIsTeachStage;              // 是否在教学阶段
-
-    //private int m_iNpcCount = 5;                  // NPC个数
-    private Text textPoint;                   // 展示文本
+    // 不通用分类模块 Begin////
+    private Text m_textPoint;                   // 展示文本
+    // 不通用分类模块 End////
 
     void Awake()
     {
-
+        InitGame();
     }
 
     // Use this for initialization
     void Start ()
     {
-        // 当前小节ID
-        m_iNowSectionID = 0;
-
-        // 该玩法所有的小节总数
-        m_iSectionCount = m_waterMusicData.GetWaterMusicCount();
-
-        // 初始化小节主定时器
-        m_oneSectionTimer = new Timer(GetNowSectionAudioClip().length);
-        m_oneSectionTimer.m_tick += OneSectionEnd;
-
-        // 触摸定时器
-        m_touchTimer = new Timer(m_fTouchAgainTime);
-        m_touchTimer.m_tick += TouchEnd;
-
-        // 失败次数
-        m_iFailTimes = 0;
-
-        // 初始第一次为教学阶段
-        m_bIsTeachStage = true;
-
-        m_clickAudioSource = GetComponent<AudioSource>();
-
-        // 初始化小节信息
-        ReInitSection();
-
-        textPoint = GetComponentInChildren<Text>();
+        // 播放音乐
+        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+        m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
+        //Debug.Log("InitTime:" + m_fInitTime);
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        m_oneSectionTimer.Update(Time.deltaTime);
+        float fNowTime = AudioManager.Instance.GetMusicSourceTime();
+        float fRunTime = fNowTime - m_fInitTime;
+        //Debug.Log("fRunTime:" + fRunTime);
 
-        // 当前小节节奏点已经全部使用，等待小节定时器结束
-        if (m_iCheckPointID >= m_iSongPointCount)
+        if (m_bIsPointEnd)
         {
+            Debug.Log("PointEnd");
             return;
         }
-
-        // 触摸CD时间内，更新触摸定时器
-        if (!m_bIsTouch)
-        {
-            m_touchTimer.Update(Time.deltaTime);
-        }
-
         // 检查当前节超时；教学阶段，可以检查节点是否需要增加NPC操作
-        CheckCurTouchTime(m_oneSectionTimer.m_curTime);
+        CheckCurPoint(fRunTime);
+
+        // 如果当前不能触摸,检查触摸CD是否已过
+        if (!m_bIsTouch && (fRunTime - m_fLastTouchTime) > m_fTouchAgainTime)
+        {
+            m_bIsTouch = true;
+        }
 
         // 玩家点击,教学阶段不检测玩家点击
         if (!m_bIsTeachStage && Input.GetMouseButtonDown(0))
@@ -100,9 +85,9 @@ public class WaterMusicManager : MonoBehaviour
             if (m_bIsTouch)
             {
                 // 当前点击有效
-                m_touchTimer.Restart(); // 点击定时器重0开始计时
-                CheckPlayerInput(m_oneSectionTimer.m_curTime); // 检测玩家有效点击情况
-                m_bIsTouch = false; // 点击定时器结束之前，点击无效
+                m_fLastTouchTime = fRunTime;
+                CheckPlayerInput(fRunTime); // 检测玩家有效点击情况
+                m_bIsTouch = false;  // CD时间内，点击无效
             }
             else
             {
@@ -113,146 +98,31 @@ public class WaterMusicManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取当前片段的音乐
+    /// 初始化游戏
     /// </summary>
-    /// <returns></returns>
-    private AudioClip GetNowSectionAudioClip()
+    void InitGame()
     {
-        return m_waterMusicData.GetOneMusicData(m_iNowSectionID).audioClip;
-    }
+        // 临界时间模块 Begin////
+        m_fTouchAgainTime = m_musicGameConfig.GetTouchAgainTime();           //玩家再次touch时间
+        m_fTouchSuccessTime = m_musicGameConfig.GetTouchSuccessTime();       //检测玩家点击成功的有效范围
+        m_fTouchCheckTime = m_musicGameConfig.GetTouchCheckTime();           //玩家的点击影响物体的检测时间范围
+        // 临界时间模块 End////
 
-    /// <summary>
-    /// 获取当前音乐片段节奏点序列
-    /// </summary>
-    /// <returns></returns>
-    private List<float> GetNowSectionPointTimeList()
-    {
-        return m_waterMusicData.GetOneMusicData(m_iNowSectionID).m_songTimePoint;
-    }
+        // 当前状态模块 Begin////
+        m_iNowSectionID = 0;              // 该玩法中，当前小节ID
+        m_iSectionCount = m_musicGameConfig.GetSectionCount();              // 该玩法中，音乐小节总数
+        m_bIsPointEnd = false;
+        m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;             // 是否在教学阶段
+        m_iNowPointID = 0;                // 当前小节中，目前所处的节奏点序号
+        m_iNowSectionPointCount = m_musicGameConfig.GetSectionPointCount(m_iNowSectionID);      // 当前小节中，节奏点总个数
+        m_bIsTouch = true;           // 本次触摸是否有效
+        // 当前状态模块 Begin////
 
-    /// <summary>
-    /// 触摸限制时间结束
-    /// </summary>
-    void TouchEnd()
-    {
-        m_touchTimer.Stop();
-        m_bIsTouch = true;
-    }
+        m_clickAudioSource = GetComponent<AudioSource>();
 
-    /// <summary>
-    ///  检测节点是否超时未被点。如果超时为被点击，则当前节点失败，跳到下一个节点
-    /// </summary>
-    /// <param name="curTime"></param>
-    private void CheckCurTouchTime(float curTime)
-    {
-        float checkPointTime = GetNowSectionPointTimeList()[m_iCheckPointID];
+        m_iFailTimes = 0;
 
-        if (Mathf.Abs(checkPointTime - curTime) < m_fTouchSuccessTime)
-        {
-            if (m_bIsTeachStage)
-            {
-                textPoint.text = "教学阶段";
-            }
-            else
-            {
-                textPoint.text = "玩家阶段";
-            }
-            textPoint.text += m_iCheckPointID.ToString();
-        }
-
-        if (curTime > checkPointTime + m_fTouchCheckTime)
-        {
-            Debug.Log("节点超时");
-
-            CheckPointChange();
-            m_iFailTimes++;
-        }
-
-        // 教学阶段，检查节奏点是否需要操作
-        if (m_bIsTeachStage && Mathf.Abs(checkPointTime - curTime) < m_fTouchSuccessTime)
-        {
-            Debug.Log("NPC教学");
-            m_iCheckPointID++;
-        }
-    }
-
-    /// <summary>
-    /// 检测玩家的CD内点击情况
-    /// </summary>
-    /// <param name="curTime"></param>
-    private void CheckPlayerInput(float curTime)
-    {
-        float checkPointTime = GetNowSectionPointTimeList()[m_iCheckPointID];
-        if (Mathf.Abs(checkPointTime - curTime) < m_fTouchSuccessTime)
-        {
-            Debug.Log("检测成功");
-            CheckPointChange();
-
-            // 播放成功音效
-            PlayClickAudio(0);
-        }
-        else if ((checkPointTime - curTime) > m_fTouchSuccessTime && (checkPointTime - curTime) < m_fTouchCheckTime)
-        {
-            Debug.Log("超前点击");
-
-            CheckPointChange();
-
-            // 播放超前点击音效
-            PlayClickAudio(1);
-
-            m_iFailTimes++;
-        }
-        else if ((curTime - checkPointTime) > m_fTouchSuccessTime && (curTime - checkPointTime) < m_fTouchCheckTime)
-        {
-            Debug.Log("延迟点击");
-
-            CheckPointChange();
-
-            // 播放超前点击音效
-            PlayClickAudio(1);
-
-            m_iFailTimes++;
-        }
-        else
-        {
-            Debug.Log("无效点击");
-
-            // 播放无效点击音效
-            PlayClickAudio(-1);
-        }
-    }
-
-    /// <summary>
-    /// 当前节点改变，需要做的操作
-    /// </summary>
-    void CheckPointChange()
-    {
-        m_iCheckPointID++;
-    }
-
-    /// <summary>
-    /// 当前小节音乐结束
-    /// </summary>
-    void OneSectionEnd()
-    {
-        // 当前是否为教学阶段
-        if (m_bIsTeachStage)
-        {
-            m_bIsTeachStage = false;
-        }
-        else
-        {
-            m_bIsTeachStage = true;
-            m_iNowSectionID++;
-        }
-        
-        if (m_iNowSectionID >= m_iSectionCount)
-        {
-            Debug.Log("游戏结束");
-            enabled = false;
-            return;
-        }
-        ReInitSection();
+        m_textPoint = GetComponent<Text>();
     }
 
     /// <summary>
@@ -260,27 +130,79 @@ public class WaterMusicManager : MonoBehaviour
     /// </summary>
     void ReInitSection()
     {
-        // 一小节音乐的定时器
-        m_oneSectionTimer.ResetTirggerTime(6f);
-        m_oneSectionTimer.Restart();
+    }
 
-        // 可以触摸
-        m_bIsTouch = true;
+    /// <summary>
+    /// 检查当前节点是否超时;检查当前节奏点是否到达，可以增加NPC处理
+    /// </summary>
+    /// <param name="fRunTime"></param>
+    void CheckCurPoint(float fRunTime)
+    {
+        if (fRunTime > m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID) + m_fTouchCheckTime)
+        {
+            Debug.Log("节奏点超时");
+            m_iNowPointID++;
+            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
+        }
+    }
 
-        // 触摸定时器
-        m_touchTimer.Restart();
+    /// <summary>
+    /// 检测玩家的CD时间之外的点击
+    /// </summary>
+    /// <param name="fRunTime"></param>
+    void CheckPlayerInput(float fRunTime)
+    {
+        float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
+        //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
+        if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
+        {
+            Debug.Log("检测成功");
+            // 播放成功音效
+            PlayClickAudio(0);
+            m_iNowPointID++;
+            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
+        }
+        else if ((checkPointTime - fRunTime) > m_fTouchSuccessTime && (checkPointTime - fRunTime) < m_fTouchCheckTime)
+        {
+            Debug.Log("超前点击");
+            PlayClickAudio(1);
+            m_iNowPointID++;
+            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
+            m_iFailTimes++;
+        }
+        else if ((fRunTime - checkPointTime) > m_fTouchSuccessTime && (fRunTime - checkPointTime) < m_fTouchCheckTime)
+        {
+            Debug.Log("延迟点击");
+            PlayClickAudio(1);
+            m_iNowPointID++;
+            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
+            m_iFailTimes++;
+        }
+        else
+        {
+            Debug.Log("无效点击");
+            PlayClickAudio(-1);
+        }
+    }
 
-        // 当前音乐，目前所处的节奏点序号
-        m_iCheckPointID = 0;
-
-        // 当前小节音乐，节奏点个数
-        m_iSongPointCount = GetNowSectionPointTimeList().Count;
-
-        // 游戏运行
-        enabled = true;
-
-        // 播放背景音乐
-        AudioManager.Instance.PlayMusicSingle(GetNowSectionAudioClip());
+    /// <summary>
+    /// 当前节奏点改变之后一定要调用此函数【WARNING】
+    /// </summary>
+    void OnNowPointIDChange()
+    {
+        if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
+        {
+            Debug.Log("改变小节");
+            m_iNowSectionID++;
+            if (m_iNowSectionID >= m_musicGameConfig.GetSectionCount())
+            {
+                Debug.Log("节奏点全部结束");
+                m_bIsPointEnd = true;
+                return;
+            }
+            m_iNowPointID = 0;
+            m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;
+        }
     }
 
     /// <summary>

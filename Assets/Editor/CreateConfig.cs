@@ -27,25 +27,18 @@ public class CreateConfig : MonoBehaviour {
         AssetDatabase.CreateAsset(asset, "Assets/Resources/NewSong.asset");
     }
 
-    [MenuItem("Assets/Create/WaterMusic")]
-    public static void CreateWaterMusicAsset()
-    {
-        WaterMusicData asset = ScriptableObject.CreateInstance<WaterMusicData>();
-        AssetDatabase.CreateAsset(asset, "Assets/Resources/WaterMusic.asset");
-    }
-
-    [MenuItem("Assets/Create/DishMusic")]
-    public static void CreateDishMusicAsset()
-    {
-        MusicGameConfig asset = ScriptableObject.CreateInstance<MusicGameConfig>();
-        AssetDatabase.CreateAsset(asset, "Assets/Resources/DishMusic.asset");
-    }
-
     [MenuItem("Assets/Create/RecordMusic")]
     public static void CreateRecordMusicAsset()
     {
         RecordConfig asset = ScriptableObject.CreateInstance<RecordConfig>();
         AssetDatabase.CreateAsset(asset, "Assets/Resources/RecordConfig.asset");
 
+    }
+
+    [MenuItem("Assets/Create/WaterMusicConfig")]
+    public static void CreateMusicGameConfigAsset()
+    {
+        MusicGameConfig asset = ScriptableObject.CreateInstance<MusicGameConfig>();
+        AssetDatabase.CreateAsset(asset, "Assets/Resources/WaterMusicConfig.asset");
     }
 }

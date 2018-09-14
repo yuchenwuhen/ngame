@@ -11,10 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 097dc21be1bce1d48a1091ecc2312bd6, type: 3}
   m_Name: RecordConfig
   m_EditorClassIdentifier: 
-  m_recordData:
-  - audioClips: []
-    m_songTimePoint: []
-    m_songStyle: 
-  - audioClips: []
-    m_songTimePoint: []
-    m_songStyle: 
+  m_recordData: []
