@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_beginPos: {x: 115, y: 525, z: 0}
-  m_endPos: {x: 1310, y: 525, z: 0}
+  m_endPos: {x: 1300, y: 525, z: 0}
   m_LastEndOffset: {x: 200, y: 0, z: 0}
   m_speed: 600
   m_randomSprite:

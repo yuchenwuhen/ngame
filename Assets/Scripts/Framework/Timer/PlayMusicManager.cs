@@ -27,8 +27,7 @@ public class PlayMusicManager : MonoBehaviour
 
     private bool isTouch = true;            // 本次触摸是否有效
 
-    private Timer m_Timer;                  // 游戏主时间定时器
-    private Timer m_touchTimer;             // 每次触摸的定时器
+    private float m_touchTimer = 0;             // 每次触摸的定时器
 
     private AudioSource m_clickAudioSource;   // 点击音效
     public AudioClip m_clickInvalidAudio;     // 点击无效音效
@@ -52,39 +51,34 @@ public class PlayMusicManager : MonoBehaviour
     private Queue<NPCBehaviour> queueCanUseNpc = new Queue<NPCBehaviour>();
     private Queue<NPCBehaviour> queueRunNpc = new Queue<NPCBehaviour>();
     private int m_iHandlePointID;
+    private GameObject npc;
+    private bool m_isFirstStart = true;
     
     // Use this for initialization
     void Start () 
     {
         // 节奏点数据
         m_songData = this.GetComponent<SongData>();
-
-        // 当前节奏点ID，整段音乐的节奏点个数
-        m_checkPointID = 0;
+        // 获取音效播放源
+        m_clickAudioSource = GetComponent<AudioSource>();
+        // 人物劈柴动画
+        m_animatorCutWood = GameObject.Find("CutWood").GetComponent<Animator>();
+        // 重置按钮
+        m_btnReset = transform.Find("Reset").GetComponent<Button>();
+        m_btnReset.onClick.AddListener(ResetClick);
+        // 木块被劈开的画面
+        m_woodsuccess = GameObject.Find("Woodsuccess");
+        m_woodsuccess.SetActive(false);
         m_songPointCount = m_songData.GetPlayerSongList().Count;
-
-        // 主时间定时器
-        m_totalTime = m_audioClip[(int)(m_musicSong)].length;
-        m_Timer = new Timer(m_totalTime);
-        m_Timer.m_tick += PlayEnd;
-        m_Timer.Start();
-
-        // 播放音乐
-        AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
-
-        // 触摸定时器
-        m_touchTimer = new Timer(m_touchAgainTime);
-        m_touchTimer.m_tick += TouchEnd;
-
-        // 初始化所有NPC
-        GameObject npc = GameObject.Find("NPC");
+        npc = GameObject.Find("NPC");
         npc.GetComponent<NPCBehaviour>().Init();
         queueCanUseNpc.Enqueue(npc.GetComponent<NPCBehaviour>());
         for (int i = 0; i < m_InitNpcCount - 1; i++)
         {
+            NPCBehaviour tmpBehaviour;
             GameObject tmp = Instantiate(npc) as GameObject;
             tmp.transform.SetParent(transform);
-            NPCBehaviour tmpBehaviour = tmp.GetComponent<NPCBehaviour>();
+            tmpBehaviour = tmp.GetComponent<NPCBehaviour>();
             tmpBehaviour.Init();
             queueCanUseNpc.Enqueue(tmpBehaviour);
         }
@@ -97,33 +91,61 @@ public class PlayMusicManager : MonoBehaviour
             int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
 
             NPCBehaviour tmp = queueCanUseNpc.Dequeue();
-            tmp.BeginMove(checkPointTime - m_Timer.m_curTime, iPointStyle);
+            tmp.BeginMove(checkPointTime, iPointStyle);
 
             queueRunNpc.Enqueue(tmp);
             m_iHandlePointID++;
         }
-
-        // 获取音效播放源
-        m_clickAudioSource = GetComponent<AudioSource>();
-
-        // 人物劈柴动画
-        m_animatorCutWood = GameObject.Find("CutWood").GetComponent<Animator>();
-
-        // 重置按钮
-        m_btnReset = transform.Find("Reset").GetComponent<Button>();
-        m_btnReset.onClick.AddListener(ResetClick);
-
-        // 木块被劈开的画面
-        m_woodsuccess = GameObject.Find("Woodsuccess");
-        m_woodsuccess.SetActive(false);
-
-        // 失败次数
-        m_iFailTimes = 0;
-
-        m_bGameStateRun = true;
-
-        Debug.Log("EndBegin");
     }
+
+    /// <summary>
+    /// 重置音乐场景
+    /// </summary>
+    public void ResetClick()
+    {
+        if(m_isFirstStart)
+        {
+            m_isFirstStart = false;
+            m_bGameStateRun = true;    // 运行状态
+            AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
+        }
+        else
+        {
+            m_bIsAskResult = true;
+            m_woodsuccess.SetActive(false);
+            isTouch = true;            // 本次触摸是否有效
+                                       // 初始化所有NPC
+                                       // 当前节奏点ID，整段音乐的节奏点个数
+            m_checkPointID = 0;
+            m_songPointCount = m_songData.GetPlayerSongList().Count;
+            m_touchTimer = 0;
+            // 失败次数
+            m_iFailTimes = 0;
+            while (queueRunNpc.Count > 0)
+            {
+                NPCBehaviour nPCBehaviour = queueRunNpc.Dequeue();
+                queueCanUseNpc.Enqueue(nPCBehaviour);
+                nPCBehaviour.Init();
+            }
+            // 需要移动的NPC
+            m_iHandlePointID = 0;
+            for (int i = 0; i < m_MaxMoveNpcCount; i++)
+            {
+                float checkPointTime = m_songData.GetPlayerSongList()[m_iHandlePointID];
+                int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
+
+                NPCBehaviour tmp = queueCanUseNpc.Dequeue();
+                tmp.BeginMove(checkPointTime, iPointStyle);
+
+                queueRunNpc.Enqueue(tmp);
+                m_iHandlePointID++;
+            }
+            m_bGameStateRun = true;    // 运行状态
+            AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
+        }
+       
+    }
+
 
 	// Update is called once per frame
 	void Update () 
@@ -132,19 +154,9 @@ public class PlayMusicManager : MonoBehaviour
         {
             Debug.Log("Game pause");
             return;
-        }
-
-        // 更新主时间定时器
-        m_Timer.Update(Time.deltaTime);
-        //Debug.Log("cur time:" + m_Timer.m_curTime);
-
-        for (int i = 0; i < queueRunNpc.ToArray().Length; i++)
-        {
-            queueRunNpc.ToArray()[i].Move(Time.deltaTime);
-        }
+        }      
 
         // 检查节点是否全部结束
-        //m_songPointCount
         if (m_checkPointID >= m_songPointCount)
         {
             if (m_bIsAskResult)
@@ -152,18 +164,25 @@ public class PlayMusicManager : MonoBehaviour
                 m_bIsAskResult = false;
                 Invoke("GameEnd", 2f);
             }
-            //Debug.Log("m_iFailTimes:" + m_iFailTimes);
             return;
         }
 
         // 触摸CD时间内，更新触摸定时器
         if (!isTouch)
         {
-            m_touchTimer.Update(Time.deltaTime);
+            if(AudioManager.Instance.GetMusicSourceTime()-m_touchTimer>=m_touchAgainTime)
+            {
+                isTouch = true;
+            }
+        }
+
+        for (int i = 0; i < queueRunNpc.ToArray().Length; i++)
+        {
+            queueRunNpc.ToArray()[i].Move(Time.deltaTime);
         }
 
         //检查当前节点是否超时未被点击。如果当前节点超时未点击，则当前节点失败，移到下一个节点
-        CheckCurTouchTime(m_Timer.m_curTime);
+        CheckCurTouchTime(AudioManager.Instance.GetMusicSourceTime());
 
         // 玩家点击
         if(Input.GetMouseButtonDown(0))
@@ -171,10 +190,10 @@ public class PlayMusicManager : MonoBehaviour
             if(isTouch)
             {
                 // 当前点击有效
-                m_touchTimer.Restart(); // 点击定时器重0开始计时
                 m_animatorCutWood.Play("Guoqi", -1, 0f);
                 m_animatorCutWood.Update(0f);
-                CheckPlayerInput(m_Timer.m_curTime); // 检测玩家有效点击情况
+                CheckPlayerInput(AudioManager.Instance.GetMusicSourceTime()); // 检测玩家有效点击情况
+                m_touchTimer = AudioManager.Instance.GetMusicSourceTime();
                 isTouch = false; // 点击定时器结束之前，点击无效
             }
             else
@@ -184,6 +203,17 @@ public class PlayMusicManager : MonoBehaviour
             }
         }
 	}
+
+    private void FixedUpdate()
+    {
+        if (!m_bGameStateRun)
+            return;
+
+        for (int i = 0; i < queueCanUseNpc.ToArray().Length; i++)
+        {
+            queueCanUseNpc.ToArray()[i].SuccessMove(Time.fixedDeltaTime);
+        }
+    }
 
     /// <summary>
     /// 检测玩家的CD内点击情况
@@ -285,7 +315,6 @@ public class PlayMusicManager : MonoBehaviour
     /// </summary>
     void TouchEnd()
     {
-        m_touchTimer.Stop();
         isTouch = true;
     }
 
@@ -325,78 +354,12 @@ public class PlayMusicManager : MonoBehaviour
                 Debug.LogError("queueCanUseNpc empty");
                 return;
             }
-            tmp.BeginMove(curTime2 - m_Timer.m_curTime, iPointStyle);
+            tmp.BeginMove(curTime2 - AudioManager.Instance.GetMusicSourceTime(), iPointStyle);
             queueRunNpc.Enqueue(tmp);
 
             m_iHandlePointID++; // 节点ID递增
         }
         m_checkPointID++;
-    }
-
-    /// <summary>
-    /// 重置音乐场景
-    /// </summary>
-    public void ResetClick()
-    {
-        //UIManager.instance.ShowUIFade(UIState.Musicmenu1);
-        m_bIsAskResult = true;
-        m_bGameStateRun = false;
-        // 当前节奏点ID，整段音乐的节奏点个数
-        m_checkPointID = 0;
-
-        // 主时间定时器
-        m_totalTime = m_audioClip[(int)(m_musicSong)].length;
-        if (m_Timer == null)
-        {
-            m_Timer = new Timer(m_totalTime);
-            m_Timer.m_tick += PlayEnd;
-        }
-        m_Timer.Restart();
-
-        // 播放音乐
-        AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
-
-        // 触摸定时器
-        if (m_touchTimer == null)
-        {
-            m_touchTimer = new Timer(m_touchAgainTime);
-            m_touchTimer.m_tick += TouchEnd;
-        }
-        // 节奏点数据
-        m_songData = this.GetComponent<SongData>();
-
-        // 清空所有还在移动的NPC
-        int Count = queueRunNpc.Count;
-        for (int i = 0; i < Count; i++)
-        {
-            NPCBehaviour tmp = queueRunNpc.Dequeue();
-            tmp.EndMove();
-            queueCanUseNpc.Enqueue(tmp);
-        }
-        // 需要移动的NPC
-        m_iHandlePointID = 0;
-        for (int i = 0; i < m_MaxMoveNpcCount; i++)
-        {
-            float checkPointTime = m_songData.GetPlayerSongList()[m_iHandlePointID];
-            int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
-
-            NPCBehaviour tmp = queueCanUseNpc.Dequeue();
-            tmp.BeginMove(checkPointTime - m_Timer.m_curTime, iPointStyle);
-
-            queueRunNpc.Enqueue(tmp);
-            m_iHandlePointID++;
-        }
-
-        m_woodsuccess.SetActive(false);
-
-        isTouch = true;            // 本次触摸是否有效
-
-        m_iFailTimes = 0;          // 失败次数
-
-        m_bGameStateRun = true;    // 运行状态
-
-        enabled = true;
-        Debug.Log("EndResetClick");
     }
 
 
@@ -418,7 +381,6 @@ public class PlayMusicManager : MonoBehaviour
         {
             UIManager.instance.CalculationCurMusicResult(0);
         }
-        enabled = false;
     }
 
     /// <summary>
@@ -468,11 +430,5 @@ public class PlayMusicManager : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        for (int i = 0; i < queueCanUseNpc.ToArray().Length; i++)
-        {
-            queueCanUseNpc.ToArray()[i].SuccessMove(Time.fixedDeltaTime);
-        }
-    }
+
 }

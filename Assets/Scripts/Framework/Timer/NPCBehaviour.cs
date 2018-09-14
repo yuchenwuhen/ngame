@@ -33,6 +33,22 @@ public class NPCBehaviour : MonoBehaviour
         m_imgSource = gameObject.GetComponent<Image>();
     }
 
+    private IEnumerator move(Vector3 startPos,  float time)
+    {
+        var dur = 0.0f;
+        while (dur <= time)
+        {
+            dur += Time.fixedDeltaTime;
+            transform.position = Vector3.Lerp(startPos, m_endPos, dur / time);
+            yield return null;
+        }
+    }
+
+    public void BeginMove(Vector3 startPos, float time)
+    {
+        StartCoroutine(move(startPos, time));
+    }
+
     public void BeginMove(float pointTime, int iStyle)
     {
         transform.position = new Vector3(m_endPos.x - m_speed * pointTime, m_endPos.y, m_endPos.z);
