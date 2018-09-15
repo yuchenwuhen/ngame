@@ -7,7 +7,7 @@ public enum MUSICTYPE
 {
     Water,
     Wood,
-    Basketball
+    Dish
 }
 
 public class MusicNote : RProps {
@@ -60,11 +60,14 @@ public class MusicNote : RProps {
         {
             case MUSICTYPE.Water:
                 Debug.Log("水井音乐玩法");
+                UIManager.instance.ShowUIFade(UIState.Musicmenu2);
                 break;
-            case MUSICTYPE.Basketball:
-                Debug.Log("篮球音乐玩法");
+            case MUSICTYPE.Dish:
+                Debug.Log("盘子音乐玩法");
+                UIManager.instance.ShowUIFade(UIState.Musicmenu3);
                 break;
             case MUSICTYPE.Wood:
+                Debug.Log("砍木头玩法");
                 UIManager.instance.ShowUIFade(UIState.Musicmenu1);
                 break;
             default:

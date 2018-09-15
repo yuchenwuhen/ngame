@@ -9,6 +9,8 @@ public enum UIState
     Animation,
     Bookmenu,
     Musicmenu1,
+    Musicmenu2,
+    Musicmenu3,
     MusicResultMenu,
     Scene
 }
@@ -104,6 +106,14 @@ public class UIManager : MonoBehaviour {
                     DisappearUIWindow<MusicPanel>();
                     DisappearUIWindow<MusicResultPanel>();
                     break;
+                case UIState.Musicmenu2:
+                    DisappearUIWindow<WaterMusic>();
+                    DisappearUIWindow<MusicResultPanel>();
+                    break;
+                case UIState.Musicmenu3:
+                    DisappearUIWindow<DishPanel>();
+                    DisappearUIWindow<MusicResultPanel>();
+                    break;
                 case UIState.Animation:
                     DisappearUIWindow<StartAnimationPanel>();
                     break;
@@ -130,6 +140,14 @@ public class UIManager : MonoBehaviour {
             case UIState.Musicmenu1:
                 AudioManager.Instance.StopStartMusic();
                 ShowUIWindow<MusicPanel>();
+                break;
+            case UIState.Musicmenu2:
+                AudioManager.Instance.StopStartMusic();
+                ShowUIWindow<WaterMusic>();
+                break;
+            case UIState.Musicmenu3:
+                AudioManager.Instance.StopStartMusic();
+                ShowUIWindow<DishPanel>();
                 break;
             case UIState.Animation:
                 ShowUIWindow<StartAnimationPanel>();
