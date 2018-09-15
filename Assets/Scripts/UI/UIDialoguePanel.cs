@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIDialoguePanel : UIBase {
-
+    public Sprite[] m_sprites;
     private Text m_bubble_txt;
     private Text m_player_txt;
     private RectTransform bubble_img;
@@ -50,15 +50,20 @@ public class UIDialoguePanel : UIBase {
 
     private void SetDialoguePos(Vector3 m_playerPos, Vector3 m_npcPos)
     {
-        Vector3 offset = new Vector3(50,150,0);
-        if(m_playerPos.y> m_npcPos.y)
+        Vector3 offset1 = new Vector3(-80,150,0);
+        Vector3 offset2 = new Vector3(80, 40, 0);
+        if (m_playerPos.y> m_npcPos.y)
         {
-            bubble_img.position = m_npcPos-offset;
-            player_img.position = m_playerPos+offset;
+            bubble_img.GetComponent<Image>().sprite = m_sprites[0];
+            player_img.GetComponent<Image>().sprite = m_sprites[1];
+            bubble_img.position = m_npcPos-offset2;
+            player_img.position = m_playerPos+offset1;
         }else
         {
-            bubble_img.position = m_npcPos + offset;
-            player_img.position = m_playerPos - offset;
+            bubble_img.GetComponent<Image>().sprite = m_sprites[1];
+            player_img.GetComponent<Image>().sprite = m_sprites[0];
+            bubble_img.position = m_npcPos + offset1;
+            player_img.position = m_playerPos - offset2;
         }
         
     }
