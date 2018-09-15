@@ -283,7 +283,7 @@ public class DishMusicManager : MonoBehaviour
         // 更新一些对每个节奏点生效的数据
         m_bIsNpcHasAction = false;
 
-        // 如果是七次点击关卡，如果策划配置时间点为-1，则递增到下一个节点
+        // 如果是七次点击关卡，如果策划配置时间点为-1，则说明该NPC不用行动，递增到下一个节点
         if (m_bIsSevenClickStage)
         {
             while (m_iNowPointID < m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))

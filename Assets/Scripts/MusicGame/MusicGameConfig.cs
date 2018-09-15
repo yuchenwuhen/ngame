@@ -138,4 +138,13 @@ public class MusicGameConfig : ScriptableObject
     {
         return m_musicGameData[iSectionID].m_iClickIndex;
     }
+
+    public int GetSectionOnePointNoteType(int iSectionID, int iPointID)
+    {
+        if(iSectionID >= m_musicGameData.Count || iPointID >= m_musicGameData[iSectionID].m_songNoteType.Count)
+        {
+            return 0;
+        }
+        return m_musicGameData[iSectionID].m_songNoteType[iPointID];
+    }
 }
