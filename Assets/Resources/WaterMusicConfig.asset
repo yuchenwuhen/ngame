@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa72853e691ab43239e24c1a81a5555d, type: 3}
   m_Name: WaterMusicConfig
   m_EditorClassIdentifier: 
-  m_audioClipBgm: {fileID: 8300000, guid: b07aba970bc494893bf62f8e36f852aa, type: 3}
+  m_audioClipBgm: {fileID: 8300000, guid: 9c3e40c5b71cf5c49be11bf639449300, type: 3}
   m_fTouchAgainTime: 0.1
   m_fTouchSuccessTime: 0.15
   m_fTouchCheckTime: 0.3
@@ -19,35 +19,18 @@ MonoBehaviour:
   - m_iSectionID: 0
     m_iSectionType: 1
     m_songTimePoint:
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
+    - 9.383
+    - 10.8216
+    - 11.8052
+    - 12.7888
     m_songStyle: 
     m_iClickIndex: 0
   - m_iSectionID: 1
     m_iSectionType: 0
     m_songTimePoint:
-    - 6
-    - 7
-    - 8
-    - 9
-    - 10
-    - 11
-    - 12
-    - 13
-    - 14
-    - 15
-    - 16
-    - 17
-    - 18
-    - 19
-    - 20
-    - 21
-    - 22
-    - 23
-    - 24
-    - 25
-    m_songStyle: 
+    - 13.7724
+    - 14.756
+    - 15.7396
+    - 16.7323
+    m_songStyle: 01000000020000000300000004000000
     m_iClickIndex: 0
