@@ -45,6 +45,9 @@ public class WaterMusicManager : MonoBehaviour
 
     // 不通用分类模块 Begin////
     private Text m_textPoint;                   // 展示文本
+    private Animator m_animatorLeaf;            // 叶子动画
+    private Animator m_animatorHead;            // 头部动画
+    private bool m_bIsHeadPlayAnimator;         // 本节奏点是否播放过头部动画,避免重复播放
     // 不通用分类模块 End////
 
     void Awake()
@@ -129,7 +132,18 @@ public class WaterMusicManager : MonoBehaviour
 
         m_iFailTimes = 0;
 
-        m_textPoint = GetComponent<Text>();
+        m_textPoint = GetComponentInChildren<Text>();
+        if (m_bIsTeachStage)
+        {
+            m_textPoint.text = "教学阶段";
+        }
+        else
+        {
+            m_textPoint.text = "玩家阶段";
+        }
+        m_animatorLeaf = transform.Find("Leaf").GetComponent<Animator>();
+        m_animatorHead = transform.Find("Head").GetComponent<Animator>();
+        m_bIsHeadPlayAnimator = false;
     }
 
     /// <summary>
@@ -167,6 +181,10 @@ public class WaterMusicManager : MonoBehaviour
         if (fRunTime > checkPointTime + m_fTouchCheckTime)
         {
             Debug.Log("节奏点超时");
+
+            // 播放失败动画
+            //PlayFailedAnimator();
+
             m_iNowPointID++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
         }
@@ -185,6 +203,10 @@ public class WaterMusicManager : MonoBehaviour
             Debug.Log("检测成功");
             // 播放成功音效
             PlayClickAudio(0);
+
+            // 播放成功动画
+            PlaySuccessAnimator();
+
             m_iNowPointID++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
         }
@@ -192,6 +214,10 @@ public class WaterMusicManager : MonoBehaviour
         {
             Debug.Log("超前点击");
             PlayClickAudio(1);
+
+            // 播放失败动画
+            PlayFailedAnimator();
+
             m_iNowPointID++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
             m_iFailTimes++;
@@ -200,6 +226,10 @@ public class WaterMusicManager : MonoBehaviour
         {
             Debug.Log("延迟点击");
             PlayClickAudio(1);
+
+            // 播放失败动画
+            PlayFailedAnimator();
+
             m_iNowPointID++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
             m_iFailTimes++;
@@ -208,6 +238,9 @@ public class WaterMusicManager : MonoBehaviour
         {
             Debug.Log("无效点击");
             PlayClickAudio(-1);
+
+            // 播放失败动画
+            PlayFailedAnimator();
         }
     }
 
@@ -218,6 +251,7 @@ public class WaterMusicManager : MonoBehaviour
     {
         // 更新一些对每个节奏点生效的数据
         m_bIsNpcHasAction = false;
+        m_bIsHeadPlayAnimator = false;
         if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
         {
             Debug.Log("改变小节");
@@ -232,6 +266,14 @@ public class WaterMusicManager : MonoBehaviour
             // 更新一些在小节中生效的数据
             m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;
             m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
+            if (m_bIsTeachStage)
+            {
+                m_textPoint.text = "教学阶段";
+            }
+            else
+            {
+                m_textPoint.text = "玩家阶段";
+            }
         }
     }
 
@@ -260,5 +302,44 @@ public class WaterMusicManager : MonoBehaviour
             m_clickAudioSource.Play();
 
         }
+    }
+
+    /// <summary>
+    /// 播放成功动画
+    /// </summary>
+    void PlaySuccessAnimator()
+    {
+        int iRandomValue = Random.Range(0, 4);
+        Debug.Log(iRandomValue);
+        switch(iRandomValue)
+        {
+            case 0:
+                m_animatorLeaf.Play("WaterHighLeft");
+                break;
+            case 1:
+                m_animatorLeaf.Play("WaterHighRight");
+                break;
+            case 2:
+                m_animatorLeaf.Play("WaterLowLeft");
+                break;
+            case 3:
+                m_animatorLeaf.Play("WaterLowRight");
+                break;
+            default:
+                break;
+        }
+        
+    }
+
+    /// <summary>
+    /// 播放失败动画
+    /// </summary>
+    void PlayFailedAnimator()
+    {
+        if (!m_bIsHeadPlayAnimator)
+        {
+            m_animatorHead.Play("WaterMusicHead");
+            m_bIsHeadPlayAnimator = true;
+        } 
     }
 }
