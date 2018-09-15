@@ -121,6 +121,10 @@ public class MusicGameConfig : ScriptableObject
     /// <returns></returns>
     public int GetSectionOnePointStyle(int iSectionID, int iPointID)
     {
+        if (iSectionID > m_musicGameData.Count || iPointID > m_musicGameData[iSectionID].m_songStyle.Count)
+        {
+            return 0;
+        }
         return m_musicGameData[iSectionID].m_songStyle[iPointID];
     }
 

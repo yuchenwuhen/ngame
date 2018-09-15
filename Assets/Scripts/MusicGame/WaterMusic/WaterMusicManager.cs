@@ -208,12 +208,12 @@ public class WaterMusicManager : MonoBehaviour
     void CheckPlayerInput(float fRunTime)
     {
         float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
-        //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
+        int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
         if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
         {
             Debug.Log("检测成功");
             // 播放成功音效
-            PlayClickAudio(0);
+            PlayClickAudio(0, iPointStyle);
 
             // 播放成功动画
             PlaySuccessAnimator();
@@ -224,7 +224,7 @@ public class WaterMusicManager : MonoBehaviour
         else if ((checkPointTime - fRunTime) > m_fTouchSuccessTime && (checkPointTime - fRunTime) < m_fTouchCheckTime)
         {
             Debug.Log("超前点击");
-            PlayClickAudio(1);
+            PlayClickAudio(1, iPointStyle);
 
             // 播放失败动画
             PlayFailedAnimator();
@@ -236,7 +236,7 @@ public class WaterMusicManager : MonoBehaviour
         else if ((fRunTime - checkPointTime) > m_fTouchSuccessTime && (fRunTime - checkPointTime) < m_fTouchCheckTime)
         {
             Debug.Log("延迟点击");
-            PlayClickAudio(1);
+            PlayClickAudio(1, iPointStyle);
 
             // 播放失败动画
             PlayFailedAnimator();
@@ -248,7 +248,7 @@ public class WaterMusicManager : MonoBehaviour
         else
         {
             Debug.Log("无效点击");
-            PlayClickAudio(-1);
+            PlayClickAudio(-1, iPointStyle);
 
             // 播放失败动画
             PlayFailedAnimator();
@@ -292,7 +292,7 @@ public class WaterMusicManager : MonoBehaviour
     /// 播放点击音效
     /// </summary>
     /// <param name="iClickState">点击状态 0成功 -1无效 1失败 </param>
-    void PlayClickAudio(int iClickState)
+    void PlayClickAudio(int iClickState, int iStyle)
     {
         if (m_clickAudioSource)
         {
@@ -300,7 +300,7 @@ public class WaterMusicManager : MonoBehaviour
 
             if (iClickState == 0)
             {
-                m_clickAudioSource.clip = m_clickAudios[0];
+                m_clickAudioSource.clip = m_clickAudios[iStyle];
             }
             else if (iClickState == 1)
             {
