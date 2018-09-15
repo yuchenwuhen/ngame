@@ -428,6 +428,7 @@ GameObject:
   - component: {fileID: 794231250}
   - component: {fileID: 794231252}
   - component: {fileID: 794231251}
+  - component: {fileID: 794231253}
   m_Layer: 5
   m_Name: Head
   m_TagString: Untagged
@@ -487,6 +488,24 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 794231249}
   m_CullTransparentMesh: 0
+--- !u!95 &794231253
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 794231249}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 847cded0ebaaffe40b1b555e47c200de, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &872705320
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +662,7 @@ GameObject:
   - component: {fileID: 1141205045}
   - component: {fileID: 1141205047}
   - component: {fileID: 1141205046}
+  - component: {fileID: 1141205048}
   m_Layer: 5
   m_Name: Leaf
   m_TagString: Untagged
@@ -702,6 +722,24 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1141205044}
   m_CullTransparentMesh: 0
+--- !u!95 &1141205048
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1141205044}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf5a20b0c9827d54e8e9b7f209d0eeaf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1289825401
 GameObject:
   m_ObjectHideFlags: 0
