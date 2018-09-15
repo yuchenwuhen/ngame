@@ -32,7 +32,7 @@ MonoBehaviour:
     - 14.756
     - 15.7396
     - 16.7323
-    m_songStyle: 01000000020000000300000004000000
+    m_songStyle: 00000000010000000200000003000000
     m_iClickIndex: 0
   - m_iSectionID: 2
     m_iSectionType: 1
