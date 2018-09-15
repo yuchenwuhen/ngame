@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioClip:
-  - {fileID: 8300000, guid: 22da1c94f67b159478b4d4a13d7b3111, type: 3}
+  - {fileID: 8300000, guid: 9c3e40c5b71cf5c49be11bf639449300, type: 3}
   m_musicSong: 0
   m_touchAgainTime: 0.1
   m_touchSuccessTIme: 0.2
@@ -356,8 +356,8 @@ MonoBehaviour:
   m_clickInvalidAudio: {fileID: 8300000, guid: a9888368c9e62cd47acd932b62f21f74, type: 3}
   m_clickFailAudio: {fileID: 8300000, guid: 2bda2e531794747d6854dc7c30a178e6, type: 3}
   m_clickAudios:
-  - {fileID: 8300000, guid: daa33427abd6bb148ba416a23635c713, type: 3}
-  - {fileID: 8300000, guid: 16dae175dde39584d816d730e069af75, type: 3}
+  - {fileID: 8300000, guid: c82ce48aadeb7c64d8ef173023e1a350, type: 3}
+  - {fileID: 8300000, guid: 683a4891ca01fbe4589a6ac3595137e9, type: 3}
   m_iMaxStar: 3
   m_InitNpcCount: 10
   m_MaxMoveNpcCount: 3

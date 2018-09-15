@@ -96,6 +96,7 @@ public class PlayMusicManager : MonoBehaviour
             queueRunNpc.Enqueue(tmp);
             m_iHandlePointID++;
         }
+        ResetClick();
     }
 
     /// <summary>
