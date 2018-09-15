@@ -45,11 +45,17 @@ public class WaterMusicManager : MonoBehaviour
 
     // 不通用分类模块 Begin////
     private Text m_textPoint;                   // 展示文本
+    // 不通用分类模块 End////
+
+    // 动画模块 Begin////
     private Animator m_animatorLeaf;            // 叶子动画
     private Animator m_animatorHead;            // 头部动画
     private bool m_bIsHeadPlayAnimator;         // 本节奏点是否播放过头部动画,避免重复播放
-    // 不通用分类模块 End////
-
+    private Animator m_animatorWaterDrop1;      // 水滴动画1
+    private Animator m_animatorWaterDrop2;      // 水滴动画2
+    private Animator m_animatorWaterDrop3;      // 水滴动画3
+    private Animator m_animatorWaterDrop4;      // 水滴动画4
+    // 动画模块 End////
     void Awake()
     {
         // 初始化场景
@@ -144,6 +150,11 @@ public class WaterMusicManager : MonoBehaviour
         m_animatorLeaf = transform.Find("Leaf").GetComponent<Animator>();
         m_animatorHead = transform.Find("Head").GetComponent<Animator>();
         m_bIsHeadPlayAnimator = false;
+
+        m_animatorWaterDrop1 = transform.Find("WaterDrop1").GetComponent<Animator>();      // 水滴动画1
+        m_animatorWaterDrop2 = transform.Find("WaterDrop2").GetComponent<Animator>();      // 水滴动画2
+        m_animatorWaterDrop3 = transform.Find("WaterDrop3").GetComponent<Animator>();      // 水滴动画3
+        m_animatorWaterDrop4 = transform.Find("WaterDrop4").GetComponent<Animator>();      // 水滴动画4
     }
 
     /// <summary>
@@ -197,12 +208,12 @@ public class WaterMusicManager : MonoBehaviour
     void CheckPlayerInput(float fRunTime)
     {
         float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
-        //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
+        int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
         if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
         {
             Debug.Log("检测成功");
             // 播放成功音效
-            PlayClickAudio(0);
+            PlayClickAudio(0, iPointStyle);
 
             // 播放成功动画
             PlaySuccessAnimator();
@@ -213,7 +224,7 @@ public class WaterMusicManager : MonoBehaviour
         else if ((checkPointTime - fRunTime) > m_fTouchSuccessTime && (checkPointTime - fRunTime) < m_fTouchCheckTime)
         {
             Debug.Log("超前点击");
-            PlayClickAudio(1);
+            PlayClickAudio(1, iPointStyle);
 
             // 播放失败动画
             PlayFailedAnimator();
@@ -225,7 +236,7 @@ public class WaterMusicManager : MonoBehaviour
         else if ((fRunTime - checkPointTime) > m_fTouchSuccessTime && (fRunTime - checkPointTime) < m_fTouchCheckTime)
         {
             Debug.Log("延迟点击");
-            PlayClickAudio(1);
+            PlayClickAudio(1, iPointStyle);
 
             // 播放失败动画
             PlayFailedAnimator();
@@ -237,7 +248,7 @@ public class WaterMusicManager : MonoBehaviour
         else
         {
             Debug.Log("无效点击");
-            PlayClickAudio(-1);
+            PlayClickAudio(-1, iPointStyle);
 
             // 播放失败动画
             PlayFailedAnimator();
@@ -281,7 +292,7 @@ public class WaterMusicManager : MonoBehaviour
     /// 播放点击音效
     /// </summary>
     /// <param name="iClickState">点击状态 0成功 -1无效 1失败 </param>
-    void PlayClickAudio(int iClickState)
+    void PlayClickAudio(int iClickState, int iStyle)
     {
         if (m_clickAudioSource)
         {
@@ -289,7 +300,7 @@ public class WaterMusicManager : MonoBehaviour
 
             if (iClickState == 0)
             {
-                m_clickAudioSource.clip = m_clickAudios[0];
+                m_clickAudioSource.clip = m_clickAudios[iStyle];
             }
             else if (iClickState == 1)
             {
@@ -315,15 +326,19 @@ public class WaterMusicManager : MonoBehaviour
         {
             case 0:
                 m_animatorLeaf.Play("WaterHighLeft");
+                m_animatorWaterDrop1.Play("WaterDrop");
                 break;
             case 1:
                 m_animatorLeaf.Play("WaterHighRight");
+                m_animatorWaterDrop4.Play("WaterDrop");
                 break;
             case 2:
                 m_animatorLeaf.Play("WaterLowLeft");
+                m_animatorWaterDrop2.Play("WaterDrop");
                 break;
             case 3:
                 m_animatorLeaf.Play("WaterLowRight");
+                m_animatorWaterDrop3.Play("WaterDrop");
                 break;
             default:
                 break;

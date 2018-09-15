@@ -47,6 +47,14 @@ public class DishMusicManager : MonoBehaviour
     private Text m_textPoint;                   // 展示文本
     // 不通用分类模块 End////
 
+    private Animator m_animatorHand1;
+    private Animator m_animatorHand2;
+    private Animator m_animatorHand3;
+    private Animator m_animatorHand4;
+    private Animator m_animatorHand5;
+    private Animator m_animatorChicken;
+    private Animator m_animatorPlayerHand;
+
     void Awake()
     {
         // 初始化场景
@@ -130,6 +138,15 @@ public class DishMusicManager : MonoBehaviour
         m_iFailTimes = 0;
 
         m_textPoint = GetComponent<Text>();
+
+        m_animatorHand1 = transform.Find("Hand1").GetComponent<Animator>();
+        Debug.Log(m_animatorHand1);
+        m_animatorHand2 = transform.Find("Hand2").GetComponent<Animator>();
+        m_animatorHand3 = transform.Find("Hand3").GetComponent<Animator>();
+        m_animatorHand4 = transform.Find("Hand4").GetComponent<Animator>();
+        m_animatorHand5 = transform.Find("Hand5").GetComponent<Animator>();
+        m_animatorChicken = transform.Find("Chicken").GetComponent<Animator>();
+        m_animatorPlayerHand = transform.Find("PlayerHand").GetComponent<Animator>();
     }
 
     /// <summary>
@@ -158,9 +175,12 @@ public class DishMusicManager : MonoBehaviour
         {
             Debug.Log("NPC行动");
             m_bIsNpcHasAction = true;
+            Debug.Log(m_iNowSectionID + "|" + m_iNowPointID + "|" + m_bIsSevenClickStage);
             if (m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
             {
                 Debug.Log("NPC打盘子");
+                PlayBeatAnimator(m_iNowPointID);
+
             }
         }
 
@@ -172,12 +192,52 @@ public class DishMusicManager : MonoBehaviour
         }
     }
 
+    void PlayBeatAnimator(int iNpcID)
+    {
+        switch(iNpcID)
+        {
+            case 0:
+                Debug.Log("NPC1 beats");
+                m_animatorHand1.Play("HandBeat");
+                break;
+            case 1:
+                m_animatorHand2.Play("HandBeat");
+                break;
+            case 2:
+                m_animatorHand3.Play("HandBeat");
+                break;
+            case 3:
+                m_animatorHand4.Play("HandBeat");
+                break;
+            case 4:
+                m_animatorHand5.Play("HandBeat");
+                break;
+            case 5:
+                Debug.Log("chicken beat");
+                m_animatorChicken.Play("ChickenBeat");
+                break;
+            case 6:
+                m_animatorPlayerHand.Play("HandBeat");
+                break;
+            default:
+                break;
+        }
+    }
+
     /// <summary>
     /// 检测玩家的CD时间之外的有效点击
     /// </summary>
     /// <param name="fRunTime"></param>
     void CheckPlayerInput(float fRunTime)
     {
+        // 七次点击关卡,为轮到玩家点击，判定无效
+        if(m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
+        {
+            Debug.Log("无效点击");
+            PlayClickAudio(-1);
+            return;
+        }
+
         float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
         //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
         if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
@@ -185,6 +245,10 @@ public class DishMusicManager : MonoBehaviour
             Debug.Log("检测成功");
             // 播放成功音效
             PlayClickAudio(0);
+
+            // 播放成功点击动画
+            PlayBeatAnimator(m_iNowPointID);
+
             m_iNowPointID++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
         }
