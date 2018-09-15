@@ -180,7 +180,6 @@ public class DishMusicManager : MonoBehaviour
             {
                 Debug.Log("NPC打盘子");
                 PlayBeatAnimator(m_iNowPointID);
-
             }
         }
 
@@ -284,16 +283,16 @@ public class DishMusicManager : MonoBehaviour
         m_bIsNpcHasAction = false;
 
         // 如果是七次点击关卡，如果策划配置时间点为-1，则说明该NPC不用行动，递增到下一个节点
-        if (m_bIsSevenClickStage)
-        {
-            while (m_iNowPointID < m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
-            {
-                if (m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID) == -1)
-                {
-                    m_iNowPointID++;
-                }
-            }
-        }
+        //if (m_bIsSevenClickStage)
+        //{
+        //    while (m_iNowPointID < m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
+        //    {
+        //        if (m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID) == -1)
+        //        {
+        //            m_iNowPointID++;
+        //        }
+        //    }
+        //}
 
         if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
         {
