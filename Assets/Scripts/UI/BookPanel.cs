@@ -48,13 +48,14 @@ public class BookPanel : UIBase {
     {
         m_isPlaying = !m_isPlaying;
         AudioManager.Instance.StopAudioMusic();
-        UIManager.instance.ShowUIFade(UIState.Scene); 
+        UIManager.instance.ShowUIFade(UIState.Scene);
     }
 
     private void BackToLogin()
     {
         UIManager.instance.ShowUIFade(UIState.Mainmenu);
         AudioManager.Instance.StopAudioMusic();
+        AudioManager.Instance.StopStartMusic();
     }
 
     void PlayMulMusic()
@@ -63,11 +64,13 @@ public class BookPanel : UIBase {
         SetBtnplaySprite();
         if(m_isPlaying)
         {
+            AudioManager.Instance.StopStartMusic();
             AudioManager.Instance.PlayMulMusic(TileManager.Instance.GetMusicLevel());
         }
         else
         {
             AudioManager.Instance.StopAudioMusic();
+            AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Menu);
         }
     }
 

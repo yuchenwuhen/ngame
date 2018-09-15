@@ -11,6 +11,8 @@ public class GameMenu : UIBase {
 	void Start () {
         m_startButton = transform.Find("btnstart").GetComponent<Button>();
         m_startButton.onClick.AddListener(StartGame);
+        AudioManager.Instance.StopStartMusic();
+        AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
     }
 	
     /// <summary>
@@ -18,6 +20,6 @@ public class GameMenu : UIBase {
     /// </summary>
 	void StartGame()
     {
-        UIManager.instance.ShowUIFade(UIState.Bookmenu);
+        UIManager.instance.ShowUIFade(UIState.Animation);
     }
 }

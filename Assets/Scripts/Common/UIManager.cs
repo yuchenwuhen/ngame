@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public enum UIState
 {
     Mainmenu,
+    Animation,
     Bookmenu,
     Musicmenu1,
     MusicResultMenu,
@@ -14,7 +15,6 @@ public enum UIState
 public class UIManager : MonoBehaviour {
 
     public static UIManager instance = null;
-    public bool ISstart = false;
 
 
 
@@ -26,14 +26,12 @@ public class UIManager : MonoBehaviour {
     {
         if (instance == null)
             instance = this;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
     {
         ResgisterHandler();
-        //ShowOptionWindow(null);
-        if(ISstart)
-        ShowUIWindow<GameMenu>();
     }
 
     private void Update()
@@ -68,6 +66,7 @@ public class UIManager : MonoBehaviour {
         fadeTransition.m_FadeOutEnd += ReceiveChildUIMessage;
         fadeTransition.Appear();
     }
+
 
     /// <summary>
     /// 显示选择窗口
@@ -105,6 +104,9 @@ public class UIManager : MonoBehaviour {
                     DisappearUIWindow<MusicPanel>();
                     DisappearUIWindow<MusicResultPanel>();
                     break;
+                case UIState.Animation:
+                    DisappearUIWindow<StartAnimationPanel>();
+                    break;
                 default:
                     break;
             }
@@ -113,16 +115,24 @@ public class UIManager : MonoBehaviour {
         switch (m_curState)
         {
             case UIState.Mainmenu:
+                AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
                 ShowUIWindow<GameMenu>();
                 break;
             case UIState.Bookmenu:
+                AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Menu);
                 ShowUIWindow<BookPanel>();
                 break;
             case UIState.Scene:
+                AudioManager.Instance.StopStartMusic();
+                AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Scene);
                 ShowUIWindow<SettingBtn>();
                 break;
             case UIState.Musicmenu1:
+                AudioManager.Instance.StopStartMusic();
                 ShowUIWindow<MusicPanel>();
+                break;
+            case UIState.Animation:
+                ShowUIWindow<StartAnimationPanel>();
                 break;
             default:
                 break;
