@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum MenuSingleClip
+{
+    Start = 0,
+    Menu,
+    Scene,
+    End
+}
+
 public class AudioManager : MonoBehaviour
 {
 
@@ -13,11 +21,14 @@ public class AudioManager : MonoBehaviour
     }
     public float minPitch = 0.9f;
     public float maxPitch = 1.1f;
-    public AudioSource efxSource;
-    public AudioSource bgSource;
-    public AudioSource musicSource;
+    public AudioSource _startSource;
+    public AudioSource _efxSource;
+    public AudioSource _bgSource;
+    public AudioSource _musicSource;
+    public AudioSource m_defaultSource;
     public AudioSource[] m_audioSource;
-
+    [Tooltip("Start,Menu,Scene,End")]
+    public AudioClip[] m_menuSingleClip;
 
     void Awake()
     {
@@ -29,32 +40,47 @@ public class AudioManager : MonoBehaviour
         float pitch = Random.Range(minPitch, maxPitch);
         int index = Random.Range(0, clips.Length);
         AudioClip clip = clips[index];
-        efxSource.clip = clip;
-        efxSource.pitch = pitch;
-        efxSource.Play();
+        _efxSource.clip = clip;
+        _efxSource.pitch = pitch;
+        _efxSource.Play();
     }
 
     public void PlayMusicSingle(AudioClip audioClip)
     {
-        musicSource.Stop();
-        musicSource.clip = audioClip;
-        musicSource.Play();
+        _musicSource.Stop();
+        _musicSource.clip = audioClip;
+        _musicSource.Play();
         Debug.Log("总时长" + audioClip.length);
     }
 
     public float GetMusicSourceTime()
     {
-        return musicSource.time;
+        return _musicSource.time;
     }
 
     public void StopMusicSingle()
     {
-        musicSource.Stop();
+        _musicSource.Stop();
     }
 
     public void StopBgMusic()
     {
-        bgSource.Stop();
+        _bgSource.Stop();
+    }
+
+    public void PlayMenuMusic(MenuSingleClip singleClip)
+    {
+        if (m_menuSingleClip[(int)singleClip])
+        {
+            _startSource.clip = m_menuSingleClip[(int)singleClip];
+            _startSource.Play();
+        }
+
+    }
+
+    public void StopStartMusic()
+    {
+        _startSource.Stop();
     }
 
     /// <summary>
@@ -63,7 +89,8 @@ public class AudioManager : MonoBehaviour
     /// <param name="index"></param>
     public void PlayMulMusic(int[] index)
     {
-        for(int i=0;i<index.Length;i++)
+        m_defaultSource.Play();
+        for (int i=0;i<index.Length;i++)
         {
             m_audioSource[index[i]].Play();
         }
@@ -71,7 +98,8 @@ public class AudioManager : MonoBehaviour
 
     public void StopAudioMusic()
     {
-        foreach(var i in m_audioSource)
+        m_defaultSource.Stop();
+        foreach (var i in m_audioSource)
         {
             i.Stop();
         }
@@ -79,12 +107,12 @@ public class AudioManager : MonoBehaviour
 
     public void PlayEffectMusic(AudioClip clip)
     {
-        efxSource.clip = clip;
-        efxSource.Play();
+        _efxSource.clip = clip;
+        _efxSource.Play();
     }
     public void StopEffectMusic()
     {
-        efxSource.Stop();
+        _efxSource.Stop();
     }
 
 }
