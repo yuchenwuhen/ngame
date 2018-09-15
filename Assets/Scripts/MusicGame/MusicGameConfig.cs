@@ -19,6 +19,7 @@ public class MusicGameConfig : ScriptableObject
         public SectionType m_iSectionType;                       // 小节样式
         public List<float> m_songTimePoint = new List<float>();  // 节奏点时间
         public List<int> m_songStyle = new List<int>();          // 节奏点风格
+        public List<int> m_songNoteType = new List<int>();       // 音符类型 0为正常音符 -1为空拍
         public int m_iClickIndex;                                // 当该小节为SevenClick时，该字段判断需要玩家点击的是哪一拍
     }
 
