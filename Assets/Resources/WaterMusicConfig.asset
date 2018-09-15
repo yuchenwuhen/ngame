@@ -40,14 +40,15 @@ MonoBehaviour:
     - 17.7068
     - 18.6904
     - 19.674
+    - 20.5676
     m_songStyle: 
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
     m_songTimePoint:
-    - 20.6576
     - 21.6412
-    - 22.6248
+    - 22.6428
+    - 23.6048
     m_songStyle: 040000000500000003000000
     m_iClickIndex: 0
   - m_iSectionID: 3
