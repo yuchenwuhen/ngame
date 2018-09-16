@@ -9,8 +9,11 @@ public class DialogueNote : MonoBehaviour {
     private SpriteRenderer m_sprite;
     private BoxCollider m_collider;
     public GameObject m_parent;
+    private Animator m_animator;
 
     private bool m_isEnter = false;
+    public float m_changeTime = 10f;
+    private float m_curTime = 0;
     // Use this for initialization
     void Start()
     {
@@ -18,6 +21,10 @@ public class DialogueNote : MonoBehaviour {
         m_sprite = this.GetComponent<SpriteRenderer>();
         m_collider = this.GetComponent<BoxCollider>();
         m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
+        if(m_parent.GetComponent<Animator>())
+        {
+            m_animator = m_parent.GetComponent<Animator>();
+        }
     }
 
     // Update is called once per frame
@@ -37,8 +44,23 @@ public class DialogueNote : MonoBehaviour {
                 m_collider.enabled = false;
                 m_isEnter = false;
             }
+            m_curTime += Time.deltaTime;
+            if (m_curTime > m_changeTime)
+            {
+                m_curTime = 0;
+                if (m_animator)
+                {
+                    m_animator.SetBool("Dothing", true);
+                    Invoke("SetIdle", 2f);
+                }
 
+            }
         }
+    }
+
+    void SetIdle()
+    {
+        m_animator.SetBool("Dothing", false);
     }
 
     public void EnterDialoguePlay()
