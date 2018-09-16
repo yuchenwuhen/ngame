@@ -1173,6 +1173,10 @@ MonoBehaviour:
   m_middleRightPos: {x: 501, y: 902, z: 0}
   m_middleLeftPos: {x: 381, y: 902, z: 0}
   m_NpcSuccessTime: 0.03
+  m_WaterNoteTeachSprite: {fileID: 21300000, guid: 22cda3ce952439d4baa1aba2eeb603fc,
+    type: 3}
+  m_WaterNoteSuccessSprite: {fileID: 21300000, guid: ffe6b8c2a5d62b14fbcf1104876f17f1,
+    type: 3}
 --- !u!114 &114360693113244894
 MonoBehaviour:
   m_ObjectHideFlags: 1

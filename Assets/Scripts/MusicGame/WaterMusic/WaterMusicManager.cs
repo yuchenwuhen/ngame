@@ -67,6 +67,10 @@ public class WaterMusicManager : MonoBehaviour
     private Button m_btnReset;
 
     public float m_NpcSuccessTime;
+
+    public Sprite m_WaterNoteTeachSprite;
+    public Sprite m_WaterNoteSuccessSprite;
+
     void Awake()
     {
         // 初始化场景
@@ -183,10 +187,13 @@ public class WaterMusicManager : MonoBehaviour
         {
             string sWaterNote = "WaterNote" + (i + 1).ToString();
             transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(false);
+            transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().sprite = m_WaterNoteTeachSprite;
+            transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().SetNativeSize();
         }
+
         if (m_bIsTeachStage)
         {
-            IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
+            InitWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
         }
 
         m_animatorLeaf = transform.Find("Leaf").GetComponent<Animator>();
@@ -249,11 +256,13 @@ public class WaterMusicManager : MonoBehaviour
             {
                 string sWaterNote = "WaterNote" + (i + 1).ToString();
                 transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(false);
+                transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().sprite = m_WaterNoteTeachSprite;
+                transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().SetNativeSize();
             }
 
             if (m_bIsTeachStage)
             {
-                IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
+                InitWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
             }
 
             m_bIsHeadPlayAnimator = false;
@@ -328,6 +337,9 @@ public class WaterMusicManager : MonoBehaviour
         if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
         {
             Debug.Log("检测成功");
+            string sWaterNote = "WaterNote" + (m_iNowPointID + 1).ToString();
+            transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().sprite = m_WaterNoteSuccessSprite;
+            transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().SetNativeSize();
             // 播放成功音效
             PlayClickAudio(0, iPointStyle);
 
@@ -409,10 +421,12 @@ public class WaterMusicManager : MonoBehaviour
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    string sWaterNote = "WaterNote" + (i + 1).ToString();
+                    string sWaterNote = "WaterNote" + (i + 1).ToString();                   
                     transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(false);
+                    transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().sprite = m_WaterNoteTeachSprite;
+                    transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().SetNativeSize();
                 }
-                IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
+                InitWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
             }
         }
     }
@@ -497,7 +511,11 @@ public class WaterMusicManager : MonoBehaviour
         } 
     }
 
-    void IntiWaterNotePos(List<float> listPointTime)
+    /// <summary>
+    /// 初始化水滴音符的位置
+    /// </summary>
+    /// <param name="listPointTime"></param>
+    void InitWaterNotePos(List<float> listPointTime)
     {
         int iPointCount = listPointTime.Count;//节奏点个数
         if (iPointCount == 0)
