@@ -12,13 +12,14 @@ public enum UIState
     Musicmenu2,
     Musicmenu3,
     MusicResultMenu,
-    Scene
+    Scene,
+    Dialogue
 }
 public class UIManager : MonoBehaviour {
 
     public static UIManager instance = null;
 
-
+    public bool m_UICotroller { get; set; }
 
     private UIState m_curState = UIState.Mainmenu;
     private UIState m_preState = UIState.Mainmenu;
@@ -51,8 +52,6 @@ public class UIManager : MonoBehaviour {
         T ui = UIUtility.Instance.GetUI<T>();
         ui.Appear();
     }
-
-
 
     public void DisappearUIWindow<T>() where T:UIBase
     {
@@ -136,6 +135,7 @@ public class UIManager : MonoBehaviour {
                 AudioManager.Instance.StopStartMusic();
                 AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Scene);
                 ShowUIWindow<SettingBtn>();
+                m_UICotroller = false;
                 break;
             case UIState.Musicmenu1:
                 AudioManager.Instance.StopStartMusic();
@@ -204,6 +204,12 @@ public class UIManager : MonoBehaviour {
             {
                 case UIState.Musicmenu1:
                     TileManager.Instance.SetMusicLevel(0);
+                    break;
+                case UIState.Musicmenu2:
+                    TileManager.Instance.SetMusicLevel(1);
+                    break;
+                case UIState.Musicmenu3:
+                    TileManager.Instance.SetMusicLevel(2);
                     break;
                 default:
                     break;

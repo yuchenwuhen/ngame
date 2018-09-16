@@ -31,7 +31,7 @@ public class PathfindingCommand : ICommand {
         {
             m_moveBaseRole = m_actor.GetComponent<RMoveBaseRole>();
 
-            if (m_moveBaseRole != null)
+            if (m_moveBaseRole != null )
             {
                 m_moveBaseRole.Pathfinding(m_MoveInt, m_HitObj);
             }

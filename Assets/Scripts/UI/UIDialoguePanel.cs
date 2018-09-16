@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIDialoguePanel : UIBase {
@@ -26,6 +27,10 @@ public class UIDialoguePanel : UIBase {
         player_img = GameObject.Find("player_img").GetComponent<RectTransform>();
     }
 
+    public override void Appear()
+    {
+        base.Appear();
+    }
 
     public override void Init(object[] parameters)
     {
@@ -81,6 +86,7 @@ public class UIDialoguePanel : UIBase {
         {
             if(Input.GetMouseButtonDown(0))
             {
+
                 //改变内容
                 ChangeContext();
             }
@@ -108,5 +114,11 @@ public class UIDialoguePanel : UIBase {
             m_isStartTalk = false;
             DisAppear();
         }
+    }
+
+    public override void DisAppear()
+    {
+        UIManager.instance.m_UICotroller = false;
+        base.DisAppear();
     }
 }

@@ -15,6 +15,12 @@ public class SettingBtn : UIBase
         m_btn.onClick.AddListener(BackToMenu);
     }
 
+    public override void Appear()
+    {
+        base.Appear();
+        UIManager.instance.m_UICotroller = false;
+    }
+
     void BackToMenu()
     {
         UIManager.instance.ShowUIFade(UIState.Bookmenu);
