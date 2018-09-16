@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa72853e691ab43239e24c1a81a5555d, type: 3}
   m_Name: WaterMusicConfig
   m_EditorClassIdentifier: 
-  m_audioClipBgm: {fileID: 8300000, guid: c1a6b02fee65c3a4ea4887288429180f, type: 3}
+  m_audioClipBgm: {fileID: 8300000, guid: ec6691c5c3916d7498e73f80e8661c01, type: 3}
   m_fTouchAgainTime: 0.1
   m_fTouchSuccessTime: 0.15
   m_fTouchCheckTime: 0.3

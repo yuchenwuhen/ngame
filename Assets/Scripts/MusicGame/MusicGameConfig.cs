@@ -137,4 +137,14 @@ public class MusicGameConfig : ScriptableObject
     {
         return m_musicGameData[iSectionID].m_iClickIndex;
     }
+
+    /// <summary>
+    /// 获取节奏点序列
+    /// </summary>
+    /// <param name="iSectionID"></param>
+    /// <returns></returns>
+    public List<float> GetPointTimeList(int iSectionID)
+    {
+        return m_musicGameData[iSectionID].m_songTimePoint;
+    }
 }

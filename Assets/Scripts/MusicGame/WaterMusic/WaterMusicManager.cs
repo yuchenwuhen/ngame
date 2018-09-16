@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,6 +57,10 @@ public class WaterMusicManager : MonoBehaviour
     private Animator m_animatorWaterDrop3;      // 水滴动画3
     private Animator m_animatorWaterDrop4;      // 水滴动画4
     // 动画模块 End////
+
+    public Vector3 m_middleRightPos;//中间点的坐标
+    public Vector3 m_middleLeftPos; //中间偏左的坐标
+ 
     void Awake()
     {
         // 初始化场景
@@ -74,6 +79,7 @@ public class WaterMusicManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(transform.Find("WaterNote1").position);
         float fNowTime = AudioManager.Instance.GetMusicSourceTime();
         float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
         //Debug.Log("fRunTime:" + fRunTime);
@@ -147,6 +153,17 @@ public class WaterMusicManager : MonoBehaviour
         {
             m_textPoint.text = "玩家阶段";
         }
+
+        for (int i = 0; i < 8; i++)
+        {
+            string sWaterNote = "WaterNote" + (i + 1).ToString();
+            transform.Find(sWaterNote).gameObject.SetActive(false);
+        }
+        if (m_bIsTeachStage)
+        {
+            IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
+        }
+
         m_animatorLeaf = transform.Find("Leaf").GetComponent<Animator>();
         m_animatorHead = transform.Find("Head").GetComponent<Animator>();
         m_bIsHeadPlayAnimator = false;
@@ -186,6 +203,13 @@ public class WaterMusicManager : MonoBehaviour
             if (m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
             {
                 Debug.Log("NPC打盘子");
+            }
+
+            if (m_bIsTeachStage)
+            {
+                string sWaterNote = "WaterNote" + (m_iNowPointID + 1).ToString();
+                //Debug.Log(sWaterNote);
+                transform.Find(sWaterNote).gameObject.SetActive(true);
             }
         }
 
@@ -285,6 +309,15 @@ public class WaterMusicManager : MonoBehaviour
             {
                 m_textPoint.text = "玩家阶段";
             }
+            if (m_bIsTeachStage)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    string sWaterNote = "WaterNote" + (i + 1).ToString();
+                    transform.Find(sWaterNote).gameObject.SetActive(false);
+                }
+                IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
+            }
         }
     }
 
@@ -320,7 +353,7 @@ public class WaterMusicManager : MonoBehaviour
     /// </summary>
     void PlaySuccessAnimator()
     {
-        int iRandomValue = Random.Range(0, 4);
+        int iRandomValue = UnityEngine.Random.Range(0, 4);
         Debug.Log(iRandomValue);
         switch(iRandomValue)
         {
@@ -356,5 +389,103 @@ public class WaterMusicManager : MonoBehaviour
             m_animatorHead.Play("WaterMusicHead");
             m_bIsHeadPlayAnimator = true;
         } 
+    }
+
+    void IntiWaterNotePos(List<float> listPointTime)
+    {
+        int iPointCount = listPointTime.Count;//节奏点个数
+        if (iPointCount == 0)
+        {
+            Debug.Log("error,iPointCount == 0");
+        }
+        else
+        {
+            int iMiddleLeftIndex = 0;
+            float iMiddleLeftPointTime = 0f;
+            int iMiddleRightIndex = 0;
+            float iMiddleRightPointTime = 0f;
+
+            bool bIsOdd = Convert.ToBoolean(iPointCount % 2);//是否是奇数
+            if (bIsOdd)
+            {
+                if (iPointCount == 1)
+                {
+                    iMiddleLeftIndex = 0;
+                    iMiddleLeftPointTime = listPointTime[0];
+
+                    iMiddleRightIndex = 0;
+                    iMiddleRightPointTime = listPointTime[0];
+                }
+                else
+                {
+                    // 奇数处理方式
+                    int iMiddleIndex = (iPointCount - 1) / 2; //中间序号
+
+                    // 中间偏左的序号
+                    iMiddleLeftIndex = iMiddleIndex - 1;
+                    iMiddleLeftPointTime = listPointTime[iMiddleLeftIndex];
+
+                    // 中间偏右的序号
+                    iMiddleRightIndex = iMiddleIndex + 1;
+                    iMiddleRightPointTime = listPointTime[iMiddleRightIndex];
+                }
+            }
+            else
+            {
+                // 偶数处理方式
+                // 中间偏左的序号
+                iMiddleLeftIndex = (iPointCount / 2) - 1;
+                iMiddleLeftPointTime = listPointTime[iMiddleLeftIndex];
+
+                // 中间偏右的序号
+                iMiddleRightIndex = iPointCount / 2;
+                iMiddleRightPointTime = listPointTime[iMiddleRightIndex];
+            }
+            Vector3 offset = (m_middleRightPos - m_middleLeftPos) / (iMiddleRightPointTime - iMiddleLeftPointTime);
+            Debug.Log( "offset:" + offset);
+
+            float fMinOffset = 100f;
+            float fMaxOffset = 150f;
+            if (offset.x < fMinOffset)
+            {
+                offset.x = fMinOffset;
+            }
+            else if(offset.x > fMaxOffset)
+            {
+                offset.x = fMaxOffset;
+            }
+
+            float fMixPosX = 136f;
+            float fMaxPosX = 705f;
+            float fLastX = 0f;
+            float fIntervalOffset = 20f;
+            float fHasOffset = 0f;
+            for (int i = 0; i < iPointCount; i++)
+            {
+                Vector3 vector3Pos = m_middleLeftPos + offset * (listPointTime[i] - iMiddleLeftPointTime);
+                vector3Pos.x += fHasOffset;
+                if (i == 0 && vector3Pos.x < fMixPosX)
+                {
+                    vector3Pos.x = fMixPosX;
+                }
+
+                if (vector3Pos.x - fLastX < fIntervalOffset)
+                {
+                    vector3Pos.x = fLastX + fIntervalOffset;
+                    fHasOffset = fLastX + fIntervalOffset - vector3Pos.x;
+                }
+
+                if(i == (iPointCount -1) && vector3Pos.x > fMaxPosX)
+                {
+                    vector3Pos.x = fMaxPosX;
+                }
+                //Debug.Log("i:" + i + ",vector3Pos:" + vector3Pos);
+                string sWaterNote = "WaterNote" + (i + 1).ToString();
+                //Debug.Log(sWaterNote);
+                //tansform.Find(sWaterNote).gameObject.SetActive(false);
+                transform.Find(sWaterNote).position = vector3Pos;
+                fLastX = vector3Pos.x;
+            }
+        }
     }
 }
