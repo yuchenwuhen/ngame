@@ -36,13 +36,13 @@ public class RPlayer : RMoveBaseRole {
         base.Pathfinding(pos,hitObj);
         m_hitObj = null;
         //判断hitObj是否为空
-        if (hitObj!=null)
+        if (hitObj!=null )
         {
             //点击到了交互对象
             Vector2Int hitpos = TileManager.Instance.WorldPositionToGridPoint(hitObj.transform.position);
             Vector2Int playerpos = TileManager.Instance.WorldPositionToGridPoint(transform.position);
             Vector2Int newpos = GetAroundPoint(playerpos, hitpos);
-            if (newpos != playerpos)
+            if (newpos != playerpos && !UIManager.instance.m_UICotroller)
             {
                 m_playerMove.Pathfinding(newpos);
                 m_hitObj = hitObj;
@@ -52,7 +52,7 @@ public class RPlayer : RMoveBaseRole {
         else
         {
             //点击了地面
-            if (pos != TileManager.Instance.WorldPositionToGridPoint(transform.position))
+            if (pos != TileManager.Instance.WorldPositionToGridPoint(transform.position) && !UIManager.instance.m_UICotroller)
             {
                 m_playerMove.Pathfinding(pos);
                 PlayAnimation(1f);

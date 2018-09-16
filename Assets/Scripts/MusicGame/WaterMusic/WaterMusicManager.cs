@@ -83,8 +83,15 @@ public class WaterMusicManager : MonoBehaviour
             //Debug.Log("PointEnd");
             return;
         }
+
         // 检查当前节超时；教学阶段，可以检查节点是否需要增加NPC操作
         CheckCurPoint(fRunTime);
+
+        // 如果当前拍为空拍，不处理后续玩家的任何点击
+        if (m_musicGameConfig.GetSectionOnePointNoteType(m_iNowSectionID, m_iNowPointID) < 0)
+        {
+            return;
+        }
 
         // 如果当前不能触摸,检查触摸CD是否已过
         if (!m_bIsTouch && (fRunTime - m_fLastTouchTime) > m_fTouchAgainTime)
@@ -160,7 +167,7 @@ public class WaterMusicManager : MonoBehaviour
     /// <summary>
     /// 重新初始化场景信息
     /// </summary>
-    void ReInitSection()
+    public void ReInitSection()
     {
         //初始化数据
         InitGame();
@@ -178,14 +185,31 @@ public class WaterMusicManager : MonoBehaviour
         float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
         //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
 
-        // Seven中，NPC行动，但是不更新当前节点ID，等到超时的时候再更新
-        if (!m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
+        // 教学关中，NPC行动，但是不更新当前节点ID，更新节点一样走原来的超时逻辑
+        if (m_bIsTeachStage && !m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
         {
             Debug.Log("NPC行动");
             m_bIsNpcHasAction = true;
+
+            // SevenClick 关卡
             if (m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
             {
                 Debug.Log("NPC打盘子");
+            }
+
+            // 教学关
+            if (m_bIsTeachStage)
+            {
+                if (m_musicGameConfig.GetSectionOnePointNoteType(m_iNowSectionID, m_iNowPointID) >= 0)
+                {
+                    // 如果符号类型大于0，则正常显示音符
+                    
+                }
+                else
+                {
+                    // 如果音符类型为-1，则空拍处理
+
+                }
             }
         }
 
@@ -193,7 +217,7 @@ public class WaterMusicManager : MonoBehaviour
         {
             Debug.Log("节奏点超时");
 
-            // 播放失败动画
+            // 播放失败动画(只有当玩家关卡，且不为空拍是才能调用)
             //PlayFailedAnimator();
 
             m_iNowPointID++;
@@ -263,6 +287,14 @@ public class WaterMusicManager : MonoBehaviour
         // 更新一些对每个节奏点生效的数据
         m_bIsNpcHasAction = false;
         m_bIsHeadPlayAnimator = false;
+        //while (m_iNowPointID < m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
+        //{
+        //    if (m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID) == -1)
+        //    {
+        //        m_iNowPointID++;
+        //    }
+        //}
+
         if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
         {
             Debug.Log("改变小节");
@@ -270,6 +302,8 @@ public class WaterMusicManager : MonoBehaviour
             if (m_iNowSectionID >= m_musicGameConfig.GetSectionCount())
             {
                 Debug.Log("节奏点全部结束");
+
+                UIManager.instance.CalculationCurMusicResult(CaculateStar(m_iFailTimes));
                 m_bIsPointEnd = true;
                 return;
             }
@@ -286,6 +320,18 @@ public class WaterMusicManager : MonoBehaviour
                 m_textPoint.text = "玩家阶段";
             }
         }
+    }
+
+    private int CaculateStar(int fail)
+    {
+        if (fail == 0)
+            return 3;
+        else if (fail > 0 && fail <= 5)
+            return 2;
+        else if (fail > 5 && fail <= 12)
+            return 1;
+        else
+            return 0;
     }
 
     /// <summary>
