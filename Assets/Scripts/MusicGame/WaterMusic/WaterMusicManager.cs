@@ -61,7 +61,12 @@ public class WaterMusicManager : MonoBehaviour
 
     public Vector3 m_middleRightPos;//中间点的坐标
     public Vector3 m_middleLeftPos; //中间偏左的坐标
- 
+
+    private bool m_isFirstStart = true;
+
+    private Button m_btnReset;
+
+    public float m_NpcSuccessTime;
     void Awake()
     {
         // 初始化场景
@@ -71,10 +76,10 @@ public class WaterMusicManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
-        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
-        m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
+
         //Debug.Log("InitTime:" + m_fInitTime);
+        // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
+        ReInitSection();
     }
 
     // Update is called once per frame
@@ -82,7 +87,8 @@ public class WaterMusicManager : MonoBehaviour
     {
         //Debug.Log(transform.Find("WaterNote1").position);
         float fNowTime = AudioManager.Instance.GetMusicSourceTime();
-        float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
+        //float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
+        float fRunTime = AudioManager.Instance.GetMusicSourceTime();//修改未不依赖差值
         //Debug.Log("fRunTime:" + fRunTime);
 
         if (m_bIsPointEnd)
@@ -159,18 +165,8 @@ public class WaterMusicManager : MonoBehaviour
             AudioSource tmpAudioSource = tmp.GetComponent<AudioSource>();
             m_listClickAudioSources.Add(tmpAudioSource);
         }
+        m_iClickAudioSourceIndex = 0;
 
-        //npc.GetComponent<NPCBehaviour>().Init();
-        //queueCanUseNpc.Enqueue(npc.GetComponent<NPCBehaviour>());
-        //for (int i = 0; i < m_InitNpcCount - 1; i++)
-        //{
-        //    NPCBehaviour tmpBehaviour;
-        //    GameObject tmp = Instantiate(npc) as GameObject;
-        //    tmp.transform.SetParent(transform);
-        //    tmpBehaviour = tmp.GetComponent<NPCBehaviour>();
-        //    tmpBehaviour.Init();
-        //    queueCanUseNpc.Enqueue(tmpBehaviour);
-        //}
         m_iFailTimes = 0;
 
         m_textPoint = GetComponentInChildren<Text>();
@@ -201,6 +197,9 @@ public class WaterMusicManager : MonoBehaviour
         m_animatorWaterDrop2 = transform.Find("WaterDrop").Find("WaterDrop2").GetComponent<Animator>();      // 水滴动画2
         m_animatorWaterDrop3 = transform.Find("WaterDrop").Find("WaterDrop3").GetComponent<Animator>();      // 水滴动画3
         m_animatorWaterDrop4 = transform.Find("WaterDrop").Find("WaterDrop4").GetComponent<Animator>();      // 水滴动画4
+
+        m_btnReset = transform.Find("ResetBtn").GetComponent<Button>();
+        m_btnReset.onClick.AddListener(ReInitSection);
     }
 
     /// <summary>
@@ -208,12 +207,61 @@ public class WaterMusicManager : MonoBehaviour
     /// </summary>
     public void ReInitSection()
     {
-        //初始化数据
-        InitGame();
-        // 播放音乐
-        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
-        m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
-        enabled = true;
+        if (m_isFirstStart)
+        {
+            m_isFirstStart = false;
+            enabled = true;
+            // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
+            AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+            m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
+        }
+        else
+        {
+            //初始化数据
+            enabled = true;
+
+            m_iNowSectionID = 0;              // 该玩法中，当前小节ID
+            m_iSectionCount = m_musicGameConfig.GetSectionCount();              // 该玩法中，音乐小节总数
+            m_bIsPointEnd = false;
+            m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 1 ? true : false;             // 是否在教学阶段
+            m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
+            m_bIsNpcHasAction = false;
+
+            m_iNowPointID = 0;                // 当前小节中，目前所处的节奏点序号
+            m_iNowSectionPointCount = m_musicGameConfig.GetSectionPointCount(m_iNowSectionID);      // 当前小节中，节奏点总个数
+            m_bIsTouch = true;           // 本次触摸是否有效
+
+            m_iClickAudioSourceIndex = 0;
+
+            m_iFailTimes = 0;
+
+            if (m_bIsTeachStage)
+            {
+                m_textPoint.text = "教学阶段";
+            }
+            else
+            {
+                m_textPoint.text = "玩家阶段";
+            }
+
+            Debug.Log("reset");
+            for (int i = 0; i < 8; i++)
+            {
+                string sWaterNote = "WaterNote" + (i + 1).ToString();
+                transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(false);
+            }
+
+            if (m_bIsTeachStage)
+            {
+                IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
+            }
+
+            m_bIsHeadPlayAnimator = false;
+
+            // 播放音乐
+            AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+            m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
+        }   
     }
 
     /// <summary>
@@ -226,9 +274,10 @@ public class WaterMusicManager : MonoBehaviour
         //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
 
         // 教学关中，NPC行动，但是不更新当前节点ID，更新节点一样走原来的超时逻辑
-        if (m_bIsTeachStage && !m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
+        if (m_bIsTeachStage && !m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_NpcSuccessTime)
         {
             Debug.Log("NPC行动");
+            Debug.Log("checkPointTime:" + checkPointTime + ",fRunTime:" + fRunTime);
             m_bIsNpcHasAction = true;
 
             // SevenClick 关卡
@@ -275,6 +324,7 @@ public class WaterMusicManager : MonoBehaviour
     {
         float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
         int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
+        Debug.Log("checkPointTime:" + checkPointTime + ",fRunTime:" + fRunTime);
         if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
         {
             Debug.Log("检测成功");

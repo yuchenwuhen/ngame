@@ -115,8 +115,7 @@ public class PlayMusicManager : MonoBehaviour
             m_bIsAskResult = true;
             m_woodsuccess.SetActive(false);
             isTouch = true;            // 本次触摸是否有效
-                                       // 初始化所有NPC
-                                       // 当前节奏点ID，整段音乐的节奏点个数
+
             m_checkPointID = 0;
             m_songPointCount = m_songData.GetPlayerSongList().Count;
             m_touchTimer = 0;
