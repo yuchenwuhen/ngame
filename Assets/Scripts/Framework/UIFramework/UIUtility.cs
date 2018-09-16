@@ -92,6 +92,7 @@ public class UIUtility : XSingleton<UIUtility>
     public T GetUI<T>() where T : UIBase
     {
         string key = typeof(T).ToString();
+        Debug.Log("key:" + key);
         UIBase ui = GetUI(key);
 
         return (ui as T);

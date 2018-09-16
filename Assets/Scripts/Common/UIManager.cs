@@ -50,6 +50,10 @@ public class UIManager : MonoBehaviour {
     {
         
         T ui = UIUtility.Instance.GetUI<T>();
+        if (ui == null)
+        {
+            Debug.LogError("ui:" + ui);
+        }
         ui.Appear();
     }
 

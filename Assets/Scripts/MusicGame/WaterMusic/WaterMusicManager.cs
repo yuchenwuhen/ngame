@@ -33,10 +33,11 @@ public class WaterMusicManager : MonoBehaviour
     // 当前状态模块 Begin////
 
     // 点击音效模块 Begin/////
-    private AudioSource m_clickAudioSource;   // 点击音效
     public AudioClip m_clickInvalidAudio;     // 点击无效音效
     public AudioClip m_clickFailAudio;        // 点击失败音效
     public AudioClip[] m_clickAudios;         // 音效列表
+    private List<AudioSource> m_listClickAudioSources;// 点击音效AudioSource列表
+    private int m_iClickAudioSourceIndex = 0;
     // 点击音效模块 End/////
 
     // 结算相关模块 Begin////
@@ -147,8 +148,29 @@ public class WaterMusicManager : MonoBehaviour
         m_bIsTouch = true;           // 本次触摸是否有效
         // 当前状态模块 Begin////
 
-        m_clickAudioSource = GetComponent<AudioSource>();
+        m_listClickAudioSources = new List<AudioSource>();
+        GameObject gameObjectClickAudioSource = transform.Find("ClickAudioSources").Find("ClickAudioSource").gameObject;
+        AudioSource clickAudioSource = transform.Find("ClickAudioSources").Find("ClickAudioSource").GetComponent<AudioSource>();
+        m_listClickAudioSources.Add(clickAudioSource);
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject tmp = Instantiate(gameObjectClickAudioSource) as GameObject;
+            tmp.transform.SetParent(transform.Find("ClickAudioSources"));
+            AudioSource tmpAudioSource = tmp.GetComponent<AudioSource>();
+            m_listClickAudioSources.Add(tmpAudioSource);
+        }
 
+        //npc.GetComponent<NPCBehaviour>().Init();
+        //queueCanUseNpc.Enqueue(npc.GetComponent<NPCBehaviour>());
+        //for (int i = 0; i < m_InitNpcCount - 1; i++)
+        //{
+        //    NPCBehaviour tmpBehaviour;
+        //    GameObject tmp = Instantiate(npc) as GameObject;
+        //    tmp.transform.SetParent(transform);
+        //    tmpBehaviour = tmp.GetComponent<NPCBehaviour>();
+        //    tmpBehaviour.Init();
+        //    queueCanUseNpc.Enqueue(tmpBehaviour);
+        //}
         m_iFailTimes = 0;
 
         m_textPoint = GetComponentInChildren<Text>();
@@ -164,7 +186,7 @@ public class WaterMusicManager : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             string sWaterNote = "WaterNote" + (i + 1).ToString();
-            transform.Find(sWaterNote).gameObject.SetActive(false);
+            transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(false);
         }
         if (m_bIsTeachStage)
         {
@@ -175,10 +197,10 @@ public class WaterMusicManager : MonoBehaviour
         m_animatorHead = transform.Find("Head").GetComponent<Animator>();
         m_bIsHeadPlayAnimator = false;
 
-        m_animatorWaterDrop1 = transform.Find("WaterDrop1").GetComponent<Animator>();      // 水滴动画1
-        m_animatorWaterDrop2 = transform.Find("WaterDrop2").GetComponent<Animator>();      // 水滴动画2
-        m_animatorWaterDrop3 = transform.Find("WaterDrop3").GetComponent<Animator>();      // 水滴动画3
-        m_animatorWaterDrop4 = transform.Find("WaterDrop4").GetComponent<Animator>();      // 水滴动画4
+        m_animatorWaterDrop1 = transform.Find("WaterDrop").Find("WaterDrop1").GetComponent<Animator>();      // 水滴动画1
+        m_animatorWaterDrop2 = transform.Find("WaterDrop").Find("WaterDrop2").GetComponent<Animator>();      // 水滴动画2
+        m_animatorWaterDrop3 = transform.Find("WaterDrop").Find("WaterDrop3").GetComponent<Animator>();      // 水滴动画3
+        m_animatorWaterDrop4 = transform.Find("WaterDrop").Find("WaterDrop4").GetComponent<Animator>();      // 水滴动画4
     }
 
     /// <summary>
@@ -223,7 +245,7 @@ public class WaterMusicManager : MonoBehaviour
                     // 如果符号类型大于0，则正常显示音符
                     string sWaterNote = "WaterNote" + (m_iNowPointID + 1).ToString();
                     //Debug.Log(sWaterNote);
-                    transform.Find(sWaterNote).gameObject.SetActive(true);
+                    transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(true);
                 }
                 else
                 {
@@ -316,7 +338,7 @@ public class WaterMusicManager : MonoBehaviour
             {
                 Debug.Log("节奏点全部结束");
 
-                //UIManager.instance.CalculationCurMusicResult(CaculateStar(m_iFailTimes));
+                UIManager.instance.CalculationCurMusicResult(CaculateStar(m_iFailTimes));
                 enabled = false;
                 m_bIsPointEnd = true;
                 return;
@@ -338,7 +360,7 @@ public class WaterMusicManager : MonoBehaviour
                 for (int i = 0; i < 8; i++)
                 {
                     string sWaterNote = "WaterNote" + (i + 1).ToString();
-                    transform.Find(sWaterNote).gameObject.SetActive(false);
+                    transform.Find("WaterNote").Find(sWaterNote).gameObject.SetActive(false);
                 }
                 IntiWaterNotePos(m_musicGameConfig.GetPointTimeList(m_iNowSectionID));
             }
@@ -363,25 +385,23 @@ public class WaterMusicManager : MonoBehaviour
     /// <param name="iClickState">点击状态 0成功 -1无效 1失败 </param>
     void PlayClickAudio(int iClickState, int iStyle)
     {
-        if (m_clickAudioSource)
+        m_listClickAudioSources[m_iClickAudioSourceIndex % 5].Stop();
+
+        if (iClickState == 0)
         {
-            m_clickAudioSource.Stop();
-
-            if (iClickState == 0)
-            {
-                m_clickAudioSource.clip = m_clickAudios[iStyle];
-            }
-            else if (iClickState == 1)
-            {
-                m_clickAudioSource.clip = m_clickFailAudio;
-            }
-            else if (iClickState == -1)
-            {
-                m_clickAudioSource.clip = m_clickInvalidAudio;
-            }
-            m_clickAudioSource.Play();
-
+            m_listClickAudioSources[m_iClickAudioSourceIndex % 5].clip = m_clickAudios[iStyle];
         }
+        else if (iClickState == 1)
+        {
+            m_listClickAudioSources[m_iClickAudioSourceIndex % 5].clip = m_clickFailAudio;
+        }
+        else if (iClickState == -1)
+        {
+            m_listClickAudioSources[m_iClickAudioSourceIndex % 5].clip = m_clickInvalidAudio;
+        }
+        m_listClickAudioSources[m_iClickAudioSourceIndex % 5].Play();
+
+        m_iClickAudioSourceIndex++;
     }
 
     /// <summary>
@@ -478,7 +498,7 @@ public class WaterMusicManager : MonoBehaviour
                 iMiddleRightPointTime = listPointTime[iMiddleRightIndex];
             }
             Vector3 offset = (m_middleRightPos - m_middleLeftPos) / (iMiddleRightPointTime - iMiddleLeftPointTime);
-            Debug.Log( "offset:" + offset);
+            //Debug.Log( "offset:" + offset);
 
             float fMinOffset = 100f;
             float fMaxOffset = 150f;
@@ -493,8 +513,9 @@ public class WaterMusicManager : MonoBehaviour
 
             float fMixPosX = 136f;
             float fMaxPosX = 705f;
-            float fLastX = 0f;
             float fIntervalOffset = 45f;
+
+            float fLastX = 0f;
             float fHasOffset = 0f;
             for (int i = 0; i < iPointCount; i++)
             {
@@ -515,11 +536,10 @@ public class WaterMusicManager : MonoBehaviour
                 {
                     vector3Pos.x = fMaxPosX;
                 }
-                Debug.Log("i:" + i + ",vector3Pos:" + vector3Pos);
+                //Debug.Log("i:" + i + ",vector3Pos:" + vector3Pos);
                 string sWaterNote = "WaterNote" + (i + 1).ToString();
-                //Debug.Log(sWaterNote);
-                //tansform.Find(sWaterNote).gameObject.SetActive(false);
-                transform.Find(sWaterNote).position = vector3Pos;
+
+                transform.Find("WaterNote").Find(sWaterNote).position = vector3Pos;
                 fLastX = vector3Pos.x;
             }
         }
