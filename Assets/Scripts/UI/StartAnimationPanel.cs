@@ -9,7 +9,7 @@ public class StartAnimationPanel : UIBase
 
     public List<Image> m_animationImg = new List<Image>();
     public List<Text> m_animationTxt = new List<Text>();
-    private float m_showTimePerImg = 2f;
+    public float m_showTimePerImg = 4f;
     private float m_curTime = 0;
     private int m_curIndex = 0;
 
@@ -18,12 +18,16 @@ public class StartAnimationPanel : UIBase
         base.OnAwake();
        
     }
-
+    public override void OnStart()
+    {
+        base.OnStart();
+        m_curIndex = 0;
+        SetImgByIndex(m_curIndex);
+    }
     public override void Appear()
     {
         base.Appear();
-        m_curIndex = 0;
-        SetImgByIndex(m_curIndex);
+        
     }
 
     private void Update()
@@ -72,6 +76,7 @@ public class StartAnimationPanel : UIBase
         fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
         fadeTransition.m_FadeOutEnd += ReceiveChildUIMessage;
         fadeTransition.Appear();
+        Debug.Log(m_curIndex);
     }
 
     void ReceiveChildUIMessage(GameObject sender, EventArgs e)
@@ -79,6 +84,7 @@ public class StartAnimationPanel : UIBase
         if (m_curIndex < m_animationImg.Count)
         {
             SetImgByIndex(m_curIndex);
+            //Debug.Log(m_curIndex);
         }
 
     }
