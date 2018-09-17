@@ -13,7 +13,7 @@ public class BookPanel : UIBase {
 
     private RectTransform m_rectTransform;
     private Button btn_book;
-    public Image[] Img_musics;
+    public GameObject[] Img_musics;
     public Sprite[] btnPlay_sprites;
     public Image[] m_leftImage;
 
@@ -36,7 +36,7 @@ public class BookPanel : UIBase {
         m_btnBack.onClick.AddListener(BackToLogin);
         for(int i=0;i< Img_musics.Length;i++)
         {
-            Img_musics[i].enabled = false;
+            Img_musics[i].SetActive(false);
         }
         for (int i = 0; i < m_leftImage.Length; i++)
         {
@@ -104,7 +104,7 @@ public class BookPanel : UIBase {
         int[] level = TileManager.Instance.GetMusicLevel();
         for (int i=0;i< level.Length;i++)
         {
-            Img_musics[level[i]].enabled = true;
+            Img_musics[level[i]].SetActive(true);
         }
         int curlevel = TileManager.Instance.GetCurLevel();
         if(curlevel>=0)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WaterMusicManager : MonoBehaviour
+public class WaterMusicManager : MusicManager
 {
     [SerializeField]
     public MusicGameConfig m_musicGameConfig; //玩法通用配置数据
@@ -90,7 +90,7 @@ public class WaterMusicManager : MonoBehaviour
     void Update()
     {
         //Debug.Log(transform.Find("WaterNote1").position);
-        float fNowTime = AudioManager.Instance.GetMusicSourceTime();
+        //float fNowTime = AudioManager.Instance.GetMusicSourceTime();
         //float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
         float fRunTime = AudioManager.Instance.GetMusicSourceTime();//修改未不依赖差值
         //Debug.Log("fRunTime:" + fRunTime);
@@ -206,7 +206,7 @@ public class WaterMusicManager : MonoBehaviour
         m_animatorWaterDrop4 = transform.Find("WaterDrop").Find("WaterDrop4").GetComponent<Animator>();      // 水滴动画4
 
         m_btnReset = transform.Find("ResetBtn").GetComponent<Button>();
-        m_btnReset.onClick.AddListener(ReInitSection);
+        m_btnReset.onClick.AddListener(PopPauseWindow);
     }
 
     /// <summary>
@@ -219,7 +219,7 @@ public class WaterMusicManager : MonoBehaviour
             m_isFirstStart = false;
             enabled = true;
             // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
-            AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+            AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
             m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
         }
         else
@@ -268,7 +268,7 @@ public class WaterMusicManager : MonoBehaviour
             m_bIsHeadPlayAnimator = false;
 
             // 播放音乐
-            AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+            AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
             m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
         }   
     }
@@ -610,5 +610,24 @@ public class WaterMusicManager : MonoBehaviour
                 fLastX = vector3Pos.x;
             }
         }
+    }
+    private void PopPauseWindow()
+    {
+        UIManager.instance.PopPauseWindow(this);
+    }
+
+    public override void Continue()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Record()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Exit()
+    {
+        throw new NotImplementedException();
     }
 }

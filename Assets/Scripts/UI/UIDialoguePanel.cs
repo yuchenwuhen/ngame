@@ -84,18 +84,12 @@ public class UIDialoguePanel : UIBase {
     {
         if(m_isStartTalk)
         {
-            if(EventSystem.current.IsPointerOverGameObject())
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
 
-                    //改变内容
-                    ChangeContext();
-                }
-            }
-            else
+            if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("click scene");
+
+                //改变内容
+                ChangeContext();
             }
         }
     }
@@ -119,7 +113,7 @@ public class UIDialoguePanel : UIBase {
         }else
         {
             m_isStartTalk = false;
-            DisAppear();
+            Invoke("DisAppear",0.1f);
         }
     }
 

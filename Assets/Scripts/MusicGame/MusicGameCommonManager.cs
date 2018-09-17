@@ -57,7 +57,7 @@ public class MusicGameCommonManager : MonoBehaviour
     void Start()
     {
         // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
-        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
         m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
         //Debug.Log("InitTime:" + m_fInitTime);
     }
@@ -140,7 +140,7 @@ public class MusicGameCommonManager : MonoBehaviour
         //初始化数据
         InitGame();
         // 播放音乐
-        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
         m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
     }
 

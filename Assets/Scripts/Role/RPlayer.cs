@@ -10,15 +10,11 @@ public class RPlayer : RMoveBaseRole {
         Move,
         Pathfinding
     }
-
-    private StateMachine<States> m_fsm;
     private PlayerMove m_playerMove;
-    private GameObject m_hitObj = null;
 
     protected override void Init()
     {
         base.Init();
-        m_fsm = StateMachine<States>.Initialize(this,States.Idle);
         m_playerMove = this.GetComponent<PlayerMove>();
     }
 
@@ -34,7 +30,6 @@ public class RPlayer : RMoveBaseRole {
     public override void Pathfinding(Vector2Int pos,GameObject hitObj)
     {
         base.Pathfinding(pos,hitObj);
-        m_hitObj = null;
         //判断hitObj是否为空
         if (hitObj!=null )
         {
@@ -45,7 +40,6 @@ public class RPlayer : RMoveBaseRole {
             if (newpos != playerpos && !UIManager.instance.m_UICotroller)
             {
                 m_playerMove.Pathfinding(newpos);
-                m_hitObj = hitObj;
                 PlayAnimation(1f);
             }     
         }

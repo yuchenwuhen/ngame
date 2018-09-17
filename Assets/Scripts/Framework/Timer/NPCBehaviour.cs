@@ -14,11 +14,13 @@ public class NPCBehaviour : MonoBehaviour
     private Vector3 m_LastEndPos; // 最远的距离
 
     private Image m_imgSource;
+    private PlayMusicManager manager;
 
     // Use this for initialization
     void Start()
     {
         m_LastEndPos = m_endPos + m_LastEndOffset;
+        manager = transform.parent.GetComponent<PlayMusicManager>();
     }
 
     // Update is called once per frame
@@ -33,20 +35,35 @@ public class NPCBehaviour : MonoBehaviour
         m_imgSource = gameObject.GetComponent<Image>();
     }
 
-    private IEnumerator move(Vector3 startPos,  float time)
+    //private IEnumerator move(Vector3 startPos,  float time)
+    //{
+        
+    //}
+    private bool m_startMove = false;
+    private Vector3 startPos1;
+    private void FixedUpdate()
     {
-        var dur = 0.0f;
-        while (dur <= time)
+        if (!manager.m_bGameStateRun)
+            return;
+        if(m_startMove)
         {
-            dur += Time.fixedDeltaTime;
-            transform.position = Vector3.Lerp(startPos, m_endPos, dur / time);
-            yield return null;
+            var dur = 0.0f;
+            if (dur <= time)
+            {
+                dur += Time.fixedDeltaTime;
+                transform.position = Vector3.Lerp(startPos1, m_endPos, dur / time);
+            }else
+            {
+                m_startMove = false;
+            }
         }
     }
 
     public void BeginMove(Vector3 startPos, float time)
     {
-        StartCoroutine(move(startPos, time));
+        startPos1 = startPos;
+        m_startMove = true;
+        //StartCoroutine(move(startPos, time));
     }
 
     public void BeginMove(float pointTime, int iStyle)

@@ -288,6 +288,15 @@ public class UIManager : MonoBehaviour {
         }
     }
 
+    public void PopPauseWindow(MusicManager manager)
+    {
+        PausePanel ui = UIUtility.Instance.GetUI<PausePanel>();
+        ui.Appear();
+        object[] obj = new object[1];
+        obj[0] = manager;
+        ui.Init(obj);
+    }
+
     /// <summary>
     /// 接受消息
     /// </summary>

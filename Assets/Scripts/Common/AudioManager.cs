@@ -46,12 +46,20 @@ public class AudioManager : MonoBehaviour
         _efxSource.Play();
     }
 
-    public void PlayMusicSingle(AudioClip audioClip)
+    public void PlayMusicSingleAgain(AudioClip audioClip)
     {
         _musicSource.Stop();
         _musicSource.clip = audioClip;
         _musicSource.Play();
-        Debug.Log("总时长" + audioClip.length);
+    }
+    public void PlayMusicSingle(AudioClip audioClip)
+    {
+        _musicSource.Play();
+    }
+
+    public void PauseMusicSingle(AudioClip audioClip)
+    {
+        _musicSource.Pause();
     }
 
     public void PlayWaterAudio()

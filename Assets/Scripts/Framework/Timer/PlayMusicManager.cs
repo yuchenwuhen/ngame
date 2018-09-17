@@ -9,7 +9,7 @@ public enum MusicSong
     one = 0,
 }
 
-public class PlayMusicManager : MonoBehaviour 
+public class PlayMusicManager : MusicManager
 {
     public AudioClip[] m_audioClip;          //背景音乐信息
     public MusicSong m_musicSong;            //选择的音乐序号
@@ -35,7 +35,7 @@ public class PlayMusicManager : MonoBehaviour
     public AudioClip[] m_clickAudios;         // 音效列表
 
     private Animator m_animatorCutWood;       // 劈柴动画
-    private Button m_btnReset;                // 重置按钮
+    private Button m_btnPause;                // 重置按钮
 
     private GameObject m_woodsuccess;         // 木块劈开画面
     private float m_woodSuccessTime = 0.2f;   // 木块劈开画面持续时间
@@ -44,7 +44,7 @@ public class PlayMusicManager : MonoBehaviour
     private int m_iFailTimes;
 
     private bool m_bIsAskResult = true;                // 是否调用过结算函数
-    private bool m_bGameStateRun = false;     // 场景是否正在运行
+    public bool m_bGameStateRun = false;     // 场景是否正在运行
 
     public int m_InitNpcCount = 10;
     public int m_MaxMoveNpcCount = 3;
@@ -64,8 +64,8 @@ public class PlayMusicManager : MonoBehaviour
         // 人物劈柴动画
         m_animatorCutWood = GameObject.Find("CutWood").GetComponent<Animator>();
         // 重置按钮
-        m_btnReset = transform.Find("Reset").GetComponent<Button>();
-        m_btnReset.onClick.AddListener(ResetClick);
+        m_btnPause = transform.Find("Pause").GetComponent<Button>();
+        m_btnPause.onClick.AddListener(PopPauseWindow);
         // 木块被劈开的画面
         m_woodsuccess = GameObject.Find("Woodsuccess");
         m_woodsuccess.SetActive(false);
@@ -108,7 +108,7 @@ public class PlayMusicManager : MonoBehaviour
         {
             m_isFirstStart = false;
             m_bGameStateRun = true;    // 运行状态
-            AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
+            AudioManager.Instance.PlayMusicSingleAgain(m_audioClip[(int)m_musicSong]);
         }
         else
         {
@@ -141,7 +141,7 @@ public class PlayMusicManager : MonoBehaviour
                 m_iHandlePointID++;
             }
             m_bGameStateRun = true;    // 运行状态
-            AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
+            AudioManager.Instance.PlayMusicSingleAgain(m_audioClip[(int)m_musicSong]);
         }
        
     }
@@ -185,6 +185,7 @@ public class PlayMusicManager : MonoBehaviour
         CheckCurTouchTime(AudioManager.Instance.GetMusicSourceTime());
 
         // 玩家点击
+
         if(Input.GetMouseButtonDown(0))
         {
             if(isTouch)
@@ -430,5 +431,30 @@ public class PlayMusicManager : MonoBehaviour
         }
     }
 
+    private void PopPauseWindow()
+    {
+        UIManager.instance.PopPauseWindow(this);
+        m_bGameStateRun = false;
+        AudioManager.Instance.PauseMusicSingle(m_audioClip[(int)m_musicSong]);
+    }
 
+    public override void Continue()
+    {
+        Debug.Log("继续");
+        m_bGameStateRun = true;
+        UIManager.instance.DisappearUIWindow<PausePanel>();
+        AudioManager.Instance.PlayMusicSingle(m_audioClip[(int)m_musicSong]);
+    }
+
+    public override void Record()
+    {
+        ResetClick();
+        UIManager.instance.DisappearUIWindow<PausePanel>();
+    }
+
+    public override void Exit()
+    {
+        UIManager.instance.ShowUIFade(UIState.Scene);
+        UIManager.instance.DisappearUIWindow<PausePanel>();
+    }
 }
