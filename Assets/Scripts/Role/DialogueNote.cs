@@ -20,6 +20,7 @@ public class DialogueNote : MonoBehaviour {
         m_player = GameObject.FindWithTag("Player").transform;
         m_sprite = this.GetComponent<SpriteRenderer>();
         m_collider = this.GetComponent<BoxCollider>();
+        m_collider.enabled = false;
         m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
         if(m_parent.GetComponent<Animator>())
         {

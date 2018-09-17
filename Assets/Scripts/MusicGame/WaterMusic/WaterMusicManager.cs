@@ -90,7 +90,7 @@ public class WaterMusicManager : MonoBehaviour
     void Update()
     {
         //Debug.Log(transform.Find("WaterNote1").position);
-        float fNowTime = AudioManager.Instance.GetMusicSourceTime();
+        //float fNowTime = AudioManager.Instance.GetMusicSourceTime();
         //float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
         float fRunTime = AudioManager.Instance.GetMusicSourceTime();//修改未不依赖差值
         //Debug.Log("fRunTime:" + fRunTime);

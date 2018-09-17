@@ -14,7 +14,6 @@ public class RNPC : RMoveBaseRole {
     public float m_checkRange = 3f;
     private Transform m_player;
     private BoxCollider m_collider;
-    private bool m_isEnter = false;
 
     private void Start()
     {

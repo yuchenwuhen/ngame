@@ -51,6 +51,6 @@ public class Control : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, ID
     private void CreateNewRipple(Vector2 pos)
     {
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(pos);
-        GameObject tempNewRipple = Instantiate(prefabRippleEffect, worldPos, Quaternion.identity, transform);
+        Instantiate(prefabRippleEffect, worldPos, Quaternion.identity, transform);
     }
 }

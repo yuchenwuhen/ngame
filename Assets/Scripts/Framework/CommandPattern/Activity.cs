@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class Activity
 {
     private GameObject m_player;            //玩家
-    private GameObject m_camera;
+    //private GameObject m_camera;
     public virtual ICommand ActivityHandle()
     {
         return null;
@@ -13,7 +13,7 @@ public class Activity
     public Activity(GameObject player, GameObject camera)
     {
         m_player = player;
-        m_camera = camera;
+        //m_camera = camera;
     }
 
     public ICommand OnClickEvent(Vector3 clickPosition)
@@ -45,6 +45,7 @@ public class Activity
         }
         else
         {
+
             Debug.Log("Click on the ui");
         }
 
