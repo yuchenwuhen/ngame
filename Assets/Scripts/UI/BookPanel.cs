@@ -15,6 +15,7 @@ public class BookPanel : UIBase {
     private Button btn_book;
     public Image[] Img_musics;
     public Sprite[] btnPlay_sprites;
+    public Image[] m_leftImage;
 
     //private BookPro m_bookPro;
     //private AutoFlip m_autoFlip;
@@ -33,15 +34,24 @@ public class BookPanel : UIBase {
         btn_play.onClick.AddListener(PlayMulMusic);
         m_btnBack = transform.Find("btn_back").GetComponent<Button>();
         m_btnBack.onClick.AddListener(BackToLogin);
+        for(int i=0;i< Img_musics.Length;i++)
+        {
+            Img_musics[i].enabled = false;
+        }
+        for (int i = 0; i < m_leftImage.Length; i++)
+        {
+            m_leftImage[i].enabled = false;
+        }
     }
 
     public override void Appear()
     {
         base.Appear();
         transform.SetSiblingIndex(transform.GetComponentsInChildren<UIBase>().Length-1);
-        SetImgmusic();
+
         m_isPlaying = false;
         SetBtnplaySprite();
+        SetImgmusic();
     }
 
     private void EnterScene()
@@ -94,7 +104,13 @@ public class BookPanel : UIBase {
         int[] level = TileManager.Instance.GetMusicLevel();
         for (int i=0;i< level.Length;i++)
         {
-            Img_musics[level[i]].color = Color.white;
+            Img_musics[level[i]].enabled = true;
+        }
+        int curlevel = TileManager.Instance.GetCurLevel();
+        if(curlevel>=0)
+        {
+            m_leftImage[curlevel].enabled = true;
+            m_leftImage[curlevel].transform.SetAsLastSibling();
         }
     }
 

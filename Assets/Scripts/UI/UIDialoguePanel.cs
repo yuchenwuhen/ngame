@@ -84,11 +84,18 @@ public class UIDialoguePanel : UIBase {
     {
         if(m_isStartTalk)
         {
-            if(Input.GetMouseButtonDown(0))
+            if(EventSystem.current.IsPointerOverGameObject())
             {
+                if (Input.GetMouseButtonDown(0))
+                {
 
-                //改变内容
-                ChangeContext();
+                    //改变内容
+                    ChangeContext();
+                }
+            }
+            else
+            {
+                Debug.Log("click scene");
             }
         }
     }
@@ -119,6 +126,8 @@ public class UIDialoguePanel : UIBase {
     public override void DisAppear()
     {
         UIManager.instance.m_UICotroller = false;
+        UIManager.instance.m_preState = UIState.Scene;
+        UIManager.instance.m_curState = UIState.Scene;
         base.DisAppear();
     }
 }

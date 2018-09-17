@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_audioClipBgm: {fileID: 8300000, guid: ec6691c5c3916d7498e73f80e8661c01, type: 3}
   m_fTouchAgainTime: 0.1
-  m_fTouchSuccessTime: 0.15
+  m_fTouchSuccessTime: 0.2
   m_fTouchCheckTime: 0.3
   m_musicGameData:
   - m_iSectionID: 0

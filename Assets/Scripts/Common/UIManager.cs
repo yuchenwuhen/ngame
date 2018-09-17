@@ -21,8 +21,8 @@ public class UIManager : MonoBehaviour {
 
     public bool m_UICotroller { get; set; }
 
-    private UIState m_curState = UIState.Mainmenu;
-    private UIState m_preState = UIState.Mainmenu;
+    public UIState m_curState = UIState.Mainmenu;
+    public UIState m_preState = UIState.Mainmenu;
     private int m_curMusicLevel;
 
     private void Awake()
@@ -61,6 +61,15 @@ public class UIManager : MonoBehaviour {
 
     public void ShowUIFade(UIState state)
     {
+        switch(state)
+        {
+            case UIState.Musicmenu1:
+            case UIState.Musicmenu2:
+            case UIState.Musicmenu3:
+                if (m_preState == UIState.Dialogue)
+                    return;
+                break;
+        }
         m_curState = state;
         FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
         fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
@@ -151,6 +160,8 @@ public class UIManager : MonoBehaviour {
                 break;
             case UIState.Animation:
                 ShowUIWindow<StartAnimationPanel>();
+                FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
+                fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
                 break;
             default:
                 break;
@@ -173,6 +184,8 @@ public class UIManager : MonoBehaviour {
         m_obj[2] = Camera.main.WorldToScreenPoint(actor.transform.position);
         dialoguePanel.Appear();
         dialoguePanel.Init(m_obj);
+        m_preState = m_curState;
+        m_curState = UIState.Dialogue;
     }
 
     /// <summary>
@@ -225,6 +238,12 @@ public class UIManager : MonoBehaviour {
         {
             case UIState.Musicmenu1:
                 UIUtility.Instance.GetUI<MusicPanel>().Reset();
+                break;
+            case UIState.Musicmenu2:
+                UIUtility.Instance.GetUI<WaterMusic>().Reset();
+                break;
+            case UIState.Musicmenu3:
+                UIUtility.Instance.GetUI<DishPanel>().Reset();
                 break;
             default:
                 break;

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_yUnit: 57
   m_Width: 0.93
   m_Height: 0.465
-  m_musicLevel: 010000000000000000000000
+  m_musicLevel: 000000000000000000000000
   m_playerPos: {x: 0, y: 0, z: 0}
   m_startPosition: {x: -20.5, y: 2.5, z: 0}
   wallPos:

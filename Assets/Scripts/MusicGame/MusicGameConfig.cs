@@ -111,7 +111,7 @@ public class MusicGameConfig : ScriptableObject
     /// <returns></returns>
     public float GetSectionOnePointTime(int iSectionID, int iPointID)
     {
-        return m_musicGameData[iSectionID].m_songTimePoint[iPointID];
+        return m_musicGameData[iSectionID].m_songTimePoint[iPointID] + 0.3f;
     }
 
     /// <summary>

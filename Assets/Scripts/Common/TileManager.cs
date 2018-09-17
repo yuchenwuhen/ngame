@@ -29,6 +29,7 @@ public class TileManager : MonoBehaviour {
     private float time = 0;
     private List<int> reed = new List<int>();
     private int curNum = 0;
+    private int m_CurLevel = -1;
 
     // Use this for initialization
     private void Awake() {
@@ -537,6 +538,11 @@ public class TileManager : MonoBehaviour {
         return level.ToArray();
     }
 
+    public int GetCurLevel()
+    {
+        return m_CurLevel;
+    }
+
     /// <summary>
     /// 设置音乐关卡
     /// </summary>
@@ -544,6 +550,7 @@ public class TileManager : MonoBehaviour {
     public void SetMusicLevel(int level)
     {
         m_roleConfig.m_musicLevel[level] = 1;
+        m_CurLevel = level;
     }
     /// <summary>
     /// 获取玩家位置

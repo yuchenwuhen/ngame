@@ -9,9 +9,11 @@ public class StartAnimationPanel : UIBase
 
     public List<Image> m_animationImg = new List<Image>();
     public List<Text> m_animationTxt = new List<Text>();
-    public float m_showTimePerImg = 4f;
+    [SerializeField]
+    private float m_showTimePerImg = 4f;
     private float m_curTime = 0;
     private int m_curIndex = 0;
+    private float m_showTime1;
 
     public override void OnAwake()
     {
@@ -21,13 +23,13 @@ public class StartAnimationPanel : UIBase
     public override void OnStart()
     {
         base.OnStart();
-        m_curIndex = 0;
-        SetImgByIndex(m_curIndex);
     }
     public override void Appear()
     {
         base.Appear();
-        
+        m_curIndex = 0;
+        m_showTime1 = m_showTimePerImg;
+        SetImgByIndex(m_curIndex);
     }
 
     private void Update()
@@ -35,7 +37,7 @@ public class StartAnimationPanel : UIBase
         if(m_curIndex< m_animationImg.Count)
         {
             m_curTime += Time.deltaTime;
-            if (m_curTime > m_showTimePerImg)
+            if (m_curTime > m_showTime1)
             {
                 m_curTime = 0;
                 ShowFade();
@@ -51,6 +53,13 @@ public class StartAnimationPanel : UIBase
             {
                 m_animationImg[i].gameObject.SetActive(true);
                 m_animationTxt[i].gameObject.SetActive(true);
+                if(i==0||i==m_animationImg.Count-1)
+                {
+                    m_showTime1 = m_showTimePerImg;
+                }else
+                {
+                    m_showTime1 = m_showTimePerImg + 2f;
+                }
             }else
             {
                 m_animationImg[i].gameObject.SetActive(false);
@@ -73,18 +82,17 @@ public class StartAnimationPanel : UIBase
     void ShowFade()
     {
         FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
-        fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
-        fadeTransition.m_FadeOutEnd += ReceiveChildUIMessage;
+        fadeTransition.m_FadeOutEnd -= ReceiveMessage;
+        fadeTransition.m_FadeOutEnd += ReceiveMessage;
         fadeTransition.Appear();
-        Debug.Log(m_curIndex);
     }
 
-    void ReceiveChildUIMessage(GameObject sender, EventArgs e)
+    void ReceiveMessage(GameObject sender, EventArgs e)
     {
         if (m_curIndex < m_animationImg.Count)
         {
             SetImgByIndex(m_curIndex);
-            //Debug.Log(m_curIndex);
+            Debug.Log(m_curIndex);
         }
 
     }

@@ -27,6 +27,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource _musicSource;
     public AudioSource m_defaultSource;
     public AudioSource[] m_audioSource;
+    public AudioSource m_waterSource;
     [Tooltip("Start,Menu,Scene,End")]
     public AudioClip[] m_menuSingleClip;
 
@@ -51,6 +52,17 @@ public class AudioManager : MonoBehaviour
         _musicSource.clip = audioClip;
         _musicSource.Play();
         Debug.Log("总时长" + audioClip.length);
+    }
+
+    public void PlayWaterAudio()
+    {
+        m_waterSource.Stop();
+        m_waterSource.Play();
+    }
+
+    public float GetMusicWaterTime()
+    {
+        return m_waterSource.time;
     }
 
     public float GetMusicSourceTime()

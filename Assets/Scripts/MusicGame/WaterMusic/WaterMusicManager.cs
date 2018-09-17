@@ -70,7 +70,7 @@ public class WaterMusicManager : MonoBehaviour
 
     public Sprite m_WaterNoteTeachSprite;
     public Sprite m_WaterNoteSuccessSprite;
-
+    private AudioSource m_audio;
     void Awake()
     {
         // 初始化场景
@@ -80,7 +80,7 @@ public class WaterMusicManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        m_audio = this.GetComponent<AudioSource>();
         //Debug.Log("InitTime:" + m_fInitTime);
         // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
         ReInitSection();
@@ -342,7 +342,6 @@ public class WaterMusicManager : MonoBehaviour
             transform.Find("WaterNote").Find(sWaterNote).GetComponent<Image>().SetNativeSize();
             // 播放成功音效
             PlayClickAudio(0, iPointStyle);
-
             // 播放成功动画
             PlaySuccessAnimator();
 
@@ -437,7 +436,7 @@ public class WaterMusicManager : MonoBehaviour
             return 3;
         else if (fail > 0 && fail <= 5)
             return 2;
-        else if (fail > 5 && fail <= 12)
+        else if (fail > 5 && fail <= 9)
             return 1;
         else
             return 0;
