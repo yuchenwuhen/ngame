@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DishMusicManager : MonoBehaviour
+public class DishMusicManager : MusicManager
 {
     [SerializeField]
     public MusicGameConfig m_musicGameConfig; //玩法通用配置数据
@@ -55,6 +55,8 @@ public class DishMusicManager : MonoBehaviour
     private Animator m_animatorChicken;
     private Animator m_animatorPlayerHand;
 
+    private Button m_btnPause;
+
     void Awake()
     {
         // 初始化场景
@@ -65,7 +67,7 @@ public class DishMusicManager : MonoBehaviour
     void Start()
     {
         // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
-        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
         m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
         //Debug.Log("InitTime:" + m_fInitTime);
     }
@@ -147,6 +149,8 @@ public class DishMusicManager : MonoBehaviour
         m_animatorHand5 = transform.Find("Hand5").GetComponent<Animator>();
         m_animatorChicken = transform.Find("Chicken").GetComponent<Animator>();
         m_animatorPlayerHand = transform.Find("PlayerHand").GetComponent<Animator>();
+        m_btnPause = transform.Find("btnPause").GetComponent<Button>();
+        m_btnPause.onClick.AddListener(PopPauseWindow);
     }
 
     /// <summary>
@@ -157,7 +161,7 @@ public class DishMusicManager : MonoBehaviour
         //初始化数据
         InitGame();
         // 播放音乐
-        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
+        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
         m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
     }
 
@@ -341,5 +345,25 @@ public class DishMusicManager : MonoBehaviour
             m_clickAudioSource.Play();
 
         }
+    }
+
+    private void PopPauseWindow()
+    {
+        UIManager.instance.PopPauseWindow(this);
+    }
+
+    public override void Continue()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Record()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void Exit()
+    {
+        throw new System.NotImplementedException();
     }
 }

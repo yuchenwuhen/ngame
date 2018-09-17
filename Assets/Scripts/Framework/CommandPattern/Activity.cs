@@ -19,7 +19,11 @@ public class Activity
     public ICommand OnClickEvent(Vector3 clickPosition)
     {
         //Debug.Log("clickPosition:"+ clickPosition);
+#if IPHONE || ANDROID
+	if (!EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#else
         if (!EventSystem.current.IsPointerOverGameObject())
+#endif
         {
             //Debug.Log("1");
             Ray ray = Camera.main.ScreenPointToRay(clickPosition);
