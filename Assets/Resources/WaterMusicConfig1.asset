@@ -1,0 +1,218 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa72853e691ab43239e24c1a81a5555d, type: 3}
+  m_Name: WaterMusicConfig1
+  m_EditorClassIdentifier: 
+  m_audioClipBgm: {fileID: 8300000, guid: ec6691c5c3916d7498e73f80e8661c01, type: 3}
+  m_fTouchAgainTime: 0.1
+  m_fTouchSuccessTime: 0.15
+  m_fTouchCheckTime: 0.3
+  m_musicGameData:
+  - m_iSectionID: 0
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 10.5
+    - 10.8216
+    - 11.8052
+    - 12.7888
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 1
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 13.7724
+    - 14.756
+    - 15.7396
+    - 16.7323
+    m_songStyle: 00000000010000000200000003000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 2
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 17.7068
+    - 18.6904
+    - 19.674
+    - 20.5676
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 21.6412
+    - 22.6428
+    - 23.6048
+    - 24.592
+    m_songStyle: 040000000500000006000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 25.5756
+    - 26.5592
+    - 27.5428
+    - 28.0346
+    - 28.3625
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 29.51
+    - 30.4936
+    - 31.4772
+    - 31.969
+    - 32.2968
+    m_songStyle: 0700000008000000090000000a0000000b000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 33.4444
+    - 33.9362
+    - 34.428
+    - 35.4116
+    - 36.3952
+    m_songStyle: 040000000500000003000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 37.3788
+    - 37.8706
+    - 38.3624
+    - 39.346
+    - 40.3296
+    m_songStyle: 0c0000000d0000000e0000000f000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 41.3132
+    - 42.2968
+    - 43.2804
+    - 43.7722
+    - 44.1001
+    - 44.264
+    m_songStyle: 040000000500000003000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 45.2476
+    - 46.2312
+    - 47.2148
+    - 47.7066
+    - 48.0347
+    - 48.1984
+    m_songStyle: 1000000011000000120000001300000014000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 49.182
+    - 49.6738
+    - 50.1656
+    - 50.8213
+    - 51.1492
+    - 52.1328
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 53.1164
+    - 53.6082
+    - 54.1
+    - 54.7557
+    - 55.0836
+    - 56.0672
+    m_songStyle: 1500000016000000170000001800000019000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 57.0508
+    - 57.5426
+    - 58.0344
+    - 58.5262
+    - 59.018
+    - 59.5098
+    - 59.8377
+    - 60.0016
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 60.9852
+    - 61.477
+    - 61.9688
+    - 62.4606
+    - 62.9524
+    - 63.4442
+    - 63.7721
+    - 63.936
+    m_songStyle: 1a0000001b0000001c0000001d0000001e0000001f00000020000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 64.9196
+    - 65.4114
+    - 65.9032
+    - 66.395
+    - 66.7229
+    - 67.8704
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 68.854
+    - 69.3458
+    - 69.8376
+    - 70.3294
+    - 70.6573
+    - 71.6407
+    m_songStyle: 2100000022000000230000002400000025000000
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 1
+    m_songTimePoint:
+    - 72.7884
+    - 75.7392
+    m_songStyle: 
+    m_songNoteType: 
+    m_iClickIndex: 0
+  - m_iSectionID: 3
+    m_iSectionType: 0
+    m_songTimePoint:
+    - 76.7228
+    - 79.6736
+    m_songStyle: 26000000
+    m_songNoteType: 
+    m_iClickIndex: 0
