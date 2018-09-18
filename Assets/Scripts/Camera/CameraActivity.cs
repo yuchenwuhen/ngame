@@ -16,9 +16,9 @@ public class CameraActivity : MonoBehaviour
         //By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
         inverseMoveTime = 1f / moveTime;
 
-        transform.position = new Vector3(3.7f, 3.7f, -10f);
+        transform.position = new Vector3(13f, 10.4f, -10f);
 
-        Camera.main.orthographicSize = 5f;
+        Camera.main.orthographicSize = 6.5f;
     }
 
     // Update is called once per frame
