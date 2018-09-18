@@ -71,6 +71,11 @@ public class WaterMusicManager : MusicManager
     public Sprite m_WaterNoteTeachSprite;
     public Sprite m_WaterNoteSuccessSprite;
     private AudioSource m_audio;
+
+    private RectTransform m_leftNode;
+    private RectTransform m_rightNode;
+
+    public bool m_bGameStateRun = false;     // 场景是否正在运行
     void Awake()
     {
         // 初始化场景
@@ -89,6 +94,8 @@ public class WaterMusicManager : MusicManager
     // Update is called once per frame
     void Update()
     {
+        if (!m_bGameStateRun)
+            return;
         //Debug.Log(transform.Find("WaterNote1").position);
         //float fNowTime = AudioManager.Instance.GetMusicSourceTime();
         //float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
@@ -144,6 +151,11 @@ public class WaterMusicManager : MusicManager
         m_fTouchSuccessTime = m_musicGameConfig.GetTouchSuccessTime();       //检测玩家点击成功的有效范围
         m_fTouchCheckTime = m_musicGameConfig.GetTouchCheckTime();           //玩家的点击影响物体的检测时间范围
         // 临界时间模块 End////
+
+        //水滴的范围位置begin//
+        m_leftNode = GameObject.Find("LeftNote").GetComponent<RectTransform>();
+        m_rightNode = GameObject.Find("RightNote").GetComponent<RectTransform>();
+        //水滴的范围位置end//
 
         // 当前状态模块 Begin////
         m_iNowSectionID = 0;              // 该玩法中，当前小节ID
@@ -214,6 +226,7 @@ public class WaterMusicManager : MusicManager
     /// </summary>
     public void ReInitSection()
     {
+        m_bGameStateRun = true;
         if (m_isFirstStart)
         {
             m_isFirstStart = false;
@@ -614,20 +627,26 @@ public class WaterMusicManager : MusicManager
     private void PopPauseWindow()
     {
         UIManager.instance.PopPauseWindow(this);
+        m_bGameStateRun = false;
+        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
     }
 
     public override void Continue()
     {
-        throw new NotImplementedException();
+        m_bGameStateRun = true;
+        UIManager.instance.DisappearUIWindow<PausePanel>();
+        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
     }
 
     public override void Record()
     {
-        throw new NotImplementedException();
+        ReInitSection();
+        UIManager.instance.DisappearUIWindow<PausePanel>();
     }
 
     public override void Exit()
     {
-        throw new NotImplementedException();
+        UIManager.instance.ShowUIFade(UIState.Scene);
+        UIManager.instance.DisappearUIWindow<PausePanel>();
     }
 }

@@ -55,8 +55,9 @@ public class PlayMusicManager : MusicManager
     private bool m_isFirstStart = true;
     
     // Use this for initialization
-    void Start () 
+    void Start ()
     {
+        Debug.Log(Screen.width + "宽" + Screen.height);
         // 节奏点数据
         m_songData = this.GetComponent<SongData>();
         // 获取音效播放源
@@ -78,6 +79,7 @@ public class PlayMusicManager : MusicManager
             NPCBehaviour tmpBehaviour;
             GameObject tmp = Instantiate(npc) as GameObject;
             tmp.transform.SetParent(transform);
+            tmp.transform.localScale = npc.transform.localScale;
             tmpBehaviour = tmp.GetComponent<NPCBehaviour>();
             tmpBehaviour.Init();
             queueCanUseNpc.Enqueue(tmpBehaviour);
@@ -92,7 +94,7 @@ public class PlayMusicManager : MusicManager
 
             NPCBehaviour tmp = queueCanUseNpc.Dequeue();
             tmp.BeginMove(checkPointTime, iPointStyle);
-
+           
             queueRunNpc.Enqueue(tmp);
             m_iHandlePointID++;
         }
@@ -224,7 +226,9 @@ public class PlayMusicManager : MusicManager
     {
         float checkPointTime = m_songData.GetPlayerSongList()[m_checkPointID];
         int iPointStyle = m_songData.GetPlayerSongStyleList()[m_checkPointID];
-        if(Mathf.Abs(checkPointTime - curTime) < m_touchSuccessTIme)
+        Debug.Log("检测时间点" + checkPointTime);
+        Debug.Log("点击时间点" + curTime);
+        if (Mathf.Abs(checkPointTime - curTime) < m_touchSuccessTIme)
         {
             Debug.Log("检测成功");
 

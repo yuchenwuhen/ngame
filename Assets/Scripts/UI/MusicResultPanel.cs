@@ -47,7 +47,6 @@ public class MusicResultPanel : UIBase {
         base.Init(parameters);
         int index = (int)parameters[0];
         SetResult(index);
-        transform.SetAsFirstSibling();
     }
 
     public void SetResult(int index)

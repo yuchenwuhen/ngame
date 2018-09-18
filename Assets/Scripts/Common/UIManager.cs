@@ -25,16 +25,18 @@ public class UIManager : MonoBehaviour {
     public UIState m_preState = UIState.Mainmenu;
     private int m_curMusicLevel;
 
+    public GameObject m_MainIn;
+
     private void Awake()
     {
         if (instance == null)
             instance = this;
-        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
     {
         ResgisterHandler();
+        m_MainIn = GameObject.Find("GameMenu");
     }
 
     private void Update()
@@ -103,12 +105,13 @@ public class UIManager : MonoBehaviour {
             switch (m_preState)
             {
                 case UIState.Mainmenu:
-                    DisappearUIWindow<GameMenu>();
+                    m_MainIn.SetActive(false);
                     break;
                 case UIState.Bookmenu:
                 case UIState.Scene:
                     DisappearUIWindow<BookPanel>();
                     DisappearUIWindow<SettingBtn>();
+                    m_MainIn.SetActive(false);
                     break;
                 case UIState.Musicmenu1:
                     DisappearUIWindow<MusicPanel>();
@@ -134,7 +137,7 @@ public class UIManager : MonoBehaviour {
         {
             case UIState.Mainmenu:
                 AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
-                ShowUIWindow<GameMenu>();
+                m_MainIn.SetActive(true);
                 break;
             case UIState.Bookmenu:
                 AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Menu);

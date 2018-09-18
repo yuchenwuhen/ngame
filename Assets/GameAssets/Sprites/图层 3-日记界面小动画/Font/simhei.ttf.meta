@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: eced4d12e7b006e45b5dc6376f7eae28
+guid: 33b73f4730d972941af7f793297a5198
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -11,7 +11,8 @@ TrueTypeFontImporter:
   fontName: SimHei
   fontNames:
   - SimHei
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: eced4d12e7b006e45b5dc6376f7eae28, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

@@ -4,8 +4,10 @@ using UnityEngine.UI;
 
 public class NPCBehaviour : MonoBehaviour
 {
-    public Vector3 m_beginPos;  // 起点位置
-    public Vector3 m_endPos;    // 终点位置
+    private Vector3 m_endPos = Vector3.zero;    // 终点位置
+    public float m_xaspect = 0.67f;      //x轴比例
+    public float m_yaspect = 0.45f;      //y轴比例
+
     public Vector3 m_LastEndOffset; // 超时的最远移动位置与终点位置的偏移
     public float m_speed;       //移动速度
     public Sprite[] m_randomSprite;
@@ -19,7 +21,6 @@ public class NPCBehaviour : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_LastEndPos = m_endPos + m_LastEndOffset;
         manager = transform.parent.GetComponent<PlayMusicManager>();
     }
 
@@ -31,6 +32,9 @@ public class NPCBehaviour : MonoBehaviour
 
     public void Init()
     {
+        m_endPos.x = m_xaspect * Screen.width;
+        m_endPos.y = m_yaspect * Screen.height;
+        m_LastEndPos = m_endPos + m_LastEndOffset;
         gameObject.SetActive(false);
         m_imgSource = gameObject.GetComponent<Image>();
     }

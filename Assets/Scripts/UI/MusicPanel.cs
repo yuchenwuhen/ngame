@@ -15,6 +15,7 @@ public class MusicPanel : UIBase {
     {
         base.Appear();
         m_musicManager.ResetClick();
+        transform.SetAsLastSibling();
     }
 
     public void Reset()
