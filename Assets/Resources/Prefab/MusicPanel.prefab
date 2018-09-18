@@ -353,8 +353,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9c3e40c5b71cf5c49be11bf639449300, type: 3}
   m_musicSong: 0
   m_touchAgainTime: 0.1
-  m_touchSuccessTIme: 0.2
-  m_touchCheckTIme: 0.28
+  m_touchSuccessTIme: 0.15
+  m_touchCheckTIme: 0.25
   m_clickInvalidAudio: {fileID: 8300000, guid: a9888368c9e62cd47acd932b62f21f74, type: 3}
   m_clickFailAudio: {fileID: 8300000, guid: 2bda2e531794747d6854dc7c30a178e6, type: 3}
   m_clickAudios:
@@ -630,14 +630,14 @@ RectTransform:
   m_GameObject: {fileID: 1015101456959662}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 224927815692011628}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -308, y: -15}
+  m_AnchoredPosition: {x: -308, y: -45}
   m_SizeDelta: {x: 178, y: 294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224846718625667908
