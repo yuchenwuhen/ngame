@@ -404,8 +404,10 @@ public class WaterMusicManager : MusicManager
         m_bIsNpcHasAction = false;
         m_bIsHeadPlayAnimator = false;
 
+        Debug.Log(m_iNowSectionID + "|" + m_iNowPointID);
         if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
         {
+            Debug.Log(m_iNowSectionID + "|" + m_iNowPointID);
             Debug.Log("改变小节");
             m_iNowSectionID++;
             if (m_iNowSectionID >= m_musicGameConfig.GetSectionCount())
@@ -529,101 +531,33 @@ public class WaterMusicManager : MusicManager
     /// <param name="listPointTime"></param>
     void InitWaterNotePos(List<float> listPointTime)
     {
-        int iPointCount = listPointTime.Count;//节奏点个数
+        int iPointCount = listPointTime.Count;
         if (iPointCount == 0)
         {
-            Debug.Log("error,iPointCount == 0");
+            return;
+        }
+        else if (iPointCount == 1)
+        {
+            string sWaterNote = "WaterNote1";
+            transform.Find("WaterNote").Find(sWaterNote).GetComponent<RectTransform>().anchoredPosition = (m_leftNode.anchoredPosition + m_rightNode.anchoredPosition) / 2;
         }
         else
         {
-            int iMiddleLeftIndex = 0;
-            float iMiddleLeftPointTime = 0f;
-            int iMiddleRightIndex = 0;
-            float iMiddleRightPointTime = 0f;
+            float fBeginTime = listPointTime[0];
+            float fEndTime = listPointTime[iPointCount - 1];
 
-            bool bIsOdd = Convert.ToBoolean(iPointCount % 2);//是否是奇数
-            if (bIsOdd)
-            {
-                if (iPointCount == 1)
-                {
-                    iMiddleLeftIndex = 0;
-                    iMiddleLeftPointTime = listPointTime[0];
+            float fBeginPosX = m_leftNode.anchoredPosition.x;
+            float fEndPosX = m_rightNode.anchoredPosition.x;
 
-                    iMiddleRightIndex = 0;
-                    iMiddleRightPointTime = listPointTime[0];
-                }
-                else
-                {
-                    // 奇数处理方式
-                    int iMiddleIndex = (iPointCount - 1) / 2; //中间序号
-
-                    // 中间偏左的序号
-                    iMiddleLeftIndex = iMiddleIndex - 1;
-                    iMiddleLeftPointTime = listPointTime[iMiddleLeftIndex];
-
-                    // 中间偏右的序号
-                    iMiddleRightIndex = iMiddleIndex + 1;
-                    iMiddleRightPointTime = listPointTime[iMiddleRightIndex];
-                }
-            }
-            else
-            {
-                // 偶数处理方式
-                // 中间偏左的序号
-                iMiddleLeftIndex = (iPointCount / 2) - 1;
-                iMiddleLeftPointTime = listPointTime[iMiddleLeftIndex];
-
-                // 中间偏右的序号
-                iMiddleRightIndex = iPointCount / 2;
-                iMiddleRightPointTime = listPointTime[iMiddleRightIndex];
-            }
-            Vector3 offset = (m_middleRightPos - m_middleLeftPos) / (iMiddleRightPointTime - iMiddleLeftPointTime);
-            //Debug.Log( "offset:" + offset);
-
-            float fMinOffset = 100f;
-            float fMaxOffset = 150f;
-            if (offset.x < fMinOffset)
-            {
-                offset.x = fMinOffset;
-            }
-            else if(offset.x > fMaxOffset)
-            {
-                offset.x = fMaxOffset;
-            }
-
-            float fMixPosX = 136f;
-            float fMaxPosX = 705f;
-            float fIntervalOffset = 45f;
-
-            float fLastX = 0f;
-            float fHasOffset = 0f;
+            float fRatePosX2Time = (fEndPosX - fBeginPosX) / (fEndTime - fBeginTime);
             for (int i = 0; i < iPointCount; i++)
             {
-                Vector3 vector3Pos = m_middleLeftPos + offset * (listPointTime[i] - iMiddleLeftPointTime);
-                vector3Pos.x += fHasOffset;
-                if (i == 0 && vector3Pos.x < fMixPosX)
-                {
-                    vector3Pos.x = fMixPosX;
-                }
-
-                if (vector3Pos.x - fLastX < fIntervalOffset)
-                {
-                    fHasOffset = fLastX + fIntervalOffset - vector3Pos.x;
-                    vector3Pos.x = fLastX + fIntervalOffset;                 
-                }
-
-                if(i == (iPointCount -1) && vector3Pos.x > fMaxPosX)
-                {
-                    vector3Pos.x = fMaxPosX;
-                }
-                //Debug.Log("i:" + i + ",vector3Pos:" + vector3Pos);
                 string sWaterNote = "WaterNote" + (i + 1).ToString();
-
-                transform.Find("WaterNote").Find(sWaterNote).position = vector3Pos;
-                fLastX = vector3Pos.x;
+                transform.Find("WaterNote").Find(sWaterNote).GetComponent<RectTransform>().anchoredPosition = new Vector2(m_leftNode.anchoredPosition.x + (listPointTime[i] - fBeginTime) * fRatePosX2Time, m_leftNode.anchoredPosition.y);
             }
-        }
+        }      
     }
+
     private void PopPauseWindow()
     {
         UIManager.instance.PopPauseWindow(this);
