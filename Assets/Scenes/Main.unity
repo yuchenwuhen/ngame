@@ -1171,6 +1171,7 @@ MonoBehaviour:
   hitFx: {fileID: 1374382649726616, guid: 9e8424f1b837fde459a907c513dfa30c, type: 2}
   hitSound: {fileID: 8300000, guid: 683a4891ca01fbe4589a6ac3595137e9, type: 3}
   hitPoint: {fileID: 83056427}
+  hasCollected: 0
 --- !u!61 &143314975
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9349,6 +9350,7 @@ MonoBehaviour:
   hitFx: {fileID: 1374382649726616, guid: 9e8424f1b837fde459a907c513dfa30c, type: 2}
   hitSound: {fileID: 8300000, guid: 9d44ec84621da494497107fcca037044, type: 3}
   hitPoint: {fileID: 1163734744}
+  hasCollected: 0
 --- !u!1 &1753630593
 GameObject:
   m_ObjectHideFlags: 0
@@ -9569,8 +9571,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1836873620}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.904737, y: 7.4428678, z: 1.8415437}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 13.78, y: 7.59, z: 1.8415437}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
   m_Children: []
   m_Father: {fileID: 391792787}
   m_RootOrder: 16
