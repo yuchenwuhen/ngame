@@ -2898,7 +2898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d59e4dfb9c9404b9471de0c983feac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsEnterMenu: 0
+  m_IsEnterMenu: 1
   m_IsEnterMusic: 0
   collectionSprites: []
   m_Tile: {fileID: 847957518}

@@ -739,7 +739,7 @@ GameObject:
   - component: {fileID: 114202663041519204}
   - component: {fileID: 95758979576259846}
   m_Layer: 5
-  m_Name: BookPanel
+  m_Name: BookPanel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1783,11 +1783,6 @@ MonoBehaviour:
   - {fileID: 114013955618569798}
   - {fileID: 114983195589616240}
   - {fileID: 114760724857684786}
-  sprites:
-  - {fileID: 21300000, guid: ce5c3a23db86bfb4e90c3c2110a53438, type: 3}
-  - {fileID: 21300000, guid: 3a76c3a262f70e44d936a4317f3140a2, type: 3}
-  - {fileID: 21300000, guid: 16f899d69507032428d30fdc54b7cb57, type: 3}
-  - {fileID: 21300000, guid: ad0c10914b3a0734995ee1d73cd1e038, type: 3}
 --- !u!114 &114204834804561516
 MonoBehaviour:
   m_ObjectHideFlags: 1
