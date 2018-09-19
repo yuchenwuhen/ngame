@@ -181,16 +181,19 @@ public class UIManager : MonoBehaviour {
     /// <param name="actor"></param>
     public void ShowDialogueWindow(GameObject player, GameObject actor)
     {
-        UIDialoguePanel dialoguePanel = UIUtility.Instance.GetUI<UIDialoguePanel>();
-        List<string> txt = actor.GetComponent<RBaseRole>().m_dialogueTxt;
-        object[] m_obj = new object[3];
-        m_obj[0] = txt;
-        m_obj[1] = Camera.main.WorldToScreenPoint(player.transform.position);
-        m_obj[2] = Camera.main.WorldToScreenPoint(actor.transform.position);
-        dialoguePanel.Appear();
-        dialoguePanel.Init(m_obj);
-        m_preState = m_curState;
-        m_curState = UIState.Dialogue;
+        GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UIDialogue")) as GameObject;
+        if (go)
+        {
+            UIDialogue dialogue = go.GetComponent<UIDialogue>();
+            List<string> txt = actor.GetComponent<RBaseRole>().m_dialogueTxt;
+            object[] m_obj = new object[3];
+            m_obj[0] = txt;
+            m_obj[1] = player.transform.position;
+            m_obj[2] = actor.transform.position;
+            dialogue.Init(m_obj);
+            m_preState = m_curState;
+            m_curState = UIState.Dialogue;
+        }
     }
 
     /// <summary>

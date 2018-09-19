@@ -18,10 +18,10 @@ public class UIDialogue : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        m_dialogueUp = transform.Find("UIDialogueDown");
-        m_dialogueDown = transform.Find("UIDialogueUp");
-        m_uptxt = GameObject.Find("down_txt").GetComponent<Text>();
-        m_downtxt = GameObject.Find("up_txt").GetComponent<Text>();
+        m_dialogueUp = transform.Find("UIDialogueUp");
+        m_dialogueDown = transform.Find("UIDialogueDown");
+        m_uptxt = GameObject.Find("up_txt").GetComponent<Text>();
+        m_downtxt = GameObject.Find("down_txt").GetComponent<Text>();
     }
 
     public void Init(object[] parameters)
@@ -59,8 +59,8 @@ public class UIDialogue : MonoBehaviour {
 
     private void SetDialoguePos(Vector3 m_playerPos, Vector3 m_npcPos)
     {
-        Vector3 offset1 = new Vector3(-80, 150, 0);
-        Vector3 offset2 = new Vector3(80, 40, 0);
+        Vector3 offset1 = new Vector3(-1.5f, 1.5f, 0);
+        Vector3 offset2 = new Vector3(1.7f, 0.5f, 0);
         if (m_playerPos.y > m_npcPos.y)
         {
             m_dialogueUp.position = m_playerPos + offset1;
@@ -131,5 +131,6 @@ public class UIDialogue : MonoBehaviour {
         UIManager.instance.m_UICotroller = false;
         UIManager.instance.m_preState = UIState.Scene;
         UIManager.instance.m_curState = UIState.Scene;
+        gameObject.SetActive(false);
     }
 }
