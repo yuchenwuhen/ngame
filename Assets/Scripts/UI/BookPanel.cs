@@ -55,14 +55,22 @@ public class BookPanel : UIBase {
         //更新主界面
         CollectionPanel.GetComponent<NoteBookCollection>().SetIconSprite();
     }
-
+    //开始录制进入场景
     private void EnterScene()
     {
         m_isPlaying = !m_isPlaying;
         AudioManager.Instance.StopAudioMusic();
         UIManager.instance.ShowUIFade(UIState.Scene);
+        Invoke("ShowTeachPanel",4f);
+ 
     }
+    private void ShowTeachPanel()
+    {
+        Transform teachPanel = transform.parent.FindChild("BigMapTeachPanel");
+        teachPanel.gameObject.SetActive(true);
+        teachPanel.FindChild("teachSprite").GetComponent<Image>().enabled = true;
 
+    }
     private void BackToLogin()
     {
         UIManager.instance.ShowUIFade(UIState.Mainmenu);

@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     public void BackToScene()
     {
         UIManager.instance.ShowUIFade(UIState.Musicmenu1);
+        Debug.Log("jiaoxuetishi ");
     }
 
 

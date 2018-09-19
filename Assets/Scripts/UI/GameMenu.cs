@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class GameMenu : UIBase {
 
     private Button m_startButton;
-
 	// Use this for initialization
 	void Start () {
         m_startButton = transform.Find("btnstart").GetComponent<Button>();
         m_startButton.onClick.AddListener(StartGame);
         AudioManager.Instance.StopStartMusic();
         AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
+       
     }
 	
     /// <summary>
@@ -21,5 +21,7 @@ public class GameMenu : UIBase {
 	void StartGame()
     {
         UIManager.instance.ShowUIFade(UIState.Animation);
+        Debug.Log("教学开始");
+        
     }
 }
