@@ -49,6 +49,12 @@ public class MusicResultPanel : UIBase {
         SetResult(index);
     }
 
+    public override void Appear()
+    {
+        base.Appear();
+        transform.SetAsLastSibling();
+    }
+
     public void SetResult(int index)
     {
         if(index == 0)

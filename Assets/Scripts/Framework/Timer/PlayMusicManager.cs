@@ -53,13 +53,18 @@ public class PlayMusicManager : MusicManager
     private int m_iHandlePointID;
     private GameObject npc;
     private bool m_isFirstStart = true;
-    
+
+    private GameObject m_teachPanel;
+    private Button m_teachClose;
+    private Image m_recImg;
+
     // Use this for initialization
     void Start ()
     {
-        Debug.Log(Screen.width + "宽" + Screen.height);
         // 节奏点数据
         m_songData = this.GetComponent<SongData>();
+        m_recImg = GameObject.Find("RecImg").GetComponent<Image>();
+
         // 获取音效播放源
         m_clickAudioSource = GetComponent<AudioSource>();
         // 人物劈柴动画
@@ -84,20 +89,15 @@ public class PlayMusicManager : MusicManager
             tmpBehaviour.Init();
             queueCanUseNpc.Enqueue(tmpBehaviour);
         }
+        m_teachPanel = GameObject.Find("TeachPanel");
+        m_teachClose = GameObject.Find("closeBtn").GetComponent<Button>();
+        m_teachClose.onClick.AddListener(CloseTeachPanel);
+    }
 
-        // 需要移动的NPC
-        m_iHandlePointID = 0;
-        for (int i = 0; i < m_MaxMoveNpcCount; i++)
-        {
-            float checkPointTime = m_songData.GetPlayerSongList()[m_iHandlePointID];
-            int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
-
-            NPCBehaviour tmp = queueCanUseNpc.Dequeue();
-            tmp.BeginMove(checkPointTime, iPointStyle);
-           
-            queueRunNpc.Enqueue(tmp);
-            m_iHandlePointID++;
-        }
+    void CloseTeachPanel()
+    {
+        m_teachPanel.SetActive(false);
+        m_recImg.enabled = true;
         ResetClick();
     }
 
@@ -106,8 +106,22 @@ public class PlayMusicManager : MusicManager
     /// </summary>
     public void ResetClick()
     {
-        if(m_isFirstStart)
+        m_checkPointID = 0;
+        if (m_isFirstStart)
         {
+            // 需要移动的NPC
+            m_iHandlePointID = 0;
+            for (int i = 0; i < m_MaxMoveNpcCount; i++)
+            {
+                float checkPointTime = m_songData.GetPlayerSongList()[m_iHandlePointID];
+                int iPointStyle = m_songData.GetPlayerSongStyleList()[m_iHandlePointID];
+
+                NPCBehaviour tmp = queueCanUseNpc.Dequeue();
+                tmp.BeginMove(checkPointTime, iPointStyle);
+
+                queueRunNpc.Enqueue(tmp);
+                m_iHandlePointID++;
+            }
             m_isFirstStart = false;
             m_bGameStateRun = true;    // 运行状态
             AudioManager.Instance.PlayMusicSingleAgain(m_audioClip[(int)m_musicSong]);
@@ -118,7 +132,6 @@ public class PlayMusicManager : MusicManager
             m_woodsuccess.SetActive(false);
             isTouch = true;            // 本次触摸是否有效
 
-            m_checkPointID = 0;
             m_songPointCount = m_songData.GetPlayerSongList().Count;
             m_touchTimer = 0;
             // 失败次数

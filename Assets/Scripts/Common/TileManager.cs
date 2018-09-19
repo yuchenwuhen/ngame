@@ -30,13 +30,19 @@ public class TileManager : MonoBehaviour {
     private List<int> reed = new List<int>();
     private int curNum = 0;
     private int m_CurLevel = -1;
+    private GameObject bgFront;
 
     // Use this for initialization
     private void Awake() {
         if (Instance == null)
             Instance = this;
-
+        bgFront = GameObject.Find("bgFront");
         InitMapData();
+    }
+
+    public void SetSeen()
+    {
+        bgFront.SetActive(false);
     }
 
     /// <summary>

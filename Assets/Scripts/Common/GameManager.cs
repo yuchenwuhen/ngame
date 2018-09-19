@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
 
     public bool m_IsEnterMenu = false;
     public bool m_IsEnterMusic = false;
-    public List<int> collectionNumbers;
+    //0,1表示大木材 小木材，2表示露珠，3表示篮球
+    //4鸡叫 5草丛 6水井
+    private List<int> collectionNumbers = new List<int>();
     public List<Sprite> collectionSprites;
     public  GameObject m_Tile;
 
@@ -44,8 +46,6 @@ public class GameManager : MonoBehaviour
         }
         if (m_IsEnterMusic)
             BackToScene();
-
-        m_Tile.SetActive(true);
     }
 
     public void BackToScene()
@@ -54,7 +54,33 @@ public class GameManager : MonoBehaviour
         Debug.Log("jiaoxuetishi ");
     }
 
+    /// <summary>
+    /// 添加收集元素
+    /// </summary>
+    /// <param name="id"></param>
+    public void AddElements(int id)
+    {
+        collectionNumbers.Add(id);
+    }
 
+    public int GetElement(int id)
+    {
+        return collectionNumbers[id];
+    }
+
+    public bool IsCollected(int id)
+    {
+        if(collectionNumbers.Contains(id))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public int GetCollectionLength()
+    {
+        return collectionNumbers.Count;
+    }
 
 }
 

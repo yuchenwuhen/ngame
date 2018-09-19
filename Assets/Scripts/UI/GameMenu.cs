@@ -11,7 +11,6 @@ public class GameMenu : UIBase {
         m_startButton = transform.Find("btnstart").GetComponent<Button>();
         m_startButton.onClick.AddListener(StartGame);
         AudioManager.Instance.StopStartMusic();
-        AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
        
     }
 	
@@ -22,10 +21,10 @@ public class GameMenu : UIBase {
     {
         UIManager.instance.ShowUIFade(UIState.Animation);
 
-        Invoke("UnShow",5f);
+        Invoke("DisAppear", 3f);
     }
-    public void UnShow()
+    public override void DisAppear()
     {
-        this.gameObject.SetActive(false);
+        base.DisAppear();
     }
 }

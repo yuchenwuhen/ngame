@@ -102,6 +102,25 @@ public class AudioManager : MonoBehaviour
     {
         _startSource.Stop();
     }
+    private Coroutine micro;
+    public void StopGradualStartMusic(float time)
+    {
+        if (micro != null)
+            StopCoroutine(micro);
+        micro = StartCoroutine(VolumeChange(time));
+    }
+
+    private IEnumerator VolumeChange(float time)
+    {
+        var dur = 0.0f;
+        while (dur <= time)
+        {
+            dur += Time.deltaTime;
+            _startSource.volume = dur / time;
+            yield return null;
+        }
+        StopStartMusic();
+    }
 
     /// <summary>
     /// 播放多条音轨

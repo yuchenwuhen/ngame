@@ -49,7 +49,7 @@ public class UIDialogue : MonoBehaviour {
             m_curIndex = 2;
         }
         SetDialoguePos(m_playerPos, m_npcPos);
-
+        UIManager.instance.m_UICotroller = true;
     }
 
     private void OnEnable()
@@ -122,7 +122,7 @@ public class UIDialogue : MonoBehaviour {
         else
         {
             m_isStartTalk = false;
-            Invoke("DisAppear", 0.1f);
+            Invoke("DisAppear", 0.2f);
         }
     }
 
