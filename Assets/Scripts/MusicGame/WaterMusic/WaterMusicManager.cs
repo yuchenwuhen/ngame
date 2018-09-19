@@ -76,6 +76,10 @@ public class WaterMusicManager : MusicManager
     private RectTransform m_rightNode;
 
     public bool m_bGameStateRun = false;     // 场景是否正在运行
+
+    private bool m_bIsPopTeachPanel;  // 是否弹出教学说明
+    private Button m_btnCloseTeachPanel; //关闭教学说明的按钮
+
     void Awake()
     {
         // 初始化场景
@@ -219,6 +223,10 @@ public class WaterMusicManager : MusicManager
 
         m_btnReset = transform.Find("ResetBtn").GetComponent<Button>();
         m_btnReset.onClick.AddListener(PopPauseWindow);
+
+        m_bIsPopTeachPanel = true;
+        m_btnCloseTeachPanel = transform.Find("Level2TeachPanel").Find("closeBtn").GetComponent<Button>();
+        m_btnCloseTeachPanel.onClick.AddListener(CloseTeachPanel);
     }
 
     /// <summary>
@@ -227,6 +235,16 @@ public class WaterMusicManager : MusicManager
     public void ReInitSection()
     {
         m_bGameStateRun = true;
+        if (m_bIsPopTeachPanel)
+        {
+            transform.Find("Level2TeachPanel").gameObject.SetActive(true);
+            m_bGameStateRun = false;
+            return;
+        }
+        else
+        {
+            transform.Find("Level2TeachPanel").gameObject.SetActive(false);
+        }
         if (m_isFirstStart)
         {
             m_isFirstStart = false;
@@ -284,6 +302,7 @@ public class WaterMusicManager : MusicManager
             AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
             m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
         }   
+
     }
 
     /// <summary>
@@ -333,6 +352,11 @@ public class WaterMusicManager : MusicManager
             // 播放失败动画(只有当玩家关卡，且不为空拍是才能调用)
             //PlayFailedAnimator();
 
+            // 当前不是教学关卡，且拍子不为空拍的情况下，失败次数加一
+            if (!m_bIsTeachStage && m_musicGameConfig.GetSectionOnePointNoteType(m_iNowSectionID, m_iNowPointID) >= 0)
+            {
+                m_iFailTimes++;
+            }
             m_iNowPointID++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
         }
@@ -582,5 +606,13 @@ public class WaterMusicManager : MusicManager
     {
         UIManager.instance.ShowUIFade(UIState.Scene);
         UIManager.instance.DisappearUIWindow<PausePanel>();
+    }
+
+    private void CloseTeachPanel()
+    {
+        m_bIsPopTeachPanel = false;
+        
+        transform.Find("Level2TeachPanel").gameObject.SetActive(false);
+        ReInitSection();
     }
 }
