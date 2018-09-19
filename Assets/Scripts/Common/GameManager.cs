@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
         if (m_IsEnterMenu)
         {
             UIManager.instance.ShowUIWindow<GameMenu>();
-           // UIManager.instance
         }
         if (m_IsEnterMusic)
             BackToScene();

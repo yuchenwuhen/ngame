@@ -66,9 +66,9 @@ public class BookPanel : UIBase {
     }
     private void ShowTeachPanel()
     {
-        Transform teachPanel = transform.parent.FindChild("BigMapTeachPanel");
+        Transform teachPanel = transform.parent.Find("BigMapTeachPanel");
         teachPanel.gameObject.SetActive(true);
-        teachPanel.FindChild("teachSprite").GetComponent<Image>().enabled = true;
+        teachPanel.Find("teachSprite").GetComponent<Image>().enabled = true;
 
     }
     private void BackToLogin()
