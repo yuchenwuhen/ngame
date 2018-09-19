@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public bool m_IsEnterMenu = false;
     public bool m_IsEnterMusic = false;
     public List<int> collectionNumbers;
+    public List<Sprite> collectionSprites;
     public  GameObject m_Tile;
 
 	//Awake is always called before any Start functions

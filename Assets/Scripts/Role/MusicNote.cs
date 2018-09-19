@@ -7,7 +7,11 @@ public enum MUSICTYPE
 {
     Water,
     Wood,
-    Dish
+    Chicken,
+    Grass,
+    Well,
+    Backetball,
+    Record
 }
 
 public class MusicNote : RProps {
@@ -15,11 +19,15 @@ public class MusicNote : RProps {
     private int m_musicLevel;
     public float m_checkRange = 3f;
     public MUSICTYPE m_musicType;
+    [SerializeField]
+    private Sprite m_collectSprite;
+    [SerializeField]
+    private string m_collectTxt;
     private Transform m_player;
     private SpriteRenderer m_sprite;
     private BoxCollider m_collider;
     [SerializeField]
-    private AudioClip m_efxAudio;
+    private AudioClip m_collectAudio;
 
     private bool m_isEnter = false;
     // Use this for initialization
@@ -35,8 +43,6 @@ public class MusicNote : RProps {
 		if(Vector3.Distance(m_player.position,transform.position)<m_checkRange)
         {
             m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 1f);
-            if(m_efxAudio && !m_isEnter)
-                AudioManager.Instance.PlayEffectMusic(m_efxAudio);
             m_collider.enabled = true;
             m_isEnter = true;
         }
@@ -46,8 +52,6 @@ public class MusicNote : RProps {
             {
                 m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
                 m_collider.enabled = false;
-                if (m_efxAudio&&m_isEnter)
-                    AudioManager.Instance.StopEffectMusic();
                 m_isEnter = false;
             }
 
@@ -56,24 +60,56 @@ public class MusicNote : RProps {
 
     public void EnterMusicPlay()
     {
-        switch(m_musicType)
+        
+        switch (m_musicType)
         {
             case MUSICTYPE.Water:
-                Debug.Log("水井音乐玩法");
+                Debug.Log("露珠音乐玩法");
                 UIManager.instance.ShowUIFade(UIState.Musicmenu2);
+                CollectMusic();
+                GameManager.instance.collectionNumbers.Add(2);
                 break;
-            case MUSICTYPE.Dish:
-                Debug.Log("盘子音乐玩法");
+            case MUSICTYPE.Record:
+                Debug.Log("录制音乐玩法");
                 UIManager.instance.ShowUIFade(UIState.Musicmenu3);
                 break;
             case MUSICTYPE.Wood:
                 Debug.Log("砍木头玩法");
                 UIManager.instance.ShowUIFade(UIState.Musicmenu1);
+                CollectMusic();
+                GameManager.instance.collectionNumbers.Add(0);
+                GameManager.instance.collectionNumbers.Add(1);
+                break;
+            case MUSICTYPE.Backetball:
+                Debug.Log("篮球音符");
+                CollectMusic();
+                GameManager.instance.collectionNumbers.Add(3);
+                break;
+            case MUSICTYPE.Chicken:
+                Debug.Log("鸡叫音符");
+                CollectMusic();
+                GameManager.instance.collectionNumbers.Add(4);
+                break;
+            case MUSICTYPE.Grass:
+                Debug.Log("草音符");
+                CollectMusic();
+                GameManager.instance.collectionNumbers.Add(5);
+                break;
+            case MUSICTYPE.Well:
+                Debug.Log("水井玩法");
+                CollectMusic();
+                GameManager.instance.collectionNumbers.Add(6);
                 break;
             default:
                 break;
         }
-        if (m_efxAudio)
-            AudioManager.Instance.StopEffectMusic();
+    }
+
+    void CollectMusic()
+    {
+        CollectionPanel collectionPanel = UIUtility.Instance.GetUI<CollectionPanel>();
+        collectionPanel.Appear();
+        collectionPanel.ShowCollect(m_collectSprite, m_collectTxt);
+        AudioManager.Instance.PlayEffectMusic(m_collectAudio);
     }
 }

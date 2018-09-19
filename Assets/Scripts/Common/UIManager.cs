@@ -191,6 +191,7 @@ public class UIManager : MonoBehaviour {
         }
     }
 
+
     /// <summary>
     /// 显示过渡动画
     /// </summary>
