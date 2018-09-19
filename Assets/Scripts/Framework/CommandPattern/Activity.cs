@@ -50,7 +50,6 @@ public class Activity
         else
         {
 
-            Debug.Log("Click on the ui");
         }
 
         return null;

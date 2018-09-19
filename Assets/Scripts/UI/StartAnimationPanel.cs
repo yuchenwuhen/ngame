@@ -69,7 +69,7 @@ public class StartAnimationPanel : UIBase
         m_curIndex++;
         if(m_curIndex>= m_animationImg.Count)
         {
-            Invoke("ShowMainMenu", m_showTimePerImg);
+            Invoke("ShowMainMenu", m_showTimePerImg-1f);
         }
     }
 

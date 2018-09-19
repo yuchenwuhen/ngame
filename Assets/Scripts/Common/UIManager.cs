@@ -105,13 +105,15 @@ public class UIManager : MonoBehaviour {
             switch (m_preState)
             {
                 case UIState.Mainmenu:
-                    m_MainIn.SetActive(false);
+                    if(m_MainIn)
+                        m_MainIn.SetActive(false);
                     break;
                 case UIState.Bookmenu:
                 case UIState.Scene:
                     DisappearUIWindow<BookPanel>();
                     DisappearUIWindow<SettingBtn>();
-                    m_MainIn.SetActive(false);
+                    if (m_MainIn)
+                        m_MainIn.SetActive(false);
                     break;
                 case UIState.Musicmenu1:
                     DisappearUIWindow<MusicPanel>();

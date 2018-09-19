@@ -628,14 +628,14 @@ public class WaterMusicManager : MusicManager
     {
         UIManager.instance.PopPauseWindow(this);
         m_bGameStateRun = false;
-        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
+        AudioManager.Instance.PauseMusicSingle(m_musicGameConfig.GetAudioClipBgm());
     }
 
     public override void Continue()
     {
         m_bGameStateRun = true;
         UIManager.instance.DisappearUIWindow<PausePanel>();
-        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
+        AudioManager.Instance.PlayMusicSingle(m_musicGameConfig.GetAudioClipBgm());
     }
 
     public override void Record()

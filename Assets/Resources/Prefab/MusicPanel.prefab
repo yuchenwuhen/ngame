@@ -266,7 +266,7 @@ MonoBehaviour:
   m_xaspect: 0.67
   m_yaspect: 0.45
   m_LastEndOffset: {x: 200, y: 0, z: 0}
-  m_speed: 250
+  m_speed: 300
   m_randomSprite:
   - {fileID: 21300000, guid: 86454246e6fea4f4caa778f549c11ac2, type: 3}
   - {fileID: 21300000, guid: 63137ff35d5060345b3b2291838cb742, type: 3}

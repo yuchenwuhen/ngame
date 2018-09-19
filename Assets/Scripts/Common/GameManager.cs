@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public bool m_IsEnterMenu = false;
     public bool m_IsEnterMusic = false;
 
+    public  GameObject m_Tile;
+
 	//Awake is always called before any Start functions
 	void Awake()
 	{
@@ -42,6 +44,8 @@ public class GameManager : MonoBehaviour
         }
         if (m_IsEnterMusic)
             BackToScene();
+
+        m_Tile.SetActive(true);
     }
 
     public void BackToScene()

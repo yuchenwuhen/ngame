@@ -154,7 +154,6 @@ public class PlayMusicManager : MusicManager
     {
         if (!m_bGameStateRun)
         {
-            Debug.Log("Game pause");
             return;
         }      
 
@@ -226,11 +225,9 @@ public class PlayMusicManager : MusicManager
     {
         float checkPointTime = m_songData.GetPlayerSongList()[m_checkPointID];
         int iPointStyle = m_songData.GetPlayerSongStyleList()[m_checkPointID];
-        Debug.Log("检测时间点" + checkPointTime);
-        Debug.Log("点击时间点" + curTime);
         if (Mathf.Abs(checkPointTime - curTime) < m_touchSuccessTIme)
         {
-            Debug.Log("检测成功");
+ //           Debug.Log("检测成功");
 
             CheckPointChange(0);
 
@@ -242,7 +239,7 @@ public class PlayMusicManager : MusicManager
         }
         else if ((checkPointTime - curTime) > m_touchSuccessTIme && (checkPointTime - curTime) < m_touchCheckTIme)
         {
-            Debug.Log("超前点击");
+ //           Debug.Log("超前点击");
 
             CheckPointChange(1);
 
@@ -252,7 +249,7 @@ public class PlayMusicManager : MusicManager
         }
         else if ((curTime - checkPointTime) > m_touchSuccessTIme && (curTime - checkPointTime) < m_touchCheckTIme)
         {
-            Debug.Log("延迟点击");
+ //           Debug.Log("延迟点击");
 
             CheckPointChange(2);
 
@@ -261,7 +258,7 @@ public class PlayMusicManager : MusicManager
         }
         else
         {
-            Debug.Log("无效点击");
+ //           Debug.Log("无效点击");
             PlayClickInvalidAudio();
         }
     }
