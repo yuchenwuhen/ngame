@@ -21,7 +21,11 @@ public class GameMenu : UIBase {
 	void StartGame()
     {
         UIManager.instance.ShowUIFade(UIState.Animation);
-        Debug.Log("教学开始");
-        
+
+        Invoke("UnShow",5f);
+    }
+    public void UnShow()
+    {
+        this.gameObject.SetActive(false);
     }
 }
