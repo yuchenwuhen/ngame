@@ -11,7 +11,7 @@ public enum MenuSingleClip
 
 public class AudioManager : MonoBehaviour
 {
-
+    
     private static AudioManager _instance;
 
 

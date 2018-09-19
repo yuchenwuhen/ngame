@@ -19,7 +19,7 @@ public class BookPanel : UIBase {
 
     //private BookPro m_bookPro;
     //private AutoFlip m_autoFlip;
-
+    public GameObject CollectionPanel;
     public override void OnAwake()
     {
         base.OnAwake();
@@ -52,6 +52,8 @@ public class BookPanel : UIBase {
         m_isPlaying = false;
         SetBtnplaySprite();
         SetImgmusic();
+        //更新主界面
+        CollectionPanel.GetComponent<NoteBookCollection>().SetIconSprite();
     }
 
     private void EnterScene()
