@@ -5,17 +5,22 @@ using UnityEngine.UI;
 
 public class BookPanel : UIBase {
 
-    public GameObject m_image;
     private Button btn_play;
     private Button btn_record;
     private Button m_btnBack;
+    private Button m_btnCreate;
+    public Button m_send;
     private bool m_isPlaying = false;
 
     private RectTransform m_rectTransform;
     private Button btn_book;
+    
     public GameObject[] Img_musics;
     public Sprite[] btnPlay_sprites;
     public Image[] m_leftImage;
+    private int[] m_openAudioList;
+    public List<Button> btn_volume = new List<Button>();
+    public Sprite[] m_openAudioSprite;
 
     //private BookPro m_bookPro;
     //private AutoFlip m_autoFlip;
@@ -27,6 +32,9 @@ public class BookPanel : UIBase {
         btn_play = transform.Find("btn_play").GetComponent<Button>();
         btn_record = transform.Find("btn_record").GetComponent<Button>();
         btn_record.onClick.AddListener(EnterScene);
+        m_btnCreate = transform.Find("btn_create").GetComponent<Button>();
+        m_btnCreate.onClick.AddListener(EnterLevel3);
+        m_send.gameObject.SetActive(false);
         //m_bookPro = transform.Find("BookPro").GetComponent<BookPro>();
         //m_autoFlip = transform.Find("BookPro").GetComponent<AutoFlip>();
         //btn_book = transform.Find("btn_book").GetComponent<Button>();
@@ -38,17 +46,25 @@ public class BookPanel : UIBase {
         {
             Img_musics[i].SetActive(false);
         }
+        for(int i=0;i<btn_volume.Count;i++)
+        {
+            btn_volume[i].gameObject.SetActive(false);
+        }
         for (int i = 0; i < m_leftImage.Length; i++)
         {
             m_leftImage[i].enabled = false;
         }
+        m_openAudioList = new int[3] { 0, 0, 0 };
+        btn_volume[0].onClick.AddListener(delegate() { SetPlayVolume(0); });
+        btn_volume[1].onClick.AddListener(delegate () { SetPlayVolume(1); });
+        btn_volume[2].onClick.AddListener(delegate () { SetPlayVolume(2); });
         TileManager.Instance.SetSeen();
     }
 
     public override void Appear()
     {
         base.Appear();
-        transform.SetSiblingIndex(transform.GetComponentsInChildren<UIBase>().Length-1);
+        //transform.SetSiblingIndex(transform.GetComponentsInChildren<UIBase>().Length-1);
 
         m_isPlaying = false;
         SetBtnplaySprite();
@@ -65,12 +81,32 @@ public class BookPanel : UIBase {
         Invoke("ShowTeachPanel",4f);
  
     }
+
+    private void EnterLevel3()
+    {
+        AudioManager.Instance.StopAudioMusic();
+        UIManager.instance.ShowUIFade(UIState.Musicmenu3);
+    }
+
     private void ShowTeachPanel()
     {
         BigMapTeachPanel bigMapTeach =  UIUtility.Instance.GetUI<BigMapTeachPanel>();
         bigMapTeach.Appear();
 
     }
+
+    private void SetPlayVolume(int i)
+    {
+        if(m_openAudioList[i]==0)
+        {
+            m_openAudioList[i] = 1;
+        }else
+        {
+            m_openAudioList[i] = 0;
+        }
+        btn_volume[i].gameObject.GetComponent<Image>().sprite = m_openAudioSprite[m_openAudioList[i]];
+    }
+
     private void BackToLogin()
     {
         UIManager.instance.ShowUIFade(UIState.Mainmenu);
@@ -85,7 +121,16 @@ public class BookPanel : UIBase {
         if(m_isPlaying)
         {
             AudioManager.Instance.StopStartMusic();
-            AudioManager.Instance.PlayMulMusic(TileManager.Instance.GetMusicLevel());
+            int[] level = TileManager.Instance.GetMusicLevel();
+            List<int> levelnew = new List<int>();
+            for(int i=0;i<level.Length;i++)
+            {
+                if(m_openAudioList[level[i]]==0)
+                {
+                    levelnew.Add(level[i]);
+                }
+            }
+            AudioManager.Instance.PlayMulMusic(levelnew.ToArray());
         }
         else
         {
@@ -112,9 +157,14 @@ public class BookPanel : UIBase {
     public void SetImgmusic()
     {
         int[] level = TileManager.Instance.GetMusicLevel();
+        if(level.Length>2)
+        {
+            m_send.gameObject.SetActive(true);
+        }
         for (int i=0;i< level.Length;i++)
         {
             Img_musics[level[i]].SetActive(true);
+            btn_volume[level[i]].gameObject.SetActive(true);
         }
         int curlevel = TileManager.Instance.GetCurLevel();
         if(curlevel>=0)

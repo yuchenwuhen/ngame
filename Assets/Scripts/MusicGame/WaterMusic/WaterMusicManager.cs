@@ -43,6 +43,7 @@ public class WaterMusicManager : MusicManager
     // 结算相关模块 Begin////
     private int m_iMaxStar = 3;                // 最多可获得星星数(目前结算面板只支持配置3)
     private int m_iFailTimes;                 // 失败次数
+    private int m_isuccessTime;
     // 结算相关模块 End////
 
     // 不通用分类模块 Begin////
@@ -188,6 +189,7 @@ public class WaterMusicManager : MusicManager
         m_iClickAudioSourceIndex = 0;
 
         m_iFailTimes = 0;
+        m_isuccessTime = 0;
 
 
         if (m_bIsTeachStage)
@@ -278,6 +280,7 @@ public class WaterMusicManager : MusicManager
             m_iClickAudioSourceIndex = 0;
 
             m_iFailTimes = 0;
+            m_isuccessTime = 0;
 
             if (m_bIsTeachStage)
             {
@@ -388,6 +391,7 @@ public class WaterMusicManager : MusicManager
             PlaySuccessAnimator();
 
             m_iNowPointID++;
+            m_isuccessTime++;
             OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
         }
         else if ((checkPointTime - fRunTime) > m_fTouchSuccessTime && (checkPointTime - fRunTime) < m_fTouchCheckTime)
@@ -476,11 +480,17 @@ public class WaterMusicManager : MusicManager
 
     private int CaculateStar(int fail)
     {
-        if (fail >=0&&fail<=2)
+        if(fail<=5&&m_isuccessTime>0)
+        {
+            GameManager.instance.Collectlevel2Music();
+        }
+        if (m_isuccessTime > 0&& fail==0)
             return 3;
-        else if (fail > 2 && fail <= 5)
+        if (fail >=0&&fail<=1)
+            return 3;
+        else if (fail > 1 && fail <= 3)
             return 2;
-        else if (fail > 5 && fail <= 9)
+        else if (fail > 4 && fail <= 5)
             return 1;
         else
             return 0;
