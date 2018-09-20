@@ -4004,7 +4004,7 @@ MonoBehaviour:
   m_wallGridInfo: []
   m_roleGridInfo: []
   m_roleConfig: {fileID: 11400000, guid: 15379a103be3b0243b6569ced4f9d809, type: 2}
-  bgFront: {fileID: 0}
+  bgFront: {fileID: 1924156624}
 --- !u!4 &847957520
 Transform:
   m_ObjectHideFlags: 0
@@ -4430,7 +4430,7 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 917161064}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f3cd14661d2dabd4f95ed4efd2764e7b, type: 2}
   m_CullingMode: 0

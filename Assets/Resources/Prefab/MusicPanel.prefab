@@ -487,6 +487,7 @@ MonoBehaviour:
   m_bGameStateRun: 0
   m_InitNpcCount: 10
   m_MaxMoveNpcCount: 3
+  m_teachPanel: {fileID: 1357467045581666}
 --- !u!114 &114276795899417076
 MonoBehaviour:
   m_ObjectHideFlags: 1

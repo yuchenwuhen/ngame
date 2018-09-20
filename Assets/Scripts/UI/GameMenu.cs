@@ -10,18 +10,20 @@ public class GameMenu : UIBase {
 	void Start () {
         m_startButton = transform.Find("btnstart").GetComponent<Button>();
         m_startButton.onClick.AddListener(StartGame);
-        AudioManager.Instance.StopStartMusic();
-       
     }
-	
+
+    public override void Appear()
+    {
+        base.Appear();
+        AudioManager.Instance.StopStartMusic();
+    }
+
     /// <summary>
     /// 开始游戏
     /// </summary>
-	void StartGame()
+    void StartGame()
     {
         UIManager.instance.ShowUIFade(UIState.Animation);
-
-        Invoke("DisAppear", 3f);
     }
     public override void DisAppear()
     {

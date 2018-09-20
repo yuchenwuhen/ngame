@@ -151,6 +151,8 @@ public class UIManager : MonoBehaviour {
                 break;
             case UIState.Animation:
                 ShowUIWindow<StartAnimationPanel>();
+                FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
+                fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
                 break;
             default:
                 break;
