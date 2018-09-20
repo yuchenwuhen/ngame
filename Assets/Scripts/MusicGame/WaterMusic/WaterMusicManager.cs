@@ -77,7 +77,7 @@ public class WaterMusicManager : MusicManager
 
     public bool m_bGameStateRun = false;     // 场景是否正在运行
 
-    private bool m_bIsPopTeachPanel;  // 是否弹出教学说明
+    public GameObject m_teachPanel;
     private Button m_btnCloseTeachPanel; //关闭教学说明的按钮
     private Image recimg;
 
@@ -91,9 +91,6 @@ public class WaterMusicManager : MusicManager
     void Start()
     {
         m_audio = this.GetComponent<AudioSource>();
-        //Debug.Log("InitTime:" + m_fInitTime);
-        // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
-        ReInitSection();
     }
 
     // Update is called once per frame
@@ -229,9 +226,13 @@ public class WaterMusicManager : MusicManager
         m_btnReset = transform.Find("ResetBtn").GetComponent<Button>();
         m_btnReset.onClick.AddListener(PopPauseWindow);
 
-      //  m_bIsPopTeachPanel = true;
-        m_btnCloseTeachPanel = transform.Find("Level2TeachPanel").Find("closeBtn").GetComponent<Button>();
+          m_btnCloseTeachPanel = GameObject.Find("closeBtn").GetComponent<Button>();
         m_btnCloseTeachPanel.onClick.AddListener(CloseTeachPanel);
+    }
+
+    public void Init()
+    {
+        m_teachPanel.SetActive(true);
     }
 
     /// <summary>
@@ -240,7 +241,6 @@ public class WaterMusicManager : MusicManager
     public void ReInitSection()
     {
         m_bGameStateRun = true;
-        transform.Find("Level2TeachPanel").gameObject.SetActive(true);
         ////        if (m_bIsPopTeachPanel)
         ////       {
         //           transform.Find("Level2TeachPanel").gameObject.SetActive(true);
@@ -288,7 +288,6 @@ public class WaterMusicManager : MusicManager
                 recimg.enabled = true;
             }
 
-            Debug.Log("reset");
             for (int i = 0; i < 8; i++)
             {
                 string sWaterNote = "WaterNote" + (i + 1).ToString();
@@ -616,9 +615,7 @@ public class WaterMusicManager : MusicManager
 
     private void CloseTeachPanel()
     {
-        m_bIsPopTeachPanel = false;
-        
-        transform.Find("Level2TeachPanel").gameObject.SetActive(false);
+        m_teachPanel.SetActive(false);
         ReInitSection();
     }
 }
