@@ -46,7 +46,7 @@ public class WaterMusicManager : MusicManager
     // 结算相关模块 End////
 
     // 不通用分类模块 Begin////
-    private Text m_textPoint;                   // 展示文本
+   // private Text m_textPoint;                   // 展示文本
     // 不通用分类模块 End////
 
     // 动画模块 Begin////
@@ -79,6 +79,7 @@ public class WaterMusicManager : MusicManager
 
     private bool m_bIsPopTeachPanel;  // 是否弹出教学说明
     private Button m_btnCloseTeachPanel; //关闭教学说明的按钮
+    private Image recimg;
 
     void Awake()
     {
@@ -150,6 +151,7 @@ public class WaterMusicManager : MusicManager
     /// </summary>
     void InitGame()
     {
+
         // 临界时间模块 Begin////
         m_fTouchAgainTime = m_musicGameConfig.GetTouchAgainTime();           //玩家再次touch时间
         m_fTouchSuccessTime = m_musicGameConfig.GetTouchSuccessTime();       //检测玩家点击成功的有效范围
@@ -160,7 +162,8 @@ public class WaterMusicManager : MusicManager
         m_leftNode = GameObject.Find("LeftNote").GetComponent<RectTransform>();
         m_rightNode = GameObject.Find("RightNote").GetComponent<RectTransform>();
         //水滴的范围位置end//
-
+        recimg = GameObject.Find("Rec").GetComponent<Image>();
+        recimg.enabled = false;
         // 当前状态模块 Begin////
         m_iNowSectionID = 0;              // 该玩法中，当前小节ID
         m_iSectionCount = m_musicGameConfig.GetSectionCount();              // 该玩法中，音乐小节总数
@@ -189,14 +192,16 @@ public class WaterMusicManager : MusicManager
 
         m_iFailTimes = 0;
 
-        m_textPoint = GetComponentInChildren<Text>();
+
         if (m_bIsTeachStage)
         {
-            m_textPoint.text = "教学阶段";
+           
+            recimg.enabled = false;
         }
         else
         {
-            m_textPoint.text = "玩家阶段";
+
+            recimg.enabled = true;
         }
 
         for (int i = 0; i < 8; i++)
@@ -224,7 +229,7 @@ public class WaterMusicManager : MusicManager
         m_btnReset = transform.Find("ResetBtn").GetComponent<Button>();
         m_btnReset.onClick.AddListener(PopPauseWindow);
 
-        m_bIsPopTeachPanel = true;
+      //  m_bIsPopTeachPanel = true;
         m_btnCloseTeachPanel = transform.Find("Level2TeachPanel").Find("closeBtn").GetComponent<Button>();
         m_btnCloseTeachPanel.onClick.AddListener(CloseTeachPanel);
     }
@@ -235,16 +240,17 @@ public class WaterMusicManager : MusicManager
     public void ReInitSection()
     {
         m_bGameStateRun = true;
-        if (m_bIsPopTeachPanel)
-        {
-            transform.Find("Level2TeachPanel").gameObject.SetActive(true);
-            m_bGameStateRun = false;
-            return;
-        }
-        else
-        {
-            transform.Find("Level2TeachPanel").gameObject.SetActive(false);
-        }
+        transform.Find("Level2TeachPanel").gameObject.SetActive(true);
+        ////        if (m_bIsPopTeachPanel)
+        ////       {
+        //           transform.Find("Level2TeachPanel").gameObject.SetActive(true);
+        //           m_bGameStateRun = false;
+        //           return;
+        ////       }
+        //else
+        //{
+        //    transform.Find("Level2TeachPanel").gameObject.SetActive(false);
+        //}
         if (m_isFirstStart)
         {
             m_isFirstStart = false;
@@ -275,11 +281,11 @@ public class WaterMusicManager : MusicManager
 
             if (m_bIsTeachStage)
             {
-                m_textPoint.text = "教学阶段";
+                recimg.enabled = false;
             }
             else
             {
-                m_textPoint.text = "玩家阶段";
+                recimg.enabled = true;
             }
 
             Debug.Log("reset");
@@ -449,11 +455,11 @@ public class WaterMusicManager : MusicManager
             m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
             if (m_bIsTeachStage)
             {
-                m_textPoint.text = "教学阶段";
+                recimg.enabled = false;
             }
             else
             {
-                m_textPoint.text = "玩家阶段";
+                recimg.enabled = true;
             }
             if (m_bIsTeachStage)
             {
@@ -471,9 +477,9 @@ public class WaterMusicManager : MusicManager
 
     private int CaculateStar(int fail)
     {
-        if (fail == 0)
+        if (fail >=0&&fail<=2)
             return 3;
-        else if (fail > 0 && fail <= 5)
+        else if (fail > 2 && fail <= 5)
             return 2;
         else if (fail > 5 && fail <= 9)
             return 1;

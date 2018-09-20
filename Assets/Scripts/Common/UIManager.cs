@@ -60,15 +60,6 @@ public class UIManager : MonoBehaviour {
 
     public void ShowUIFade(UIState state)
     {
-        switch(state)
-        {
-            case UIState.Musicmenu1:
-            case UIState.Musicmenu2:
-            case UIState.Musicmenu3:
-                if (m_preState == UIState.Dialogue)
-                    return;
-                break;
-        }
         m_curState = state;
         FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
         fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
@@ -160,8 +151,6 @@ public class UIManager : MonoBehaviour {
                 break;
             case UIState.Animation:
                 ShowUIWindow<StartAnimationPanel>();
-                FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
-                fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
                 break;
             default:
                 break;
@@ -176,21 +165,19 @@ public class UIManager : MonoBehaviour {
     /// <param name="actor"></param>
     public void ShowDialogueWindow(GameObject player, GameObject actor)
     {
-        if(dialogueonj == null)
+        if (dialogueonj == null)
             dialogueonj = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UIDialogue")) as GameObject;
-        else
-        {
-            dialogueonj.SetActive(true);
-            UIDialogue dialogue = dialogueonj.GetComponent<UIDialogue>();
-            List<string> txt = actor.GetComponent<RBaseRole>().m_dialogueTxt;
-            object[] m_obj = new object[3];
-            m_obj[0] = txt;
-            m_obj[1] = player.transform.position;
-            m_obj[2] = actor.transform.position;
-            dialogue.Init(m_obj);
-            m_preState = m_curState;
-            m_curState = UIState.Dialogue;
-        }
+        dialogueonj.SetActive(true);
+        UIDialogue dialogue = dialogueonj.GetComponent<UIDialogue>();
+        List<string> txt = actor.GetComponent<RBaseRole>().m_dialogueTxt;
+        object[] m_obj = new object[3];
+        m_obj[0] = txt;
+        m_obj[1] = player.transform.position;
+        m_obj[2] = actor.transform.position;
+        dialogue.Init(m_obj);
+        m_preState = m_curState;
+        m_curState = UIState.Dialogue;
+
     }
 
 
@@ -256,28 +243,26 @@ public class UIManager : MonoBehaviour {
         }
     }
     
-    private void DealFadeWindowCallback(EventArgs e)
-    {
-        switch(m_curState)
-        {
-            case UIState.Mainmenu:
-                GameMenu gameMenu = UIUtility.Instance.GetUI<GameMenu>();
-                gameMenu.DisAppear();
-                ShowUIWindow<BookPanel>();
-                m_curState = UIState.Bookmenu;
-                break;
-            case UIState.Bookmenu:
-                BookPanel bookPanel = UIUtility.Instance.GetUI<BookPanel>();
-                bookPanel.DisAppear();
-                m_curState = UIState.Scene;
-                break;
-            default:
-                break;
-        }
+    //private void DealFadeWindowCallback(EventArgs e)
+    //{
+    //    switch(m_curState)
+    //    {
+    //        case UIState.Mainmenu:
+    //            GameMenu gameMenu = UIUtility.Instance.GetUI<GameMenu>();
+    //            gameMenu.DisAppear();
+    //            ShowUIWindow<BookPanel>();
+    //            m_curState = UIState.Bookmenu;
+    //            break;
+    //        case UIState.Bookmenu:
+    //            BookPanel bookPanel = UIUtility.Instance.GetUI<BookPanel>();
+    //            bookPanel.DisAppear();
+    //            m_curState = UIState.Scene;
+    //            break;
+    //        default:
+    //            break;
+    //    }
         
-    }
-
-    /// <summary>
+    //}  /// <summary>
     /// 处理ChoiceUI回调消息
     /// </summary>
     /// <param name="e"></param>

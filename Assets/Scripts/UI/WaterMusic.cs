@@ -16,7 +16,6 @@ public class WaterMusic : UIBase {
     {
         base.Appear();
         //TODO 重置按钮
-        m_waterMusicManager.ReInitSection();
     }
 
     public void Reset()

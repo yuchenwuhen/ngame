@@ -31,6 +31,8 @@ public class DialogueNote : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (UIManager.instance.m_curState == UIState.Dialogue)
+            return;
         if (Vector3.Distance(m_player.position, transform.position) < m_checkRange)
         {
             m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 1f);
@@ -67,9 +69,11 @@ public class DialogueNote : MonoBehaviour {
     public void EnterDialoguePlay()
     {
 
-        if (m_parent != null)
+        if (m_parent != null && !UIManager.instance.m_UICotroller)
         {
             UIManager.instance.ShowDialogueWindow(m_player.gameObject, m_parent);
+            m_collider.enabled = false;
+            m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
         }
     }
 }

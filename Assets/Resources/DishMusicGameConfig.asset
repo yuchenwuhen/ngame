@@ -13,6 +13,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_audioClipBgm: {fileID: 8300000, guid: aa803c2cf75bd7445a171cd7e50fc1b9, type: 3}
   m_fTouchAgainTime: 0.1
-  m_fTouchSuccessTime: 0
-  m_fBeginClickTime: 2
-  m_fEndClickTime: 10
+  m_fBeginClickTime: 8
+  m_fEndClickTime: 80
+  m_audioDatas:
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  - m_clickstyle: 0
+    audioClip: {fileID: 0}
+  clickDatas: []

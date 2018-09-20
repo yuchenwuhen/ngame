@@ -54,7 +54,7 @@ public class PlayMusicManager : MusicManager
     private GameObject npc;
     private bool m_isFirstStart = true;
 
-    private GameObject m_teachPanel;
+    public GameObject m_teachPanel;
     private Button m_teachClose;
     private Image m_recImg;
 
@@ -89,9 +89,15 @@ public class PlayMusicManager : MusicManager
             tmpBehaviour.Init();
             queueCanUseNpc.Enqueue(tmpBehaviour);
         }
-        m_teachPanel = GameObject.Find("TeachPanel");
+//        m_teachPanel = GameObject.Find("TeachPanel");
         m_teachClose = GameObject.Find("closeBtn").GetComponent<Button>();
         m_teachClose.onClick.AddListener(CloseTeachPanel);
+    }
+
+    public void Init()
+    {
+//        m_teachPanel = GameObject.Find("TeachPanel");
+        m_teachPanel.SetActive(true);
     }
 
     void CloseTeachPanel()
@@ -468,6 +474,7 @@ public class PlayMusicManager : MusicManager
 
     public override void Exit()
     {
+    
         UIManager.instance.ShowUIFade(UIState.Scene);
         UIManager.instance.DisappearUIWindow<PausePanel>();
     }

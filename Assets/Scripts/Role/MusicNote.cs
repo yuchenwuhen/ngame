@@ -61,7 +61,10 @@ public class MusicNote : RProps {
 
     public void EnterMusicPlay()
     {
-        
+        if(UIManager.instance.m_UICotroller)
+        {
+            return;
+        }
         switch (m_musicType)
         {
             case MUSICTYPE.Water:
