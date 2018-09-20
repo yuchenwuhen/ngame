@@ -169,17 +169,19 @@ public class UIManager : MonoBehaviour {
         
         m_preState = m_curState;
     }
-
+    private GameObject dialogueonj =null;
     /// <summary>
     /// 显示对话窗口
     /// </summary>
     /// <param name="actor"></param>
     public void ShowDialogueWindow(GameObject player, GameObject actor)
     {
-        GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UIDialogue")) as GameObject;
-        if (go)
+        if(dialogueonj == null)
+            dialogueonj = GameObject.Instantiate(Resources.Load<GameObject>("Prefab/UIDialogue")) as GameObject;
+        else
         {
-            UIDialogue dialogue = go.GetComponent<UIDialogue>();
+            dialogueonj.SetActive(true);
+            UIDialogue dialogue = dialogueonj.GetComponent<UIDialogue>();
             List<string> txt = actor.GetComponent<RBaseRole>().m_dialogueTxt;
             object[] m_obj = new object[3];
             m_obj[0] = txt;

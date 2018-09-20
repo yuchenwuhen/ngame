@@ -20,19 +20,20 @@ public class MusicNote : RProps {
     public float m_checkRange = 3f;
     public MUSICTYPE m_musicType;
     [SerializeField]
-    private Sprite m_collectSprite;
+    private Sprite[] m_collectSprite;
     [SerializeField]
-    private string m_collectTxt;
+    private string[] m_collectTxt;
     private Transform m_player;
     private SpriteRenderer m_sprite;
     private BoxCollider m_collider;
     [SerializeField]
     private AudioClip m_collectAudio;
-
+    private GameObject m_basketball;
     private bool m_isEnter = false;
     // Use this for initialization
     void Start () {
         m_player = GameObject.FindWithTag("Player").transform;
+        m_basketball = GameObject.Find("basketball");
         m_sprite = this.GetComponent<SpriteRenderer>();
         m_collider = this.GetComponent<BoxCollider>();
         m_sprite.color = new Color(m_sprite.color.r, m_sprite.color.g, m_sprite.color.b, 0f);
@@ -66,8 +67,8 @@ public class MusicNote : RProps {
             case MUSICTYPE.Water:
                 Debug.Log("露珠音乐玩法");
                 UIManager.instance.ShowUIFade(UIState.Musicmenu2);
-                CollectMusic();
-                GameManager.instance.collectionNumbers.Add(2);
+                //CollectMusic();
+                //GameManager.instance.collectionNumbers.Add(2);
                 break;
             case MUSICTYPE.Record:
                 Debug.Log("录制音乐玩法");
@@ -76,40 +77,44 @@ public class MusicNote : RProps {
             case MUSICTYPE.Wood:
                 Debug.Log("砍木头玩法");
                 UIManager.instance.ShowUIFade(UIState.Musicmenu1);
-                CollectMusic();
-                GameManager.instance.collectionNumbers.Add(0);
-                GameManager.instance.collectionNumbers.Add(1);
+                //CollectMusic();
+                //GameManager.instance.collectionNumbers.Add(0);
+                //GameManager.instance.collectionNumbers.Add(1);
                 break;
             case MUSICTYPE.Backetball:
                 Debug.Log("篮球音符");
-                CollectMusic();
-                GameManager.instance.collectionNumbers.Add(3);
+                CollectMusic(3);
+                m_basketball.GetComponent<Animator>().SetTrigger("hit");
+                GameManager.instance.AddElements(3);
                 break;
             case MUSICTYPE.Chicken:
                 Debug.Log("鸡叫音符");
-                CollectMusic();
-                GameManager.instance.collectionNumbers.Add(4);
+                CollectMusic(4);
+                GameManager.instance.AddElements(4);
                 break;
             case MUSICTYPE.Grass:
                 Debug.Log("草音符");
-                CollectMusic();
-                GameManager.instance.collectionNumbers.Add(5);
+                CollectMusic(5);
+                GameManager.instance.AddElements(5);
                 break;
             case MUSICTYPE.Well:
                 Debug.Log("水井玩法");
-                CollectMusic();
-                GameManager.instance.collectionNumbers.Add(6);
+                CollectMusic(6);
+                GameManager.instance.AddElements(6);
                 break;
             default:
                 break;
         }
     }
 
-    void CollectMusic()
+    void CollectMusic(int id)
     {
-        CollectionPanel collectionPanel = UIUtility.Instance.GetUI<CollectionPanel>();
-        collectionPanel.Appear();
-        collectionPanel.ShowCollect(m_collectSprite, m_collectTxt);
+        if(!GameManager.instance.IsCollected(id))
+        {
+            CollectionPanel collectionPanel = UIUtility.Instance.GetUI<CollectionPanel>();
+            collectionPanel.Appear();
+            collectionPanel.ShowCollect(m_collectSprite[0], m_collectTxt[0]);
+        }
         AudioManager.Instance.PlayEffectMusic(m_collectAudio);
     }
 }

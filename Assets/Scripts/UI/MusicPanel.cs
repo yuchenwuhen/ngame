@@ -14,7 +14,6 @@ public class MusicPanel : UIBase {
     public override void Appear()
     {
         base.Appear();
-        m_musicManager.ResetClick();
         transform.SetAsLastSibling();
     }
 

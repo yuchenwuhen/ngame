@@ -44,7 +44,7 @@ MonoBehaviour:
     - 19.674
     - 20.5676
     m_songStyle: 
-    m_songNoteType: 
+    m_songNoteType: 000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
     - 28.0346
     - 28.3625
     m_songStyle: 
-    m_songNoteType: 
+    m_songNoteType: 00000000000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
     - 35.4116
     - 36.3952
     m_songStyle: 040000000500000003000000
-    m_songNoteType: 
+    m_songNoteType: 00000000000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -107,10 +107,10 @@ MonoBehaviour:
     - 42.2968
     - 43.2804
     - 43.7722
-    - 44.1001
+    - 44.1006
     - 44.264
     m_songStyle: 040000000500000003000000
-    m_songNoteType: 
+    m_songNoteType: 0000000000000000000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
     - 51.1492
     - 52.1328
     m_songStyle: 
-    m_songNoteType: 
+    m_songNoteType: 0000000000000000000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
     - 59.8377
     - 60.0016
     m_songStyle: 
-    m_songNoteType: 
+    m_songNoteType: 00000000000000000000000000000000000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
     - 66.7229
     - 67.8704
     m_songStyle: 
-    m_songNoteType: 
+    m_songNoteType: 0000000000000000000000000000000000000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0
@@ -206,7 +206,7 @@ MonoBehaviour:
     - 72.7884
     - 75.7392
     m_songStyle: 
-    m_songNoteType: 
+    m_songNoteType: 00000000ffffffff
     m_iClickIndex: 0
   - m_iSectionID: 3
     m_iSectionType: 0

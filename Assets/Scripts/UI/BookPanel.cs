@@ -42,6 +42,7 @@ public class BookPanel : UIBase {
         {
             m_leftImage[i].enabled = false;
         }
+        TileManager.Instance.SetSeen();
     }
 
     public override void Appear()
@@ -66,9 +67,8 @@ public class BookPanel : UIBase {
     }
     private void ShowTeachPanel()
     {
-        Transform teachPanel = transform.parent.Find("BigMapTeachPanel");
-        teachPanel.gameObject.SetActive(true);
-        teachPanel.Find("teachSprite").GetComponent<Image>().enabled = true;
+        BigMapTeachPanel bigMapTeach =  UIUtility.Instance.GetUI<BigMapTeachPanel>();
+        bigMapTeach.Appear();
 
     }
     private void BackToLogin()

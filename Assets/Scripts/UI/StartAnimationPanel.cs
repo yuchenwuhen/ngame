@@ -23,6 +23,8 @@ public class StartAnimationPanel : UIBase
     public override void OnStart()
     {
         base.OnStart();
+        AudioManager.Instance.StopStartMusic();
+        AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
     }
     public override void Appear()
     {
