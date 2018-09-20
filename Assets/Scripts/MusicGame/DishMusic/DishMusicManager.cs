@@ -9,7 +9,7 @@ public class DishMusicManager : MusicManager
     public DishMusicConfig m_dishMusicConfig; //盘子关卡配置
 
     // 临界时间模块 Begin////
-    private float m_fTouchAgainTime;           //玩家再次touch时间
+    public float m_fTouchAgainTime;           //玩家再次touch时间
     // 临界时间模块 End////
 
     // 当前状态模块 Begin////

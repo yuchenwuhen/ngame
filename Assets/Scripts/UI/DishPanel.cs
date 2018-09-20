@@ -15,7 +15,6 @@ public class DishPanel : UIBase {
     public override void Appear()
     {
         base.Appear();
-        //TODO 重置按钮
     }
 
     public void Reset()

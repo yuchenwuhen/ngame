@@ -87,6 +87,7 @@ public abstract class UIBase : BaseUI
 		uiManager.PushUI (this);
 		this.OnAppear();
         UIManager.instance.m_UICotroller = true;
+        transform.SetAsLastSibling();
 	}
 
 	/// <summary>
