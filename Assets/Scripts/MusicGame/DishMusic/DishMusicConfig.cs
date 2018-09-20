@@ -37,6 +37,16 @@ public class DishMusicConfig : ScriptableObject
         return m_audioClipBgm;
     }
 
+    public List<AudioClip> GetAudioClip()
+    {
+        List<AudioClip> m_audioClip = new List<AudioClip>();
+        foreach(var data in m_audioDatas)
+        {
+            m_audioClip.Add(data.audioClip);
+        }
+        return m_audioClip;
+    }
+
     /// <summary>
     /// 获取再次touch时间范围
     /// </summary>
