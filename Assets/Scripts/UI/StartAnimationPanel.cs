@@ -27,8 +27,6 @@ public class StartAnimationPanel : UIBase
     public override void OnStart()
     {
         base.OnStart();
-        AudioManager.Instance.StopStartMusic();
-        AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
     }
     public override void Appear()
     {
@@ -37,6 +35,8 @@ public class StartAnimationPanel : UIBase
         m_curIndex = 0;
         m_showTime1 = m_showTimePerImg;
         SetImgByIndex(m_curIndex);
+        AudioManager.Instance.StopStartMusic();
+        AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Start);
     }
 
     void SkipAniamtion()
