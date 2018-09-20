@@ -14,11 +14,15 @@ public class StartAnimationPanel : UIBase
     private float m_curTime = 0;
     private int m_curIndex = 0;
     private float m_showTime1;
+    private Button m_skipBtn;
+
+    private bool m_controller = true;
 
     public override void OnAwake()
     {
         base.OnAwake();
-       
+        m_skipBtn = GameObject.Find("SkipBtn").GetComponent<Button>();
+        m_skipBtn.onClick.AddListener(SkipAniamtion);
     }
     public override void OnStart()
     {
@@ -29,9 +33,16 @@ public class StartAnimationPanel : UIBase
     public override void Appear()
     {
         base.Appear();
+        m_controller = true;
         m_curIndex = 0;
         m_showTime1 = m_showTimePerImg;
         SetImgByIndex(m_curIndex);
+    }
+
+    void SkipAniamtion()
+    {
+        m_controller = false;
+        ShowMainMenu();
     }
 
     private void Update()
@@ -69,7 +80,7 @@ public class StartAnimationPanel : UIBase
             }
         }
         m_curIndex++;
-        if(m_curIndex>= m_animationImg.Count)
+        if(m_curIndex>= m_animationImg.Count && m_controller)
         {
             Invoke("ShowMainMenu", m_showTimePerImg-1f);
         }

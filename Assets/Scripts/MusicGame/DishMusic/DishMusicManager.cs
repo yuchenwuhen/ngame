@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DishMusicManager : MusicManager
+public class DishMusicManager : MonoBehaviour
 {
     [SerializeField]
     public DishMusicConfig m_dishMusicConfig; //盘子关卡配置
@@ -18,24 +18,35 @@ public class DishMusicManager : MusicManager
     // 当前状态模块 Begin////
 
     // 点击音效模块 Begin/////
-    private AudioSource m_clickAudioSource;   // 点击音效
+    private Queue<AudioSource> m_runAudios = new Queue<AudioSource>();
+//    private AudioSource m_clickAudioSource;   // 点击音效
     public AudioClip m_clickInvalidAudio;     // 点击无效音效
     public AudioClip m_clickFailAudio;        // 点击失败音效
     public AudioClip[] m_clickAudios;         // 音效列表
+    private AudioSource m_playaudiosource;  //播放音轨
     // 点击音效模块 End/////
 
     // 不通用分类模块 Begin////
     private Text m_textPoint;                   // 展示文本
                                                 // 不通用分类模块 End////
-
-    private List<Animator> m_animatorHand;
+    //按钮模块 Begin//
     private List<Button> m_btnHand;
+    private Button m_btnRecord;
+    public Sprite[] m_btnRecordSprite;
+    private bool m_isRecording = false;
+    private Button m_btnPlay;
+    public Sprite[] m_btnPlaySprite;
+    private bool m_isPlaying = false;
+    private Button m_btnAgain;
+    private Button m_btnBack;
+    //按钮模块 End//
 
-    private Button m_btnPause;
 
-    private Dictionary<int, int> m_Index2NoteID; //关卡中的按钮序号对应的收集到的音符ID
+    private Dictionary<int, int> m_Index2NoteID; //关卡中的按钮序号对应的收集到的音符
 
     private Dictionary<float, int> m_pointTime2NoteID; //时间点 2 音符ID
+    private List<float> m_clickTimeList;
+    private List<int> m_clickStyleList;
 
     private float m_fBeginClickTime; //规定玩家开始点击的时间
     private float m_fEndClickTime; //规定玩家结束点击的时间
@@ -96,26 +107,37 @@ public class DishMusicManager : MusicManager
 
         m_bIsTouch = true;           // 本次触摸是否有效
 
-        m_clickAudioSource = GetComponent<AudioSource>();
+        for (int i = 1;i<=4;i++)
+        {
+            AudioSource m_audios =  GameObject.Find("DishAudio" + i).GetComponent<AudioSource>();
+            m_runAudios.Enqueue(m_audios);
+        }
+  //      m_clickAudioSource = GetComponent<AudioSource>();
 
         m_textPoint = GetComponent<Text>();
 
-        m_animatorHand = new List<Animator>();
         m_btnHand = new List<Button>();
         for (int i = 0; i < 7; i++)
         {
-            string sHandIndex = "Hand" + (i + 1).ToString();
-            m_animatorHand.Add(transform.Find("Hand").Find(sHandIndex).GetComponent<Animator>());
-
             string sBtnIndex = "Btn" + (i + 1).ToString();
             m_btnHand.Add(transform.Find("Btn").Find(sBtnIndex).GetComponent<Button>());
         }
-
-        m_btnPause = transform.Find("btnPause").GetComponent<Button>();
-        m_btnPause.onClick.AddListener(PopPauseWindow);
+        m_playaudiosource = this.GetComponent<AudioSource>();
+        m_playaudiosource.clip = m_dishMusicConfig.GetAudioClipBgm();
+        m_btnRecord = transform.Find("BtnRecord").GetComponent<Button>();
+        m_btnRecord.onClick.AddListener(Record);
+        m_btnPlay = transform.Find("BtnPlay").GetComponent<Button>();
+        m_btnPlay.onClick.AddListener(Play);
+        m_btnAgain = transform.Find("BtnAgain").GetComponent<Button>();
+        m_btnAgain.onClick.AddListener(RecordAgain);
+        m_btnBack = transform.Find("BtnBack").GetComponent<Button>();
+        m_btnBack.onClick.AddListener(Back);
 
         m_Index2NoteID = new Dictionary<int, int>();
+
         m_pointTime2NoteID = new Dictionary<float, int>();
+        m_clickTimeList = new List<float>();
+        m_clickStyleList = new List<int>();
     }
 
     /// <summary>
@@ -125,44 +147,75 @@ public class DishMusicManager : MusicManager
     {
         m_Index2NoteID.Clear();
         m_pointTime2NoteID.Clear();
-        if (listCollectdNoteID.Count == 0 || listCollectdNoteID.Count == 7)
+        int[] IndexList = {0,1,2,3,4,5,6};
+        for (int i = 0; i < listCollectdNoteID.Count; i++)
         {
-            //for (int i = 0; i < 7; i++)
-            //{
-            //    Debug.Log(i);
-            //    m_btnHand[i].onClick.AddListener(delegate () { this.OnPlayerClickBtn(i); });
-            //    m_Index2NoteID.Add(i, i);
-            //}
-            m_btnHand[0].onClick.AddListener(delegate () { this.OnPlayerClickBtn(0); });
-            m_Index2NoteID.Add(0,0);
-            m_btnHand[1].onClick.AddListener(delegate () { this.OnPlayerClickBtn(1); });
-            m_Index2NoteID.Add(1, 1);
-            m_btnHand[2].onClick.AddListener(delegate () { this.OnPlayerClickBtn(2); });
-            m_Index2NoteID.Add(2, 2);
-            m_btnHand[3].onClick.AddListener(delegate () { this.OnPlayerClickBtn(3); });
-            m_Index2NoteID.Add(3, 3);
-            m_btnHand[4].onClick.AddListener(delegate () { this.OnPlayerClickBtn(4); });
-            m_Index2NoteID.Add(4, 4);
-            m_btnHand[5].onClick.AddListener(delegate () { this.OnPlayerClickBtn(5); });
-            m_Index2NoteID.Add(5, 5);
-            m_btnHand[6].onClick.AddListener(delegate () { this.OnPlayerClickBtn(6); });
-            m_Index2NoteID.Add(6, 6);
+            m_btnHand[IndexList[i]].onClick.AddListener(delegate () { this.OnPlayerClickBtn(i); });
+            m_Index2NoteID.Add(IndexList[i], i);
         }
-        else
+
+        m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[0];
+        m_btnPlay.GetComponent<Image>().sprite = m_btnPlaySprite[0];
+        StopRecordAudio();
+        enabled = true;
+        m_bIsTouch = true;
+        m_isRecording = false;
+        m_isPlaying = false;
+
+        // 播放音乐
+        //AudioManager.Instance.PlayMusicSingleAgain(m_dishMusicConfig.GetAudioClipBgm());
+    }
+
+
+    public  void Play()
+    {
+        m_isPlaying = !m_isPlaying;
+        if (m_isPlaying)
         {
-            int[] IndexList = {3,2,4,1,5,0,6};
-            for (int i = 0; i < listCollectdNoteID.Count; i++)
-            {
-                m_btnHand[IndexList[i]].onClick.AddListener(delegate () { this.OnPlayerClickBtn(i); });
-                m_Index2NoteID.Add(IndexList[i], i);
-            }
+            //正在播放
+            m_btnPlay.GetComponent<Image>().sprite = m_btnPlaySprite[1];
+            PlayRecordAudio();
+
+        }else
+        {
+            //没有播放
+            m_btnPlay.GetComponent<Image>().sprite = m_btnPlaySprite[0];
+            PauseRecordAudio();
 
         }
         enabled = true;
-        m_bIsTouch = true;
 
-        // 播放音乐
-        AudioManager.Instance.PlayMusicSingleAgain(m_dishMusicConfig.GetAudioClipBgm());
+    }
+
+    public  void Record()
+    {
+        m_isRecording = !m_isRecording;
+        if (m_isRecording)
+        {
+            //正在录制
+            m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[1];
+            AudioManager.Instance.PlayMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
+
+        }
+        else
+        {
+            //没有录制
+            m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[0];
+            AudioManager.Instance.PauseMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
+
+        }
+
+    }
+
+    public void RecordAgain()
+    {
+        List<int> listCollectdNoteID = new List<int>();
+        ReInitSection(listCollectdNoteID);
+    }
+
+    public  void Back()
+    {
+        UIManager.instance.ShowUIFade(UIState.Bookmenu);
     }
 
     /// <summary>
@@ -171,19 +224,19 @@ public class DishMusicManager : MusicManager
     /// <param name="iNpcID"></param>
     void PlayBeatAnimator(int iNpcID)
     {
-        if (iNpcID >= 7)
-        {
-            Debug.LogError("iNpcID >= 7,iNpcID:" + iNpcID);
-            return;
-        }
-        if (iNpcID == 5)
-        {
-            m_animatorHand[iNpcID].Play("ChickenBeat");
-        }
-        else
-        {
-            m_animatorHand[iNpcID].Play("HandBeat");
-        }
+        //if (iNpcID >= 7)
+        //{
+        //    Debug.LogError("iNpcID >= 7,iNpcID:" + iNpcID);
+        //    return;
+        //}
+        //if (iNpcID == 5)
+        //{
+        //    m_animatorHand[iNpcID].Play("ChickenBeat");
+        //}
+        //else
+        //{
+        //    m_animatorHand[iNpcID].Play("HandBeat");
+        //}
     }
 
     /// <summary>
@@ -191,11 +244,39 @@ public class DishMusicManager : MusicManager
     /// </summary>
     void PlayClickAudio(int iClickIndex)
     {
-        if (m_clickAudioSource)
+        AudioSource m_runaudio = m_runAudios.Dequeue();
+        m_runAudios.Enqueue(m_runaudio);
+        if (m_runaudio)
         {
-            m_clickAudioSource.Stop();
-            m_clickAudioSource.clip = m_clickAudios[iClickIndex];
-            m_clickAudioSource.Play();
+            m_runaudio.Stop();
+            m_runaudio.clip = m_clickAudios[iClickIndex];
+            m_runaudio.Play();
+
+        }
+    }
+    /// <summary>
+    /// 播放播放音效
+    /// </summary>
+    void PlayRecordAudio()
+    {
+        if (m_playaudiosource)
+        {
+            m_playaudiosource.Play();
+        }
+    }
+
+    void StopRecordAudio()
+    {
+        if (m_playaudiosource)
+        {
+            m_playaudiosource.Stop();
+        }
+    }
+    void PauseRecordAudio()
+    {
+        if (m_playaudiosource)
+        {
+            m_playaudiosource.Pause();
         }
     }
 
@@ -214,34 +295,11 @@ public class DishMusicManager : MusicManager
             PlayBeatAnimator(iIndexBtn);
             PlayClickAudio(iIndexBtn);
             fLastClickTimeBtn = AudioManager.Instance.GetMusicSourceTime();
-            m_pointTime2NoteID.Add(AudioManager.Instance.GetMusicSourceTime(), m_Index2NoteID[iIndexBtn]);
+            //m_pointTime2NoteID.Add(AudioManager.Instance.GetMusicSourceTime(), m_Index2NoteID[iIndexBtn]);
+            m_clickTimeList.Add(AudioManager.Instance.GetMusicSourceTime());
+            m_clickStyleList.Add(m_Index2NoteID[iIndexBtn]);
         }
     }
 
-    private void PopPauseWindow()
-    {
-        UIManager.instance.PopPauseWindow(this);
-        enabled = false;
-        AudioManager.Instance.PauseMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
-    }
 
-    public override void Continue()
-    {
-        enabled = true;
-        UIManager.instance.DisappearUIWindow<PausePanel>();
-        AudioManager.Instance.PlayMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
-    }
-
-    public override void Record()
-    {
-        List<int> listCollectdNoteID = new List<int>();
-        ReInitSection(listCollectdNoteID);
-        UIManager.instance.DisappearUIWindow<PausePanel>();
-    }
-
-    public override void Exit()
-    {
-        UIManager.instance.ShowUIFade(UIState.Scene);
-        UIManager.instance.DisappearUIWindow<PausePanel>();
-    }
 }
