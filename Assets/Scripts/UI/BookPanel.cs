@@ -5,12 +5,18 @@ using UnityEngine.UI;
 
 public class BookPanel : UIBase {
 
+    [SerializeField]
+    public DishMusicConfig m_dishMusicConfig; //盘子关卡配置
+
     private Button btn_play;
     private Button btn_record;
     private Button m_btnBack;
     private Button m_btnCreate;
     public Button m_send;
     private bool m_isPlaying = false;
+    private bool m_isPlayRecord = false;
+    private int id = 0;
+    public List<AudioClip> m_clickAudios = new List<AudioClip>();         // 音效列表
 
     private RectTransform m_rectTransform;
     private Button btn_book;
@@ -21,7 +27,9 @@ public class BookPanel : UIBase {
     private int[] m_openAudioList;
     public List<Button> btn_volume = new List<Button>();
     public Sprite[] m_openAudioSprite;
-
+    private Queue<AudioSource> m_runAudios = new Queue<AudioSource>();
+    public List<float> m_clickTimeList = new List<float>();
+    public List<int> m_clickStyleList = new List<int>();
     //private BookPro m_bookPro;
     //private AutoFlip m_autoFlip;
     public GameObject CollectionPanel;
@@ -34,6 +42,7 @@ public class BookPanel : UIBase {
         btn_record.onClick.AddListener(EnterScene);
         m_btnCreate = transform.Find("btn_create").GetComponent<Button>();
         m_btnCreate.onClick.AddListener(EnterLevel3);
+        m_send.onClick.AddListener(GameOver);
         m_send.gameObject.SetActive(false);
         //m_bookPro = transform.Find("BookPro").GetComponent<BookPro>();
         //m_autoFlip = transform.Find("BookPro").GetComponent<AutoFlip>();
@@ -58,6 +67,15 @@ public class BookPanel : UIBase {
         btn_volume[0].onClick.AddListener(delegate() { SetPlayVolume(0); });
         btn_volume[1].onClick.AddListener(delegate () { SetPlayVolume(1); });
         btn_volume[2].onClick.AddListener(delegate () { SetPlayVolume(2); });
+
+        // 播放点击音效的集合
+        for (int i = 1; i <= 4; i++)
+        {
+            AudioSource m_audios = GameObject.Find("DishAudio" + i).GetComponent<AudioSource>();
+            m_runAudios.Enqueue(m_audios);
+        }
+        m_clickAudios = m_dishMusicConfig.GetAudioClip();
+
         TileManager.Instance.SetSeen();
     }
 
@@ -65,12 +83,16 @@ public class BookPanel : UIBase {
     {
         base.Appear();
         //transform.SetSiblingIndex(transform.GetComponentsInChildren<UIBase>().Length-1);
-
+        m_send.gameObject.SetActive(false);
         m_isPlaying = false;
         SetBtnplaySprite();
         SetImgmusic();
         //更新主界面
         CollectionPanel.GetComponent<NoteBookCollection>().SetIconSprite();
+        m_clickTimeList = GameManager.instance.m_clickTimeList;
+        m_clickStyleList = GameManager.instance.m_clickStyleList;
+        m_isPlayRecord = false;
+        id = 0;
     }
     //开始录制进入场景
     private void EnterScene()
@@ -81,6 +103,8 @@ public class BookPanel : UIBase {
         Invoke("ShowTeachPanel",4f);
  
     }
+
+
 
     private void EnterLevel3()
     {
@@ -114,6 +138,52 @@ public class BookPanel : UIBase {
         AudioManager.Instance.StopStartMusic();
     }
 
+    /// <summary>
+    /// 播放录制音轨
+    /// </summary>
+    void PlayRecordAudio()
+    {
+        m_isPlayRecord = true;
+    }
+
+    void StopRecordAudio()
+    {
+        m_isPlayRecord = false;
+    }
+
+    private void Update()
+    {
+
+        if (m_isPlayRecord)
+        {
+            //播放已录制的音轨
+            if (id < m_clickTimeList.Count)
+            {
+                if (Mathf.Abs(m_clickTimeList[id] - AudioManager.Instance.GetTime()) < 0.002f)
+                {
+                    //播放当前节点声音
+                    PlayClickAudio(m_clickStyleList[id]);
+                    id++;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 播放点击音效
+    /// </summary>
+    void PlayClickAudio(int iClickIndex)
+    {
+        AudioSource m_runaudio = m_runAudios.Dequeue();
+        m_runAudios.Enqueue(m_runaudio);
+        if (m_runaudio)
+        {
+            m_runaudio.Stop();
+            m_runaudio.clip = m_clickAudios[iClickIndex];
+            m_runaudio.Play();
+        }
+    }
+
     void PlayMulMusic()
     {
         m_isPlaying = !m_isPlaying;
@@ -128,6 +198,11 @@ public class BookPanel : UIBase {
                 if(m_openAudioList[level[i]]==0)
                 {
                     levelnew.Add(level[i]);
+                    if(level[i]==2)
+                    {
+                        //播放录制声音
+                        PlayRecordAudio();
+                    }
                 }
             }
             AudioManager.Instance.PlayMulMusic(levelnew.ToArray());
@@ -135,6 +210,7 @@ public class BookPanel : UIBase {
         else
         {
             AudioManager.Instance.StopAudioMusic();
+            id = 0;
             AudioManager.Instance.PlayMenuMusic(MenuSingleClip.Menu);
         }
     }
@@ -211,5 +287,10 @@ public class BookPanel : UIBase {
     void Fade()
     {
         UIManager.instance.ShowFadeTransition();
+    }
+
+    void GameOver()
+    {
+        UIManager.instance.ShowUIFade(UIState.GameOver);
     }
 }

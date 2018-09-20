@@ -2747,6 +2747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d59e4dfb9c9404b9471de0c983feac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_RoleConfig: {fileID: 11400000, guid: 15379a103be3b0243b6569ced4f9d809, type: 2}
   m_IsEnterMenu: 1
   m_IsEnterMusic: 0
   collectionNumbers: 
@@ -2763,6 +2764,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 71dca9dd3c00b014ea6dd5e495d71176, type: 3}
   - {fileID: 8300000, guid: 4b64db94314d11545bcfb2f1b96369ed, type: 3}
   - {fileID: 8300000, guid: 7b201e2cb66359b4c8e1670ce2a95c8b, type: 3}
+  m_clickTimeList: []
+  m_clickStyleList: 
 --- !u!4 &442916275
 Transform:
   m_ObjectHideFlags: 0
@@ -9705,7 +9708,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1924156625
 Transform:
   m_ObjectHideFlags: 0

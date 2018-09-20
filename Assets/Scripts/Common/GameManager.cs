@@ -7,7 +7,9 @@ using UnityEngine.UI;					//Allows us to use UI.
 	
 public class GameManager : MonoBehaviour
 {
-	public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
+    [SerializeField]
+    public RoleConfig m_RoleConfig; //关卡配置
+    public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
 
     public bool m_IsEnterMenu = false;
     public bool m_IsEnterMusic = false;
@@ -19,6 +21,9 @@ public class GameManager : MonoBehaviour
     public Sprite[] m_collectSprite;
     public string[] m_collectTxt;
     public AudioClip[] m_collectAudio;
+
+    public List<float> m_clickTimeList = new List<float>();
+    public List<int> m_clickStyleList = new List<int>();
 
     //Awake is always called before any Start functions
     void Awake()
@@ -46,9 +51,18 @@ public class GameManager : MonoBehaviour
         if (m_IsEnterMenu)
         {
             UIManager.instance.ShowUIWindow<GameMenu>();
+            ClearData();
         }
         if (m_IsEnterMusic)
             BackToScene();
+    }
+
+    void ClearData()
+    {
+        for(int i=0;i< m_RoleConfig.m_musicLevel.Length;i++)
+        {
+            m_RoleConfig.m_musicLevel[i] = 0;
+        }
     }
 
     public void BackToScene()

@@ -51,6 +51,7 @@ public class DishMusicManager : MonoBehaviour
     private bool m_bIsBtnClick;
 
     private bool m_bIsRecordLoaderMove;
+    private bool m_isStartRecord = false;
 
     // 滑块移动的范围
     private int id = 0;
@@ -261,6 +262,7 @@ public class DishMusicManager : MonoBehaviour
         m_bIsRecordLoaderMove = false;
         m_moveSpeed = 2.9f * Mathf.Abs(m_fRightPosX - m_fLeftPosX) / fMusicLength;
         InitRecordLoaderPos();
+        m_isStartRecord = false;
         for (int i = 0; i < m_allAudioObj.Count; i++)
         {
             Destroy(m_allAudioObj[i]);
@@ -387,6 +389,16 @@ public class DishMusicManager : MonoBehaviour
     public void Back()
     {
         UIManager.instance.ShowUIFade(UIState.Bookmenu);
+        StopRecordAudio();
+        AudioManager.Instance.StopMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
+        if (m_isStartRecord)
+        {
+            //存在数据
+            GameManager.instance.m_clickTimeList = m_clickTimeList;
+            GameManager.instance.m_clickStyleList = m_clickStyleList;
+            UIManager.instance.PassLevel3();
+        }
+
     }
 
     /// <summary>
@@ -471,6 +483,7 @@ public class DishMusicManager : MonoBehaviour
             go.transform.SetParent(m_AudioParent);
             go.SetActive(true);
             m_allAudioObj.Add(go);
+            m_isStartRecord = true;
         }
     }
 }
