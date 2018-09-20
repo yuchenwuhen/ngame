@@ -6,29 +6,15 @@ using UnityEngine.UI;
 public class DishMusicManager : MusicManager
 {
     [SerializeField]
-    public MusicGameConfig m_musicGameConfig; //玩法通用配置数据
+    public DishMusicConfig m_dishMusicConfig; //盘子关卡配置
 
     // 临界时间模块 Begin////
     private float m_fTouchAgainTime;           //玩家再次touch时间
-    private float m_fTouchSuccessTime;         //检测玩家点击成功的有效范围
-    private float m_fTouchCheckTime;           //玩家的点击影响物体的检测时间范围
     // 临界时间模块 End////
 
     // 当前状态模块 Begin////
-    private int m_iNowSectionID;              // 该玩法中，当前小节ID
-    private int m_iSectionCount;              // 该玩法中，音乐小节总数
-    private bool m_bIsPointEnd;               // 该玩法中,所有的节奏点是否全部走完
-
-    private bool m_bIsTeachStage;             // 是否在教学阶段(雨滴关卡特有字段)
-    private bool m_bIsSevenClickStage;        // 是否是七拍点击阶段(盘子管卡特有字段)
-    private bool m_bIsNpcHasAction;           // NPC是否行动过(超时检测时，可以检测当前节点时间，让NPC做出一定动作)
-
-    private int m_iNowPointID;                // 当前小节中，目前所处的节奏点序号
-    private int m_iNowSectionPointCount;      // 当前小节中，节奏点总个数
-
     private bool m_bIsTouch = true;           // 本次触摸是否有效
     private float m_fLastTouchTime;           // 上次触摸的时间
-    private float m_fInitTime;                // 初始化获取的音乐播放时间(改字段主要是为了兼容，start中获取到的初始播放音乐时间不为0)
     // 当前状态模块 Begin////
 
     // 点击音效模块 Begin/////
@@ -38,24 +24,21 @@ public class DishMusicManager : MusicManager
     public AudioClip[] m_clickAudios;         // 音效列表
     // 点击音效模块 End/////
 
-    // 结算相关模块 Begin////
-    private int m_iMaxStar = 3;                // 最多可获得星星数(目前结算面板只支持配置3)
-    private int m_iFailTimes;                 // 失败次数
-    // 结算相关模块 End////
-
     // 不通用分类模块 Begin////
     private Text m_textPoint;                   // 展示文本
-    // 不通用分类模块 End////
+                                                // 不通用分类模块 End////
 
-    private Animator m_animatorHand1;
-    private Animator m_animatorHand2;
-    private Animator m_animatorHand3;
-    private Animator m_animatorHand4;
-    private Animator m_animatorHand5;
-    private Animator m_animatorChicken;
-    private Animator m_animatorPlayerHand;
+    private List<Animator> m_animatorHand;
+    private List<Button> m_btnHand;
 
     private Button m_btnPause;
+
+    private Dictionary<int, int> m_Index2NoteID; //关卡中的按钮序号对应的收集到的音符ID
+
+    private Dictionary<float, int> m_pointTime2NoteID; //时间点 2 音符ID
+
+    private float m_fBeginClickTime; //规定玩家开始点击的时间
+    private float m_fEndClickTime; //规定玩家结束点击的时间
 
     void Awake()
     {
@@ -66,26 +49,14 @@ public class DishMusicManager : MusicManager
     // Use this for initialization
     void Start()
     {
-        // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
-        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
-        m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
-        //Debug.Log("InitTime:" + m_fInitTime);
+        List<int> listCollectdNoteID = new List<int>();
+        ReInitSection(listCollectdNoteID);
     }
 
     // Update is called once per frame
     void Update()
     {
-        float fNowTime = AudioManager.Instance.GetMusicSourceTime();
-        float fRunTime = fNowTime - m_fInitTime;//游戏运行的时间
-        //Debug.Log("fRunTime:" + fRunTime);
-
-        if (m_bIsPointEnd)
-        {
-            //Debug.Log("PointEnd");
-            return;
-        }
-        // 检查当前节超时；教学阶段，可以检查节点是否需要增加NPC操作
-        CheckCurPoint(fRunTime);
+        float fRunTime = AudioManager.Instance.GetMusicSourceTime();//游戏运行的时间
 
         // 如果当前不能触摸,检查触摸CD是否已过
         if (!m_bIsTouch && (fRunTime - m_fLastTouchTime) > m_fTouchAgainTime)
@@ -93,22 +64,22 @@ public class DishMusicManager : MusicManager
             m_bIsTouch = true;
         }
 
-        // 玩家点击,教学阶段不检测玩家点击
-        if (!m_bIsTeachStage && Input.GetMouseButtonDown(0))
-        {
-            if (m_bIsTouch)
-            {
-                // 当前点击有效
-                m_fLastTouchTime = fRunTime;
-                CheckPlayerInput(fRunTime); // 检测玩家有效点击情况
-                m_bIsTouch = false;  // CD时间内，点击无效
-            }
-            else
-            {
-                // 当前点击无效
-                Debug.Log("CD时间内");
-            }
-        }
+        //// 玩家点击,教学阶段不检测玩家点击
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (m_bIsTouch)
+        //    {
+        //        // 当前点击有效
+        //        m_fLastTouchTime = fRunTime;
+        //        //CheckPlayerInput(fRunTime); // 检测玩家有效点击情况
+        //        m_bIsTouch = false;  // CD时间内，点击无效
+        //    }
+        //    else
+        //    {
+        //        // 当前点击无效
+        //        Debug.Log("CD时间内");
+        //    }
+        //}
     }
 
     /// <summary>
@@ -117,253 +88,160 @@ public class DishMusicManager : MusicManager
     void InitGame()
     {
         // 临界时间模块 Begin////
-        m_fTouchAgainTime = m_musicGameConfig.GetTouchAgainTime();           //玩家再次touch时间
-        m_fTouchSuccessTime = m_musicGameConfig.GetTouchSuccessTime();       //检测玩家点击成功的有效范围
-        m_fTouchCheckTime = m_musicGameConfig.GetTouchCheckTime();           //玩家的点击影响物体的检测时间范围
+        m_fTouchAgainTime = m_dishMusicConfig.GetTouchAgainTime();           //玩家再次touch时间
+
+        m_fBeginClickTime = m_dishMusicConfig.GetBeginClickTime();
+        m_fEndClickTime = m_dishMusicConfig.GetEndClickTime();
         // 临界时间模块 End////
 
-        // 当前状态模块 Begin////
-        m_iNowSectionID = 0;              // 该玩法中，当前小节ID
-        m_iSectionCount = m_musicGameConfig.GetSectionCount();              // 该玩法中，音乐小节总数
-        m_bIsPointEnd = false;
-        m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 1 ? true : false;             // 是否在教学阶段
-        m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
-        m_bIsNpcHasAction = false;
-
-        m_iNowPointID = 0;                // 当前小节中，目前所处的节奏点序号
-        m_iNowSectionPointCount = m_musicGameConfig.GetSectionPointCount(m_iNowSectionID);      // 当前小节中，节奏点总个数
         m_bIsTouch = true;           // 本次触摸是否有效
-        // 当前状态模块 Begin////
 
         m_clickAudioSource = GetComponent<AudioSource>();
 
-        m_iFailTimes = 0;
-
         m_textPoint = GetComponent<Text>();
 
-        m_animatorHand1 = transform.Find("Hand1").GetComponent<Animator>();
-        Debug.Log(m_animatorHand1);
-        m_animatorHand2 = transform.Find("Hand2").GetComponent<Animator>();
-        m_animatorHand3 = transform.Find("Hand3").GetComponent<Animator>();
-        m_animatorHand4 = transform.Find("Hand4").GetComponent<Animator>();
-        m_animatorHand5 = transform.Find("Hand5").GetComponent<Animator>();
-        m_animatorChicken = transform.Find("Chicken").GetComponent<Animator>();
-        m_animatorPlayerHand = transform.Find("PlayerHand").GetComponent<Animator>();
+        m_animatorHand = new List<Animator>();
+        m_btnHand = new List<Button>();
+        for (int i = 0; i < 7; i++)
+        {
+            string sHandIndex = "Hand" + (i + 1).ToString();
+            m_animatorHand.Add(transform.Find("Hand").Find(sHandIndex).GetComponent<Animator>());
+
+            string sBtnIndex = "Btn" + (i + 1).ToString();
+            m_btnHand.Add(transform.Find("Btn").Find(sBtnIndex).GetComponent<Button>());
+        }
+
         m_btnPause = transform.Find("btnPause").GetComponent<Button>();
         m_btnPause.onClick.AddListener(PopPauseWindow);
+
+        m_Index2NoteID = new Dictionary<int, int>();
+        m_pointTime2NoteID = new Dictionary<float, int>();
     }
 
     /// <summary>
     /// 重新初始化场景信息
     /// </summary>
-    void ReInitSection()
+    void ReInitSection(List<int> listCollectdNoteID)
     {
-        //初始化数据
-        InitGame();
-        // 播放音乐
-        AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
-        m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
-    }
-
-    /// <summary>
-    /// 检查当前节点是否超时;检查当前节奏点是否到达，可以增加NPC处理
-    /// </summary>
-    /// <param name="fRunTime"></param>
-    void CheckCurPoint(float fRunTime)
-    {
-        float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
-        //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
-
-        // Seven中，NPC行动，但是不更新当前节点ID，等到超时的时候再更新
-        if (!m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
+        m_Index2NoteID.Clear();
+        m_pointTime2NoteID.Clear();
+        if (listCollectdNoteID.Count == 0 || listCollectdNoteID.Count == 7)
         {
-            Debug.Log("NPC行动");
-            m_bIsNpcHasAction = true;
-            Debug.Log(m_iNowSectionID + "|" + m_iNowPointID + "|" + m_bIsSevenClickStage);
-
-            if (m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
-            {
-                Debug.Log("NPC打盘子");
-                PlayBeatAnimator(m_iNowPointID);
-            }
-        }
-
-        if (fRunTime > checkPointTime + m_fTouchCheckTime)
-        {
-            Debug.Log("节奏点超时");
-            m_iNowPointID++;
-            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
-        }
-    }
-
-    void PlayBeatAnimator(int iNpcID)
-    {
-        switch(iNpcID)
-        {
-            case 0:
-                Debug.Log("NPC1 beats");
-                m_animatorHand1.Play("HandBeat");
-                break;
-            case 1:
-                m_animatorHand2.Play("HandBeat");
-                break;
-            case 2:
-                m_animatorHand3.Play("HandBeat");
-                break;
-            case 3:
-                m_animatorHand4.Play("HandBeat");
-                break;
-            case 4:
-                m_animatorHand5.Play("HandBeat");
-                break;
-            case 5:
-                Debug.Log("chicken beat");
-                m_animatorChicken.Play("ChickenBeat");
-                break;
-            case 6:
-                m_animatorPlayerHand.Play("HandBeat");
-                break;
-            default:
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 检测玩家的CD时间之外的有效点击
-    /// </summary>
-    /// <param name="fRunTime"></param>
-    void CheckPlayerInput(float fRunTime)
-    {
-        // 七次点击关卡,为轮到玩家点击，判定无效
-        if(m_bIsSevenClickStage && m_iNowPointID != m_musicGameConfig.GetSevenClickPlayerIndex(m_iNowSectionID))
-        {
-            Debug.Log("无效点击");
-            PlayClickAudio(-1);
-            return;
-        }
-
-        float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
-        //int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
-        if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
-        {
-            Debug.Log("检测成功");
-            // 播放成功音效
-            PlayClickAudio(0);
-
-            // 播放成功点击动画
-            PlayBeatAnimator(m_iNowPointID);
-
-            m_iNowPointID++;
-            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
-        }
-        else if ((checkPointTime - fRunTime) > m_fTouchSuccessTime && (checkPointTime - fRunTime) < m_fTouchCheckTime)
-        {
-            Debug.Log("超前点击");
-            PlayClickAudio(1);
-            m_iNowPointID++;
-            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
-            m_iFailTimes++;
-        }
-        else if ((fRunTime - checkPointTime) > m_fTouchSuccessTime && (fRunTime - checkPointTime) < m_fTouchCheckTime)
-        {
-            Debug.Log("延迟点击");
-            PlayClickAudio(1);
-            m_iNowPointID++;
-            OnNowPointIDChange(); //当前节奏点改变之后一定要调用此函数
-            m_iFailTimes++;
+            //for (int i = 0; i < 7; i++)
+            //{
+            //    Debug.Log(i);
+            //    m_btnHand[i].onClick.AddListener(delegate () { this.OnPlayerClickBtn(i); });
+            //    m_Index2NoteID.Add(i, i);
+            //}
+            m_btnHand[0].onClick.AddListener(delegate () { this.OnPlayerClickBtn(0); });
+            m_Index2NoteID.Add(0,0);
+            m_btnHand[1].onClick.AddListener(delegate () { this.OnPlayerClickBtn(1); });
+            m_Index2NoteID.Add(1, 1);
+            m_btnHand[2].onClick.AddListener(delegate () { this.OnPlayerClickBtn(2); });
+            m_Index2NoteID.Add(2, 2);
+            m_btnHand[3].onClick.AddListener(delegate () { this.OnPlayerClickBtn(3); });
+            m_Index2NoteID.Add(3, 3);
+            m_btnHand[4].onClick.AddListener(delegate () { this.OnPlayerClickBtn(4); });
+            m_Index2NoteID.Add(4, 4);
+            m_btnHand[5].onClick.AddListener(delegate () { this.OnPlayerClickBtn(5); });
+            m_Index2NoteID.Add(5, 5);
+            m_btnHand[6].onClick.AddListener(delegate () { this.OnPlayerClickBtn(6); });
+            m_Index2NoteID.Add(6, 6);
         }
         else
         {
-            Debug.Log("无效点击");
-            PlayClickAudio(-1);
+            int[] IndexList = {3,2,4,1,5,0,6};
+            for (int i = 0; i < listCollectdNoteID.Count; i++)
+            {
+                m_btnHand[IndexList[i]].onClick.AddListener(delegate () { this.OnPlayerClickBtn(i); });
+                m_Index2NoteID.Add(IndexList[i], i);
+            }
+
         }
+        enabled = true;
+        m_bIsTouch = true;
+
+        // 播放音乐
+        AudioManager.Instance.PlayMusicSingleAgain(m_dishMusicConfig.GetAudioClipBgm());
     }
 
     /// <summary>
-    /// 当前节奏点改变之后一定要调用此函数【WARNING】
+    /// 播放敲击动画
     /// </summary>
-    void OnNowPointIDChange()
+    /// <param name="iNpcID"></param>
+    void PlayBeatAnimator(int iNpcID)
     {
-        // 更新一些对每个节奏点生效的数据
-        m_bIsNpcHasAction = false;
-
-        // 如果是七次点击关卡，如果策划配置时间点为-1，则说明该NPC不用行动，递增到下一个节点
-        if (m_bIsSevenClickStage)
+        if (iNpcID >= 7)
         {
-            while (m_iNowPointID < m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
-            {
-                if (m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID) == -1)
-                {
-                    m_iNowPointID++;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            Debug.LogError("iNpcID >= 7,iNpcID:" + iNpcID);
+            return;
         }
-
-        if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
+        if (iNpcID == 5)
         {
-            Debug.Log("改变小节");
-            m_iNowSectionID++;
-            if (m_iNowSectionID >= m_musicGameConfig.GetSectionCount())
-            {
-                Debug.Log("节奏点全部结束");
-                m_bIsPointEnd = true;
-                return;
-            }
-            m_iNowPointID = 0;
-            // 更新一些在小节中生效的数据
-            m_bIsTeachStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 0 ? false : true;
-            m_bIsSevenClickStage = m_musicGameConfig.GetSectionType(m_iNowSectionID) == 2 ? true : false;        // 是否在七次点击阶段
+            m_animatorHand[iNpcID].Play("ChickenBeat");
+        }
+        else
+        {
+            m_animatorHand[iNpcID].Play("HandBeat");
         }
     }
 
     /// <summary>
     /// 播放点击音效
     /// </summary>
-    /// <param name="iClickState">点击状态 0成功 -1无效 1失败 </param>
-    void PlayClickAudio(int iClickState)
+    void PlayClickAudio(int iClickIndex)
     {
         if (m_clickAudioSource)
         {
             m_clickAudioSource.Stop();
-
-            if (iClickState == 0)
-            {
-                m_clickAudioSource.clip = m_clickAudios[0];
-            }
-            else if (iClickState == 1)
-            {
-                m_clickAudioSource.clip = m_clickFailAudio;
-            }
-            else if (iClickState == -1)
-            {
-                m_clickAudioSource.clip = m_clickInvalidAudio;
-            }
+            m_clickAudioSource.clip = m_clickAudios[iClickIndex];
             m_clickAudioSource.Play();
+        }
+    }
 
+    private float fLastClickTimeBtn = 0f;
+    void OnPlayerClickBtn(int iIndexBtn)
+    {
+        Debug.Log(AudioManager.Instance.GetMusicSourceTime());
+        Debug.Log(m_fBeginClickTime);
+        if (AudioManager.Instance.GetMusicSourceTime() < m_fBeginClickTime || AudioManager.Instance.GetMusicSourceTime() > m_fEndClickTime)
+        {
+            Debug.Log("不在可以点击的时间范围内");
+            return;
+        }
+        if (AudioManager.Instance.GetMusicSourceTime() - fLastClickTimeBtn > m_fTouchAgainTime)
+        {
+            PlayBeatAnimator(iIndexBtn);
+            PlayClickAudio(iIndexBtn);
+            fLastClickTimeBtn = AudioManager.Instance.GetMusicSourceTime();
+            m_pointTime2NoteID.Add(AudioManager.Instance.GetMusicSourceTime(), m_Index2NoteID[iIndexBtn]);
         }
     }
 
     private void PopPauseWindow()
     {
         UIManager.instance.PopPauseWindow(this);
+        enabled = false;
+        AudioManager.Instance.PauseMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
     }
 
     public override void Continue()
     {
-        throw new System.NotImplementedException();
+        enabled = true;
+        UIManager.instance.DisappearUIWindow<PausePanel>();
+        AudioManager.Instance.PlayMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
     }
 
     public override void Record()
     {
-        throw new System.NotImplementedException();
+        List<int> listCollectdNoteID = new List<int>();
+        ReInitSection(listCollectdNoteID);
+        UIManager.instance.DisappearUIWindow<PausePanel>();
     }
 
     public override void Exit()
     {
-        throw new System.NotImplementedException();
+        UIManager.instance.ShowUIFade(UIState.Scene);
+        UIManager.instance.DisappearUIWindow<PausePanel>();
     }
 }

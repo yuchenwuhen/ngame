@@ -41,4 +41,11 @@ public class CreateConfig : MonoBehaviour {
         MusicGameConfig asset = ScriptableObject.CreateInstance<MusicGameConfig>();
         AssetDatabase.CreateAsset(asset, "Assets/Resources/MusicGameConfig.asset");
     }
+
+    [MenuItem("Assets/Create/DishMusicConfig")]
+    public static void CreateDishMusicGameConfigAsset()
+    {
+        DishMusicConfig asset = ScriptableObject.CreateInstance<DishMusicConfig>();
+        AssetDatabase.CreateAsset(asset, "Assets/Resources/DishMusicGameConfig.asset");
+    }
 }
