@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2a6df03ebb085f4f8b28d8f590362d9, type: 3}
   m_Name: DishMusicGameConfig
   m_EditorClassIdentifier: 
-  m_audioClipBgm: {fileID: 8300000, guid: aa803c2cf75bd7445a171cd7e50fc1b9, type: 3}
-  m_fTouchAgainTime: 0.1
-  m_fBeginClickTime: 2
-  m_fEndClickTime: 80
+  m_audioClipBgm: {fileID: 8300000, guid: 9c3e40c5b71cf5c49be11bf639449300, type: 3}
+  m_fTouchAgainTime: 0.5
+  m_fBeginClickTime: 3
+  m_fEndClickTime: 42
   m_audioDatas:
   - m_clickstyle: 0
     audioClip: {fileID: 8300000, guid: 71dca9dd3c00b014ea6dd5e495d71176, type: 3}

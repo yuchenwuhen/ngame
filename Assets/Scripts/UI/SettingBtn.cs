@@ -19,6 +19,13 @@ public class SettingBtn : UIBase
     {
         base.Appear();
         UIManager.instance.m_UICotroller = false;
+        this.GetComponent<Image>().enabled = false;
+        Invoke("ShowImg", 0.2f);
+    }
+
+    void ShowImg()
+    {
+        this.GetComponent<Image>().enabled = true;
     }
 
     void BackToMenu()

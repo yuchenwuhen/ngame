@@ -54,12 +54,18 @@ public class AudioManager : MonoBehaviour
     }
     public void PlayMusicSingle(AudioClip audioClip)
     {
+        _musicSource.clip = audioClip;
         _musicSource.Play();
     }
 
     public void PauseMusicSingle(AudioClip audioClip)
     {
         _musicSource.Pause();
+    }
+
+    public void StopMusicSingle(AudioClip audioClip)
+    {
+        _musicSource.Stop();
     }
 
     public void PlayWaterAudio()
@@ -129,8 +135,11 @@ public class AudioManager : MonoBehaviour
     public void PlayMulMusic(int[] index)
     {
         m_defaultSource.Play();
+
         for (int i=0;i<index.Length;i++)
         {
+            if (index[i] == 2)
+                return;
             m_audioSource[index[i]].Play();
         }
     }
@@ -142,6 +151,10 @@ public class AudioManager : MonoBehaviour
         {
             i.Stop();
         }
+    }
+    public float GetTime()
+    {
+        return m_defaultSource.time;
     }
 
     public void PlayEffectMusic(AudioClip clip)

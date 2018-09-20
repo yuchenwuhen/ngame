@@ -14,6 +14,8 @@ public class CollectionPanel : UIBase {
         testPanel = transform.Find("coName").GetComponent<Text>();
     }
 
+    private bool m_isFirstCollect = true;
+
     public override void Appear()
     {
         base.Appear();
@@ -25,6 +27,13 @@ public class CollectionPanel : UIBase {
         iconImage.sprite = icon;
         testPanel.text = txt;
         PlayAnimation();
+        if(m_isFirstCollect)
+        {
+            //弹出教学图片
+            NoteMapTeach bigMapTeach = UIUtility.Instance.GetUI<NoteMapTeach>();
+            bigMapTeach.Appear();
+            m_isFirstCollect = false;
+        }
     }
 
     private void PlayAnimation()

@@ -13,7 +13,8 @@ public enum UIState
     Musicmenu3,
     MusicResultMenu,
     Scene,
-    Dialogue
+    Dialogue,
+    GameOver
 }
 public class UIManager : MonoBehaviour {
 
@@ -116,6 +117,9 @@ public class UIManager : MonoBehaviour {
                 case UIState.Animation:
                     DisappearUIWindow<StartAnimationPanel>();
                     break;
+                case UIState.GameOver:
+                    DisappearUIWindow<GameOverPanel>();
+                    break;
                 default:
                     break;
             }
@@ -153,6 +157,9 @@ public class UIManager : MonoBehaviour {
                 ShowUIWindow<StartAnimationPanel>();
                 FadeTransition fadeTransition = UIUtility.Instance.GetUI<FadeTransition>();
                 fadeTransition.m_FadeOutEnd -= ReceiveChildUIMessage;
+                break;
+            case UIState.GameOver:
+                ShowUIWindow<GameOverPanel>();
                 break;
             default:
                 break;
@@ -225,6 +232,11 @@ public class UIManager : MonoBehaviour {
             //等级大于0
             Debug.Log("当前状态" + m_curState);
         }
+    }
+
+    public void PassLevel3()
+    {
+        TileManager.Instance.SetMusicLevel(2);
     }
 
     public void SetRecordButton()

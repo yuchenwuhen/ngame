@@ -397,6 +397,7 @@ public class PlayMusicManager : MusicManager
         if (m_iMaxStar - m_iFailTimes > 0)
         {
             UIManager.instance.CalculationCurMusicResult(m_iMaxStar - m_iFailTimes);
+            GameManager.instance.CollectLevel1Music();
         }
         else
         {
