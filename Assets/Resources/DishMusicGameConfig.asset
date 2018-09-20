@@ -13,21 +13,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_audioClipBgm: {fileID: 8300000, guid: aa803c2cf75bd7445a171cd7e50fc1b9, type: 3}
   m_fTouchAgainTime: 0.1
-  m_fBeginClickTime: 8
+  m_fBeginClickTime: 2
   m_fEndClickTime: 80
   m_audioDatas:
   - m_clickstyle: 0
-    audioClip: {fileID: 0}
-  - m_clickstyle: 0
-    audioClip: {fileID: 0}
-  - m_clickstyle: 0
-    audioClip: {fileID: 0}
-  - m_clickstyle: 0
-    audioClip: {fileID: 0}
-  - m_clickstyle: 0
-    audioClip: {fileID: 0}
-  - m_clickstyle: 0
-    audioClip: {fileID: 0}
-  - m_clickstyle: 0
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 71dca9dd3c00b014ea6dd5e495d71176, type: 3}
+  - m_clickstyle: 1
+    audioClip: {fileID: 8300000, guid: 4b64db94314d11545bcfb2f1b96369ed, type: 3}
+  - m_clickstyle: 2
+    audioClip: {fileID: 8300000, guid: 7b201e2cb66359b4c8e1670ce2a95c8b, type: 3}
+  - m_clickstyle: 3
+    audioClip: {fileID: 8300000, guid: 68c2677ab2521ed419e6c5e5064f82d4, type: 3}
+  - m_clickstyle: 4
+    audioClip: {fileID: 8300000, guid: 92c086646c778574d80a96d6b8570a91, type: 3}
+  - m_clickstyle: 5
+    audioClip: {fileID: 8300000, guid: f2924fe3cd32c41459126c8d79a492f4, type: 3}
+  - m_clickstyle: 6
+    audioClip: {fileID: 8300000, guid: d30a9b567c84b1149b268a7171ca6769, type: 3}
   clickDatas: []

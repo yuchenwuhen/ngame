@@ -22,7 +22,7 @@ public class DishMusicManager : MonoBehaviour
 //    private AudioSource m_clickAudioSource;   // 点击音效
     public AudioClip m_clickInvalidAudio;     // 点击无效音效
     public AudioClip m_clickFailAudio;        // 点击失败音效
-    public AudioClip[] m_clickAudios;         // 音效列表
+    public List<AudioClip> m_clickAudios = new List<AudioClip>();         // 音效列表
     private AudioSource m_playaudiosource;  //播放音轨
     // 点击音效模块 End/////
 
@@ -38,6 +38,7 @@ public class DishMusicManager : MonoBehaviour
     public Sprite[] m_btnPlaySprite;
     private bool m_isPlaying = false;
     private Button m_btnAgain;
+    public Sprite[] m_btnAgainSprite;
     private Button m_btnBack;
     //按钮模块 End//
 
@@ -61,6 +62,9 @@ public class DishMusicManager : MonoBehaviour
     void Start()
     {
         List<int> listCollectdNoteID = new List<int>();
+        listCollectdNoteID.Add(1);
+        listCollectdNoteID.Add(3);
+        listCollectdNoteID.Add(6);
         ReInitSection(listCollectdNoteID);
     }
 
@@ -103,6 +107,8 @@ public class DishMusicManager : MonoBehaviour
 
         m_fBeginClickTime = m_dishMusicConfig.GetBeginClickTime();
         m_fEndClickTime = m_dishMusicConfig.GetEndClickTime();
+
+        m_clickAudios = m_dishMusicConfig.GetAudioClip();
         // 临界时间模块 End////
 
         m_bIsTouch = true;           // 本次触摸是否有效
@@ -145,13 +151,36 @@ public class DishMusicManager : MonoBehaviour
     /// </summary>
     void ReInitSection(List<int> listCollectdNoteID)
     {
+        m_clickTimeList.Clear();
+        m_clickStyleList.Clear();
         m_Index2NoteID.Clear();
         m_pointTime2NoteID.Clear();
         int[] IndexList = {0,1,2,3,4,5,6};
-        for (int i = 0; i < listCollectdNoteID.Count; i++)
+        m_btnHand[0].onClick.AddListener(delegate () { this.OnPlayerClickBtn(0); });
+        m_Index2NoteID.Add(0, 0);
+        m_btnHand[1].onClick.AddListener(delegate () { this.OnPlayerClickBtn(1); });
+        m_Index2NoteID.Add(1, 1);
+        m_btnHand[2].onClick.AddListener(delegate () { this.OnPlayerClickBtn(2); });
+        m_Index2NoteID.Add(2, 2);
+        m_btnHand[3].onClick.AddListener(delegate () { this.OnPlayerClickBtn(3); });
+        m_Index2NoteID.Add(3, 3);
+        m_btnHand[4].onClick.AddListener(delegate () { this.OnPlayerClickBtn(4); });
+        m_Index2NoteID.Add(4, 4);
+        m_btnHand[5].onClick.AddListener(delegate () { this.OnPlayerClickBtn(5); });
+        m_Index2NoteID.Add(5, 5);
+        m_btnHand[6].onClick.AddListener(delegate () { this.OnPlayerClickBtn(6); });
+        m_Index2NoteID.Add(6, 6);
+
+        for (int i = 0; i < 7; i++)
         {
-            m_btnHand[IndexList[i]].onClick.AddListener(delegate () { this.OnPlayerClickBtn(i); });
-            m_Index2NoteID.Add(IndexList[i], i);
+            
+            if(listCollectdNoteID.Contains(i))
+            {
+                m_btnHand[i].gameObject.SetActive(true);
+            }else
+            {
+                m_btnHand[i].gameObject.SetActive(false);
+            }
         }
 
         m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[0];
@@ -283,8 +312,6 @@ public class DishMusicManager : MonoBehaviour
     private float fLastClickTimeBtn = 0f;
     void OnPlayerClickBtn(int iIndexBtn)
     {
-        Debug.Log(AudioManager.Instance.GetMusicSourceTime());
-        Debug.Log(m_fBeginClickTime);
         if (AudioManager.Instance.GetMusicSourceTime() < m_fBeginClickTime || AudioManager.Instance.GetMusicSourceTime() > m_fEndClickTime)
         {
             Debug.Log("不在可以点击的时间范围内");
@@ -292,7 +319,6 @@ public class DishMusicManager : MonoBehaviour
         }
         if (AudioManager.Instance.GetMusicSourceTime() - fLastClickTimeBtn > m_fTouchAgainTime)
         {
-            PlayBeatAnimator(iIndexBtn);
             PlayClickAudio(iIndexBtn);
             fLastClickTimeBtn = AudioManager.Instance.GetMusicSourceTime();
             //m_pointTime2NoteID.Add(AudioManager.Instance.GetMusicSourceTime(), m_Index2NoteID[iIndexBtn]);
