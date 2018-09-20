@@ -480,7 +480,8 @@ public class WaterMusicManager : MusicManager
 
     private int CaculateStar(int fail)
     {
-        if(fail<=5&&m_isuccessTime>0)
+        fail -= 7;
+        if (fail<=5&&m_isuccessTime>0)
         {
             GameManager.instance.Collectlevel2Music();
         }

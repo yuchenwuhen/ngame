@@ -15,6 +15,7 @@ public class DishPanel : UIBase {
     public override void Appear()
     {
         base.Appear();
+        m_dishMusicManager.Init();
     }
 
     public void Reset()

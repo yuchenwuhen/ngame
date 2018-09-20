@@ -18,8 +18,11 @@ public class DishMusicManager : MonoBehaviour
     public AudioClip m_clickFailAudio;        // 点击失败音效
     public List<AudioClip> m_clickAudios = new List<AudioClip>();         // 音效列表
     private AudioSource m_playaudiosource;  //播放音轨
+    public List<GameObject> m_audioObject = new List<GameObject>();
+    private List<GameObject> m_allAudioObj = new List<GameObject>();
+    private Transform m_AudioParent;
     // 点击音效模块 End/////
-      
+
     //按钮模块 Begin//
     private List<Button> m_btnHand;
     private Button m_btnRecord;
@@ -50,11 +53,22 @@ public class DishMusicManager : MonoBehaviour
     private bool m_bIsRecordLoaderMove;
 
     // 滑块移动的范围
+    private int id = 0;
+    private float m_moveSpeed = 0;
+    private RectTransform m_recordLoader;
+    private RectTransform m_playLoader;
+    private bool m_isMoveRecord = false;
+    private bool m_isMovePlay = false;
     private float m_fLeftPosX;
     private float m_fRightPosX;
     private float m_fTopPoxY1;
     private float m_fTopPoxY2;
     private float m_fTopPoxY3;
+    private float fMusicLength = 0;
+
+    //教学界面
+    public GameObject m_teachPanel;
+    private Button m_closeBtn;
 
     void Awake()
     {
@@ -63,20 +77,64 @@ public class DishMusicManager : MonoBehaviour
     }
 
     // Use this for initialization
-    void Start()
+    public void Init()
     {
-        List<int> listCollectdNoteID = new List<int>();
-        listCollectdNoteID.Add(1);
-        listCollectdNoteID.Add(3);
-        listCollectdNoteID.Add(6);
-        ReInitSection(listCollectdNoteID);
+        ReInitSection(GameManager.instance.collectionNumbers);
+    }
+
+    private void Update()
+    {
+        
+        if(m_isMovePlay)
+        {
+            //播放已录制的音轨
+            if(id<m_clickTimeList.Count)
+            {
+                if(Mathf.Abs(m_clickTimeList[id]- GetTime())<0.002f)
+                {
+                    //播放当前节点声音
+                    PlayClickAudio(m_clickStyleList[id]);
+                    id++;
+                }
+            }
+        }
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float fMusicLength = m_dishMusicConfig.GetAudioClipBgm().length;
-
+        if (m_isMoveRecord)
+        {
+            m_recordLoader.anchoredPosition = new Vector2(m_recordLoader.anchoredPosition.x+ m_moveSpeed * Time.fixedDeltaTime, m_recordLoader.anchoredPosition.y);
+            if(Vector2.Distance(m_recordLoader.anchoredPosition,new Vector2(m_fRightPosX,m_fTopPoxY1))<0.3f*2)
+            {
+                m_recordLoader.anchoredPosition = new Vector2(m_fLeftPosX, m_fTopPoxY2);
+            }else if(Vector2.Distance(m_recordLoader.anchoredPosition, new Vector2(m_fRightPosX, m_fTopPoxY2)) < 0.3f*2)
+            {
+                m_recordLoader.anchoredPosition = new Vector2(m_fLeftPosX, m_fTopPoxY3);
+            }else if(Vector2.Distance(m_recordLoader.anchoredPosition, new Vector2(m_fRightPosX, m_fTopPoxY3)) < 0.3f*2)
+            {
+                //停止移动
+                m_isMoveRecord = false;
+            }
+        }
+        if (m_isMovePlay)
+        {
+            m_playLoader.anchoredPosition = new Vector2(m_playLoader.anchoredPosition.x + m_moveSpeed * Time.fixedDeltaTime, m_playLoader.anchoredPosition.y);
+            if (Vector2.Distance(m_playLoader.anchoredPosition, new Vector2(m_fRightPosX, m_fTopPoxY1)) < 0.3f )
+            {
+                m_playLoader.anchoredPosition = new Vector2(m_fLeftPosX, m_fTopPoxY2);
+            }
+            else if (Vector2.Distance(m_playLoader.anchoredPosition, new Vector2(m_fRightPosX, m_fTopPoxY2)) < 0.3f )
+            {
+                m_playLoader.anchoredPosition = new Vector2(m_fLeftPosX, m_fTopPoxY3);
+            }
+            else if (Vector2.Distance(m_playLoader.anchoredPosition, new Vector2(m_fRightPosX, m_fTopPoxY3)) < 0.3f )
+            {
+                //停止移动
+                m_isMoveRecord = false;
+            }
+        }
     }
 
     /// <summary>
@@ -89,6 +147,8 @@ public class DishMusicManager : MonoBehaviour
 
         m_fBeginClickTime = m_dishMusicConfig.GetBeginClickTime();
         m_fEndClickTime = m_dishMusicConfig.GetEndClickTime();
+
+        fMusicLength = m_dishMusicConfig.GetAudioClipBgm().length;
 
         m_clickAudios = m_dishMusicConfig.GetAudioClip();
         // 临界时间模块 End////
@@ -107,6 +167,8 @@ public class DishMusicManager : MonoBehaviour
             string sBtnIndex = "Btn" + (i + 1).ToString();
             m_btnHand.Add(transform.Find("Btn").Find(sBtnIndex).GetComponent<Button>());
         }
+        m_closeBtn = GameObject.Find("closeBtn").GetComponent<Button>();
+        m_closeBtn.onClick.AddListener(CloseTeachPanel);
 
         // 主音乐音轨
         m_playaudiosource = this.GetComponent<AudioSource>();
@@ -152,13 +214,28 @@ public class DishMusicManager : MonoBehaviour
         fLastClickTimeBtn = 0f;
         m_bIsBtnClick = false;
 
-        m_bIsRecordLoaderMove = false;
-
+        m_AudioParent = transform.Find("AudioParent");
+        m_recordLoader = GameObject.Find("RecordLoader").GetComponent<RectTransform>();
+        m_playLoader = GameObject.Find("PlayLoader").GetComponent<RectTransform>();
         m_fLeftPosX = transform.Find("PosLimit").Find("PosLimitLeft").GetComponent<RectTransform>().anchoredPosition.x;
         m_fRightPosX = transform.Find("PosLimit").Find("PosLimitRight").GetComponent<RectTransform>().anchoredPosition.x;
         m_fTopPoxY1 = transform.Find("PosLimit").Find("PosLimitTop1").GetComponent<RectTransform>().anchoredPosition.y;
         m_fTopPoxY2 = transform.Find("PosLimit").Find("PosLimitTop2").GetComponent<RectTransform>().anchoredPosition.y;
         m_fTopPoxY3 = transform.Find("PosLimit").Find("PosLimitTop3").GetComponent<RectTransform>().anchoredPosition.y;
+    }
+
+    void CloseTeachPanel()
+    {
+        m_teachPanel.SetActive(false);
+    }
+
+    /// <summary>
+    /// Record位置
+    /// </summary>
+    /// <returns></returns>
+    private Vector3 GetRecoderPos()
+    {
+        return m_recordLoader.gameObject.GetComponent<Transform>().position;
     }
 
     /// <summary>
@@ -181,7 +258,14 @@ public class DishMusicManager : MonoBehaviour
     {
         m_clickTimeList.Clear();
         m_clickStyleList.Clear();
-
+        m_bIsRecordLoaderMove = false;
+        m_moveSpeed = 2.9f * Mathf.Abs(m_fRightPosX - m_fLeftPosX) / fMusicLength;
+        InitRecordLoaderPos();
+        for (int i = 0; i < m_allAudioObj.Count; i++)
+        {
+            Destroy(m_allAudioObj[i]);
+        }
+        m_allAudioObj.Clear();
         // 根据传进来的玩家收集到的音符列表，显示出可点击的音符按钮
         for (int i = 0; i < 7; i++)
         {
@@ -212,8 +296,17 @@ public class DishMusicManager : MonoBehaviour
         m_bIsBtnClick = false;
 
         fLastClickTimeBtn = 0f;
+        id = 0;
 
         m_bIsRecordLoaderMove = false;
+    }
+
+    /// <summary>
+    /// 初始化进度条位置
+    /// </summary>
+    void InitRecordLoaderPos()
+    {
+        m_playLoader.anchoredPosition =  m_recordLoader.anchoredPosition = new Vector2(m_fLeftPosX, m_fTopPoxY1);
     }
 
     /// <summary>
@@ -227,6 +320,7 @@ public class DishMusicManager : MonoBehaviour
             //正在播放
             m_btnPlay.GetComponent<Image>().sprite = m_btnPlaySprite[1];
             PlayRecordAudio();
+            m_isMovePlay = true;
             m_btnRecord.gameObject.SetActive(false);
         }
         else
@@ -234,6 +328,7 @@ public class DishMusicManager : MonoBehaviour
             //没有播放
             m_btnPlay.GetComponent<Image>().sprite = m_btnPlaySprite[0];
             PauseRecordAudio();
+            m_isMovePlay = false;
             m_btnRecord.gameObject.SetActive(true);
         }
     }
@@ -249,7 +344,7 @@ public class DishMusicManager : MonoBehaviour
             //正在录制
             m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[1];
             AudioManager.Instance.PlayMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
-
+            m_isMoveRecord = true;
             m_btnPlay.gameObject.SetActive(false);
             m_btnAgain.gameObject.SetActive(false);
 
@@ -262,7 +357,7 @@ public class DishMusicManager : MonoBehaviour
             //没有录制
             m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[0];
             AudioManager.Instance.PauseMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
-
+            m_isMoveRecord = false; 
             m_btnPlay.gameObject.SetActive(true);
             m_btnAgain.gameObject.SetActive(true);
 
@@ -278,7 +373,7 @@ public class DishMusicManager : MonoBehaviour
     public void RecordAgain()
     {
         ReInitGame();
-
+        m_bIsBtnClick = false;
         m_btnRecord.gameObject.SetActive(true);
         m_isRecording = true;
         //正在录制
@@ -316,10 +411,14 @@ public class DishMusicManager : MonoBehaviour
     {
         if (m_playaudiosource)
         {
-            m_playaudiosource.Stop();
             m_playaudiosource.clip = m_playaudiosource.clip;
-            m_playaudiosource.Play();          
+            m_playaudiosource.Play();   
         }
+    }
+
+    float GetTime()
+    {
+        return m_playaudiosource.time;
     }
 
     /// <summary>
@@ -367,6 +466,11 @@ public class DishMusicManager : MonoBehaviour
             fLastClickTimeBtn = AudioManager.Instance.GetMusicSourceTime();
             m_clickTimeList.Add(AudioManager.Instance.GetMusicSourceTime());
             m_clickStyleList.Add(m_Index2NoteID[iIndexBtn]);
+            GameObject go = GameObject.Instantiate(m_audioObject[m_Index2NoteID[iIndexBtn]]);
+            go.transform.position = GetRecoderPos();
+            go.transform.SetParent(m_AudioParent);
+            go.SetActive(true);
+            m_allAudioObj.Add(go);
         }
     }
 }

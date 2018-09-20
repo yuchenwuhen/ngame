@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public bool m_IsEnterMusic = false;
     //0,1表示大木材 小木材，2表示露珠，3表示篮球
     //4鸡叫 5草丛 6水井
-    private List<int> collectionNumbers = new List<int>();
+    public List<int> collectionNumbers = new List<int>();
     public  GameObject m_Tile;
 
     public Sprite[] m_collectSprite;
