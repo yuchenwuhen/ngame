@@ -335,7 +335,7 @@ MonoBehaviour:
   m_xaspect: 0.67
   m_yaspect: 0.45
   m_LastEndOffset: {x: 200, y: 0, z: 0}
-  m_speed: 450
+  m_speed: 300
   m_randomSprite:
   - {fileID: 21300000, guid: 86454246e6fea4f4caa778f549c11ac2, type: 3}
   - {fileID: 21300000, guid: 63137ff35d5060345b3b2291838cb742, type: 3}
@@ -481,17 +481,12 @@ MonoBehaviour:
   m_clickInvalidAudio: {fileID: 8300000, guid: a9888368c9e62cd47acd932b62f21f74, type: 3}
   m_clickFailAudio: {fileID: 8300000, guid: 2bda2e531794747d6854dc7c30a178e6, type: 3}
   m_clickAudios:
-  - {fileID: 8300000, guid: 2e404463c3dc5a64bafdc7eb3282ae92, type: 3}
   - {fileID: 8300000, guid: 3e95e3172a1f4a640a666674c65f02d3, type: 3}
+  - {fileID: 8300000, guid: 2e404463c3dc5a64bafdc7eb3282ae92, type: 3}
   m_iMaxStar: 3
   m_bGameStateRun: 0
   m_InitNpcCount: 10
-<<<<<<< HEAD
   m_MaxMoveNpcCount: 3
-  m_teachPanel: {fileID: 1357467045581666}
-=======
-  m_MaxMoveNpcCount: 8
->>>>>>> e3831629af4d405f845c6e291d076b56b7c65a9b
 --- !u!114 &114276795899417076
 MonoBehaviour:
   m_ObjectHideFlags: 1
