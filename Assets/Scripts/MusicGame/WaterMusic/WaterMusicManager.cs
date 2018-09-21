@@ -260,6 +260,7 @@ public class WaterMusicManager : MusicManager
             // 播放音乐(放在Start中调用，保证开始游戏时才会放音乐)
             AudioManager.Instance.PlayMusicSingleAgain(m_musicGameConfig.GetAudioClipBgm());
             m_fInitTime = AudioManager.Instance.GetMusicSourceTime();
+            m_iFailTimes = 0;
         }
         else
         {
@@ -326,7 +327,7 @@ public class WaterMusicManager : MusicManager
         if (m_bIsTeachStage && !m_bIsNpcHasAction && Mathf.Abs(checkPointTime - fRunTime) < m_NpcSuccessTime)
         {
             Debug.Log("NPC行动");
-            Debug.Log("checkPointTime:" + checkPointTime + ",fRunTime:" + fRunTime);
+            //Debug.Log("checkPointTime:" + checkPointTime + ",fRunTime:" + fRunTime);
             m_bIsNpcHasAction = true;
 
             // SevenClick 关卡
@@ -378,7 +379,7 @@ public class WaterMusicManager : MusicManager
     {
         float checkPointTime = m_musicGameConfig.GetSectionOnePointTime(m_iNowSectionID, m_iNowPointID);
         int iPointStyle = m_musicGameConfig.GetSectionOnePointStyle(m_iNowSectionID, m_iNowPointID);
-        Debug.Log("checkPointTime:" + checkPointTime + ",fRunTime:" + fRunTime);
+        //Debug.Log("checkPointTime:" + checkPointTime + ",fRunTime:" + fRunTime);
         if (Mathf.Abs(checkPointTime - fRunTime) < m_fTouchSuccessTime)
         {
             Debug.Log("检测成功");
@@ -437,10 +438,10 @@ public class WaterMusicManager : MusicManager
         m_bIsNpcHasAction = false;
         m_bIsHeadPlayAnimator = false;
 
-        Debug.Log(m_iNowSectionID + "|" + m_iNowPointID);
+        //Debug.Log(m_iNowSectionID + "|" + m_iNowPointID);
         if (m_iNowPointID >= m_musicGameConfig.GetSectionPointCount(m_iNowSectionID))
         {
-            Debug.Log(m_iNowSectionID + "|" + m_iNowPointID);
+            //Debug.Log(m_iNowSectionID + "|" + m_iNowPointID);
             Debug.Log("改变小节");
             m_iNowSectionID++;
             if (m_iNowSectionID >= m_musicGameConfig.GetSectionCount())
@@ -480,14 +481,19 @@ public class WaterMusicManager : MusicManager
 
     private int CaculateStar(int fail)
     {
+        Debug.Log("失败次数:" +fail);
         fail -= 7;
         if (fail<=5&&m_isuccessTime>0)
         {
             GameManager.instance.Collectlevel2Music();
         }
-        if (m_isuccessTime > 0&& fail==0)
-            return 3;
-        if (fail >=0&&fail<=1)
+
+        if (m_isuccessTime <= 0)
+        {
+            return 0;
+        }
+
+        if (fail <=1)
             return 3;
         else if (fail > 1 && fail <= 3)
             return 2;
@@ -528,7 +534,7 @@ public class WaterMusicManager : MusicManager
     void PlaySuccessAnimator()
     {
         int iRandomValue = UnityEngine.Random.Range(0, 4);
-        Debug.Log(iRandomValue);
+        //Debug.Log(iRandomValue);
         switch(iRandomValue)
         {
             case 0:
