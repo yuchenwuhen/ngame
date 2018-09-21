@@ -47,7 +47,7 @@ public class DishMusicManager : MonoBehaviour
 
     private List<int> m_listCollectdNoteID;
 
-    private float fLastClickTimeBtn;
+    private float fLastClickTimeBtn;    
     private bool m_bIsBtnClick;
 
     private bool m_bIsRecordLoaderMove;
@@ -84,8 +84,7 @@ public class DishMusicManager : MonoBehaviour
     }
 
     private void Update()
-    {
-        
+    {      
         if(m_isMovePlay)
         {
             //播放已录制的音轨
@@ -119,6 +118,7 @@ public class DishMusicManager : MonoBehaviour
                 m_isMoveRecord = false;
             }
         }
+
         if (m_isMovePlay)
         {
             m_playLoader.anchoredPosition = new Vector2(m_playLoader.anchoredPosition.x + m_moveSpeed * Time.fixedDeltaTime, m_playLoader.anchoredPosition.y);
@@ -133,7 +133,7 @@ public class DishMusicManager : MonoBehaviour
             else if (Vector2.Distance(m_playLoader.anchoredPosition, new Vector2(m_fRightPosX, m_fTopPoxY3)) < 0.3f )
             {
                 //停止移动
-                m_isMoveRecord = false;
+                m_isMovePlay = false;
             }
         }
     }
@@ -381,6 +381,16 @@ public class DishMusicManager : MonoBehaviour
         //正在录制
         m_btnRecord.GetComponent<Image>().sprite = m_btnRecordSprite[1];
         AudioManager.Instance.PlayMusicSingleAgain(m_dishMusicConfig.GetAudioClipBgm());
+
+        m_isMoveRecord = true;
+        m_btnPlay.gameObject.SetActive(false);
+        m_btnAgain.gameObject.SetActive(false);
+
+        m_bIsBtnClick = true;
+
+        m_bIsRecordLoaderMove = true;
+
+        m_isMovePlay = false;
     }
 
     /// <summary>
