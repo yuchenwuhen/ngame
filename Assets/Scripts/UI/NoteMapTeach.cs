@@ -15,6 +15,12 @@ public class NoteMapTeach : UIBase
         m_closeBtn.onClick.AddListener(SetUIController);
     }
 
+    public override void Appear()
+    {
+        base.Appear();
+        transform.SetAsLastSibling();
+    }
+
     private void SetUIController()
     {
         UIManager.instance.m_UICotroller = false;

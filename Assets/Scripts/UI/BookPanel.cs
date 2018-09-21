@@ -124,6 +124,7 @@ public class BookPanel : UIBase {
         if(m_openAudioList[i]==0)
         {
             m_openAudioList[i] = 1;
+            StopRecordAudio();
         }else
         {
             m_openAudioList[i] = 0;
@@ -233,12 +234,13 @@ public class BookPanel : UIBase {
     public void SetImgmusic()
     {
         int[] level = TileManager.Instance.GetMusicLevel();
-        if(level.Length>2)
-        {
-            m_send.gameObject.SetActive(true);
-        }
+
         for (int i=0;i< level.Length;i++)
         {
+            if(level[i]==2)
+            {
+                m_send.gameObject.SetActive(true);
+            }
             Img_musics[level[i]].SetActive(true);
             btn_volume[level[i]].gameObject.SetActive(true);
         }
@@ -291,6 +293,7 @@ public class BookPanel : UIBase {
 
     void GameOver()
     {
+        AudioManager.Instance.StopAudioMusic();
         UIManager.instance.ShowUIFade(UIState.GameOver);
     }
 }

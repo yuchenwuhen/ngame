@@ -20,6 +20,7 @@ public class CollectionPanel : UIBase {
     {
         base.Appear();
         UIManager.instance.m_UICotroller = false;
+        transform.SetAsLastSibling();
     }
 
     public void ShowCollect(Sprite icon,string txt)

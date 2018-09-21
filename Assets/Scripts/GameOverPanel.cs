@@ -9,9 +9,11 @@ public class GameOverPanel : UIBase {
     private GameObject iconAnimPrefab;        //收集的音效图标动画预制体，用于动态实例化
     public Sprite[] sprites;
     private float timer = 0;
+    public AudioSource m_audio;
     // Use this for initialization
-    void Start () {
-       
+    public override void OnAwake()
+    {
+        base.OnAwake();
 
     }
 
@@ -22,6 +24,7 @@ public class GameOverPanel : UIBase {
         collectionList = GameManager.instance.collectionNumbers;
         iconAnimPrefab = Resources.Load("Prefab/moveAnim") as GameObject;
         //播放结局音效
+        m_audio.Play();
     }
 
     // Update is called once per frame
@@ -48,6 +51,7 @@ public class GameOverPanel : UIBase {
 
     public void BackToGameMenu()
     {
+        m_audio.Stop();
         UIManager.instance.ShowUIFade(UIState.Mainmenu);
     }
 

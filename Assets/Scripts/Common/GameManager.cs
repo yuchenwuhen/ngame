@@ -83,9 +83,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CollectLevel1Music()
+    void collect1level()
     {
-        if (!(IsCollected(1)||IsCollected(0)))
+        if (!(IsCollected(1) || IsCollected(0)))
         {
             AddElements(0);
             AddElements(1);
@@ -96,6 +96,13 @@ public class GameManager : MonoBehaviour
             Invoke("PlayAgain", 2f);
         }
     }
+
+    public void CollectLevel1Music()
+    {
+        Invoke("collect1level", 1f);
+    }
+
+
 
     void PlayAgain()
     {
