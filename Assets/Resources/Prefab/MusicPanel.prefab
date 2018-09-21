@@ -502,7 +502,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2e404463c3dc5a64bafdc7eb3282ae92, type: 3}
   m_iMaxStar: 3
   m_bGameStateRun: 0
-  m_InitNpcCount: 10
+  m_InitNpcCount: 15
   m_MaxMoveNpcCount: 10
   m_teachPanel: {fileID: 1357467045581666}
 --- !u!114 &114276795899417076
