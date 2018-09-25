@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: DishMusicGameConfig
   m_EditorClassIdentifier: 
   m_audioClipBgm: {fileID: 8300000, guid: 9c3e40c5b71cf5c49be11bf639449300, type: 3}
-  m_fTouchAgainTime: 0.5
+  m_fTouchAgainTime: 0.1
   m_fBeginClickTime: 3
   m_fEndClickTime: 42
   m_audioDatas:

@@ -124,7 +124,12 @@ public class BookPanel : UIBase {
         if(m_openAudioList[i]==0)
         {
             m_openAudioList[i] = 1;
-            StopRecordAudio();
+            if(i==2)
+                StopRecordAudio();
+            else
+            {
+                AudioManager.Instance.PausebookSingleMusic(i);
+            }
         }else
         {
             m_openAudioList[i] = 0;

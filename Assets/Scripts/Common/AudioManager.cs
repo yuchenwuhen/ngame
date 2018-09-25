@@ -144,6 +144,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PausebookSingleMusic(int index)
+    {
+        m_audioSource[index].Pause();
+    }
+
     public void StopAudioMusic()
     {
         m_defaultSource.Stop();

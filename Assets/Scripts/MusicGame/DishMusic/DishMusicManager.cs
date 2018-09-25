@@ -401,6 +401,10 @@ public class DishMusicManager : MonoBehaviour
         UIManager.instance.ShowUIFade(UIState.Bookmenu);
         StopRecordAudio();
         AudioManager.Instance.StopMusicSingle(m_dishMusicConfig.GetAudioClipBgm());
+        if(m_isRecording)
+        {
+            Record();
+        }
         if (m_isStartRecord)
         {
             //存在数据
